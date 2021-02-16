@@ -1,6 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SftpService", "SftpService\SftpService.csproj", "{C7F7AD48-3C37-4445-ACC3-751D89918106}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SftpService", "SftpService", "{38DB35A0-8514-4E95-BCD3-03852ADB593D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Internship.SftpService.Service", "SftpService\Internship.SftpService.Service\Internship.SftpService.Service.csproj", "{78BE91DA-8C0F-43E9-8F42-5A009BAB4E96}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Internship.SftpService.Domain", "SftpService\Internship.SftpService.Domain\Internship.SftpService.Domain.csproj", "{5804BB4E-9C9C-4042-965C-8460FF6D94E7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Internship.SftpService.Infrastructure", "SftpService\Internship.SftpService.Infrastructure\Internship.SftpService.Infrastructure.csproj", "{CED7E63A-EED3-45B3-8EB8-1A47C3571D97}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Internship.SftpService.Service.Tests", "SftpService\Internship.SftpService.Service.Tests\Internship.SftpService.Service.Tests.csproj", "{AE98E52E-DDD0-4FA1-A4E2-5645ED9B5A3F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -8,9 +16,27 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C7F7AD48-3C37-4445-ACC3-751D89918106}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C7F7AD48-3C37-4445-ACC3-751D89918106}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C7F7AD48-3C37-4445-ACC3-751D89918106}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C7F7AD48-3C37-4445-ACC3-751D89918106}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78BE91DA-8C0F-43E9-8F42-5A009BAB4E96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78BE91DA-8C0F-43E9-8F42-5A009BAB4E96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78BE91DA-8C0F-43E9-8F42-5A009BAB4E96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78BE91DA-8C0F-43E9-8F42-5A009BAB4E96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5804BB4E-9C9C-4042-965C-8460FF6D94E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5804BB4E-9C9C-4042-965C-8460FF6D94E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5804BB4E-9C9C-4042-965C-8460FF6D94E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5804BB4E-9C9C-4042-965C-8460FF6D94E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CED7E63A-EED3-45B3-8EB8-1A47C3571D97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CED7E63A-EED3-45B3-8EB8-1A47C3571D97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CED7E63A-EED3-45B3-8EB8-1A47C3571D97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CED7E63A-EED3-45B3-8EB8-1A47C3571D97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE98E52E-DDD0-4FA1-A4E2-5645ED9B5A3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE98E52E-DDD0-4FA1-A4E2-5645ED9B5A3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE98E52E-DDD0-4FA1-A4E2-5645ED9B5A3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE98E52E-DDD0-4FA1-A4E2-5645ED9B5A3F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{78BE91DA-8C0F-43E9-8F42-5A009BAB4E96} = {38DB35A0-8514-4E95-BCD3-03852ADB593D}
+		{5804BB4E-9C9C-4042-965C-8460FF6D94E7} = {38DB35A0-8514-4E95-BCD3-03852ADB593D}
+		{CED7E63A-EED3-45B3-8EB8-1A47C3571D97} = {38DB35A0-8514-4E95-BCD3-03852ADB593D}
+		{AE98E52E-DDD0-4FA1-A4E2-5645ED9B5A3F} = {38DB35A0-8514-4E95-BCD3-03852ADB593D}
 	EndGlobalSection
 EndGlobal
