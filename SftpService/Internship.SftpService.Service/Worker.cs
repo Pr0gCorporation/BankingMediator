@@ -1,28 +1,53 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Internship.SftpService.Service.Jobs;
 using Internship.SftpService.Service.SFTPAccess;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Quartz;
+using Quartz.Impl;
+using Quartz.Impl.Matchers;
+using Quartz.Spi;
 
 namespace Internship.SftpService.Service
 {
     public class Worker : BackgroundService
     {
         private readonly ILogger<Worker> _logger;
-        private readonly IFileDownloadable _downloader;
+        private readonly IServiceProvider _serviceProvider;
 
-        public Worker(ILogger<Worker> logger, IFileDownloadable downloader)
+        public Worker(ILogger<Worker> logger, IServiceProvider  serviceProvider)
         {
             _logger = logger;
-            _downloader = downloader;
+            _serviceProvider = serviceProvider;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _logger.LogInformation("Message from ExecuteAsync before the LongWorkload method.\n\n\n");
+            ISchedulerFactory schedulerFactory = new StdSchedulerFactory();
 
-            _downloader.Download(@"./downloads/", "upload/out/", true, _logger);
+            // get a scheduler
+            var scheduler = await schedulerFactory?.GetScheduler(stoppingToken);
+            scheduler.JobFactory = _serviceProvider.GetService<JobFactory>()!;
+            await scheduler.Start(stoppingToken);
+
+            // define the job
+            var job = JobBuilder.Create<DownloadFilesJob>()
+                .WithIdentity("myJob", "group1")
+                .Build();
+
+            // Trigger the job to run now, and then every 40 seconds
+            var trigger = TriggerBuilder.Create()
+                .WithIdentity("myTrigger", "group1")
+                .StartNow()
+                .WithSimpleSchedule(x => x
+                    .WithIntervalInSeconds(30)
+                    .RepeatForever())
+                .Build();
+    
+            await scheduler.ScheduleJob(job, trigger, stoppingToken);
         }
 
         private async Task LongWorkload(CancellationToken cancellationToken)
