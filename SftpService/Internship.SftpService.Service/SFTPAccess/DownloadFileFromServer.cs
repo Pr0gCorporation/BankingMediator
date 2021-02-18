@@ -4,7 +4,7 @@ using Renci.SshNet;
 
 namespace Internship.SftpService.Service.SFTPAccess
 {
-    public class DownloadFileFromServer : IDownloadable
+    public class DownloadFileFromServer : IFileDownloadable
     {
         private readonly string _host;
         private readonly string _username;
@@ -31,6 +31,7 @@ namespace Internship.SftpService.Service.SFTPAccess
 
             sftp.Connect();
             logger.LogInformation($"Connect to sftp: {sftp.IsConnected} .\n\n");
+            
             using (Stream fileStream = File.Create(fileName))
             {
                 sftp.DownloadFile(fullpaths, fileStream);
@@ -40,6 +41,7 @@ namespace Internship.SftpService.Service.SFTPAccess
                 sftp.DeleteFile(fullpaths);
                 logger.LogInformation($"After file deleted: \n{sftp.ListDirectory(path)} .\n\n");
             }
+            
             sftp.Disconnect();
             logger.LogInformation($"Connect from sftp: {sftp.IsConnected} .\n\n");
 

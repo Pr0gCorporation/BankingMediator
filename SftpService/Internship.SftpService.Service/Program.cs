@@ -17,7 +17,7 @@ namespace Internship.SftpService.Service
                 {
                     services.AddHostedService<Worker>();
                     
-                    services.AddSingleton<IDownloadable, DownloadFileFromServer>(downloader => 
+                    services.AddSingleton<IFileDownloadable, DownloadFileFromServer>(downloader => 
                         new DownloadFileFromServer(
                             "localhost",
                             "foo", 

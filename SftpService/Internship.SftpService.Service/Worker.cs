@@ -12,9 +12,9 @@ namespace Internship.SftpService.Service
     public class Worker : BackgroundService
     {
         private readonly ILogger<Worker> _logger;
-        private readonly IDownloadable _downloader;
+        private readonly IFileDownloadable _downloader;
 
-        public Worker(ILogger<Worker> logger, IDownloadable downloader)
+        public Worker(ILogger<Worker> logger, IFileDownloadable downloader)
         {
             _logger = logger;
             _downloader = downloader;
@@ -24,7 +24,7 @@ namespace Internship.SftpService.Service
         {
             _logger.LogInformation("Message from ExecuteAsync before the LongWorkload method.\n\n\n");
 
-            _downloader.Download(@"C:\out\pogchamp.txt", "upload/out/", "pogchamp.txt", _logger);
+            _downloader.Download(@"./downloads/pogchamp.txt", "upload/out/", "pogchamp.txt", _logger);
 
             // LongWorkload(stoppingToken);
         }

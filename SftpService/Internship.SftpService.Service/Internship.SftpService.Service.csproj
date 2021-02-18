@@ -9,4 +9,8 @@
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
         <PackageReference Include="SSH.NET" Version="2020.0.1" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="downloads" />
+    </ItemGroup>
 </Project>
