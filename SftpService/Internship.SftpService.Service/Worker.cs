@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Internship.SftpService.Service.SFTPAccess;
@@ -24,9 +22,7 @@ namespace Internship.SftpService.Service
         {
             _logger.LogInformation("Message from ExecuteAsync before the LongWorkload method.\n\n\n");
 
-            _downloader.Download(@"./downloads/pogchamp.txt", "upload/out/", "pogchamp.txt", _logger);
-
-            // LongWorkload(stoppingToken);
+            _downloader.Download(@"./downloads/", "upload/out/", true, _logger);
         }
 
         private async Task LongWorkload(CancellationToken cancellationToken)

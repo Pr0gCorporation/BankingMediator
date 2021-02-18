@@ -1,4 +1,5 @@
 using Internship.SftpService.Service.SFTPAccess;
+using Internship.SftpService.Service.SFTPClientFactory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -16,12 +17,11 @@ namespace Internship.SftpService.Service
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddHostedService<Worker>();
-                    
+
+                    ISFTPClientFactory sftpClientFactory = new SftpClientFactory();
                     services.AddSingleton<IFileDownloadable, DownloadFileFromServer>(downloader => 
                         new DownloadFileFromServer(
-                            "localhost",
-                            "foo", 
-                            "pass"));
+                            sftpClientFactory.GetSftpClient()));
                 });
     }
 }

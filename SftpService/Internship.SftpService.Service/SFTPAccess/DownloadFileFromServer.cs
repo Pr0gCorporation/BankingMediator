@@ -1,51 +1,58 @@
 ﻿using System.IO;
 using Microsoft.Extensions.Logging;
 using Renci.SshNet;
+using Renci.SshNet.Sftp;
 
 namespace Internship.SftpService.Service.SFTPAccess
 {
-    public class DownloadFileFromServer : IFileDownloadable
+    public sealed class DownloadFileFromServer : IFileDownloadable
     {
-        private readonly string _host;
-        private readonly string _username;
-        private readonly string _password;
+        private readonly SftpClient _sftpClient;
 
-        public DownloadFileFromServer(string host, string username, string password)
+        public DownloadFileFromServer(SftpClient sftpClient)
         {
-            _host = host;
-            _username = username;
-            _password = password;
+            _sftpClient = sftpClient;
         }
         
-        public int Download(string fileName, string path, string file, ILogger logger)
-        {    
-            var connectionInfo = new ConnectionInfo(_host, 2222, _username, new PasswordAuthenticationMethod(_username, _password));
-            logger.LogInformation($"Initialize connection info instance. \nHost: {connectionInfo.Host}," +
-                                   $"Port: {connectionInfo.Port}," +
-                                   $"Password: {connectionInfo.ProxyPassword}.\n\n");
+        public int Download(string pathTo, string pathFrom, bool removeFileAfterDownloading, ILogger logger)
+        {
+            _sftpClient.Connect();
+            logger.LogInformation($"Connect to sftp: {_sftpClient.IsConnected} .\n\n");
 
-            var fullpaths = path + file;
+            var files = _sftpClient.ListDirectory(pathFrom);
 
-            using var sftp = new SftpClient(connectionInfo);
-            logger.LogInformation($"Initialize sftp client instance: {sftp.BufferSize} .\n\n");
+            var downloaded = 0;
 
-            sftp.Connect();
-            logger.LogInformation($"Connect to sftp: {sftp.IsConnected} .\n\n");
-            
-            using (Stream fileStream = File.Create(fileName))
+            foreach (var file in files)
             {
-                sftp.DownloadFile(fullpaths, fileStream);
-                logger.LogInformation($"Download file: \n{sftp.ReadAllText(fullpaths)} .\n\n");
+                if (file.IsDirectory) continue;
+                var fullPath = pathFrom + file.Name;
+                logger.LogInformation($"Downloading file: {fullPath}\n\n");
+                using (Stream fileStream = File.Create(pathTo + file.Name))
+                {
+                    DownloadFile(_sftpClient, fullPath, fileStream);
+                    downloaded++;
+                }
 
-                logger.LogInformation($"Before file deleted: \n{sftp.ListDirectory(path)} .\n\n");
-                sftp.DeleteFile(fullpaths);
-                logger.LogInformation($"After file deleted: \n{sftp.ListDirectory(path)} .\n\n");
+                if(!removeFileAfterDownloading) continue;
+                DeleteFile(_sftpClient, fullPath);
+                logger.LogInformation($"File deleted: {fullPath}\n\n");
             }
             
-            sftp.Disconnect();
-            logger.LogInformation($"Connect from sftp: {sftp.IsConnected} .\n\n");
+            _sftpClient.Disconnect();
+            logger.LogInformation($"Connect from sftp: {_sftpClient.IsConnected} .\n\n");
 
-            return 0;
+            return downloaded;
+        }
+
+        private void DownloadFile(ISftpClient sftp, string pathFrom, Stream fileStream)
+        {
+            sftp.DownloadFile(pathFrom, fileStream);
+        }
+
+        private void DeleteFile(ISftpClient sftp, string pathFrom)
+        {
+            sftp.DeleteFile(pathFrom);
         }
     }
 }

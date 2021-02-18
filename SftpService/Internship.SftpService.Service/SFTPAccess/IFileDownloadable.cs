@@ -4,6 +4,6 @@ namespace Internship.SftpService.Service.SFTPAccess
 {
     public interface IFileDownloadable
     {
-        int Download(string name, string path, string file, ILogger logger);
+        int Download(string pathTo, string pathFrom, bool removeFileAfterDownloading, ILogger logger);
     }
 }
