@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Internship.SftpService.Service.SFTPAccess;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -16,6 +13,15 @@ namespace Internship.SftpService.Service
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureServices((hostContext, services) => { services.AddHostedService<Worker>(); });
+                .ConfigureServices((hostContext, services) =>
+                {
+                    services.AddHostedService<Worker>();
+                    
+                    services.AddSingleton<IDownloadable, DownloadFileFromServer>(downloader => 
+                        new DownloadFileFromServer(
+                            "localhost",
+                            "foo", 
+                            "pass"));
+                });
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Internship.SftpService.Service.SFTPAccess;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -11,18 +12,29 @@ namespace Internship.SftpService.Service
     public class Worker : BackgroundService
     {
         private readonly ILogger<Worker> _logger;
+        private readonly IDownloadable _downloader;
 
-        public Worker(ILogger<Worker> logger)
+        public Worker(ILogger<Worker> logger, IDownloadable downloader)
         {
             _logger = logger;
+            _downloader = downloader;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            while (!stoppingToken.IsCancellationRequested)
+            _logger.LogInformation("Message from ExecuteAsync before the LongWorkload method.\n\n\n");
+
+            _downloader.Download(@"C:\out\pogchamp.txt", "upload/out/", "pogchamp.txt", _logger);
+
+            // LongWorkload(stoppingToken);
+        }
+
+        private async Task LongWorkload(CancellationToken cancellationToken)
+        {
+            while (!cancellationToken.IsCancellationRequested)
             {
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-                await Task.Delay(1000, stoppingToken);
+                _logger.LogInformation("Workload running at: {time}", DateTimeOffset.Now);
+                await Task.Delay(500, cancellationToken);
             }
         }
     }
