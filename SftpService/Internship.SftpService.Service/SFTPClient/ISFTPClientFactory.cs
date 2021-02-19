@@ -1,6 +1,6 @@
 ﻿using Renci.SshNet;
 
-namespace Internship.SftpService.Service.SFTPClientFactory
+namespace Internship.SftpService.Service.SFTPClient
 {
     public interface ISFTPClientFactory
     {

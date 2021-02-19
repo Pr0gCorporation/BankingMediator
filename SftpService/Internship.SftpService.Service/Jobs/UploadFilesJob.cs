@@ -1,23 +1,22 @@
 ﻿using System.Threading.Tasks;
 using Internship.SftpService.Service.SFTPAccess;
-using Microsoft.Extensions.Logging;
 using Quartz;
 
 namespace Internship.SftpService.Service.Jobs
 {
     [DisallowConcurrentExecution]
-    public class DownloadFilesJob : IJob
+    public class UploadFilesJob : IJob
     {
-        private readonly IServerFileDownloadable _downloadable;
+        private readonly IServerFileUploadable _uploadable;
 
-        public DownloadFilesJob(IServerFileDownloadable downloadable)
+        public UploadFilesJob(IServerFileUploadable uploadable)
         {
-            _downloadable = downloadable;
+            _uploadable = uploadable;
         }
         
         public Task Execute(IJobExecutionContext context)
         {
-            _downloadable.Download(@"./downloads/", "upload/out/", true);
+            _uploadable.Upload("upload/in/", "./downloads/", false);
             return Task.CompletedTask;
         }
     }

@@ -26,28 +26,7 @@ namespace Internship.SftpService.Service
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            ISchedulerFactory schedulerFactory = new StdSchedulerFactory();
-
-            // get a scheduler
-            var scheduler = await schedulerFactory?.GetScheduler(stoppingToken);
-            scheduler.JobFactory = _serviceProvider.GetService<JobFactory>()!;
-            await scheduler.Start(stoppingToken);
-
-            // define the job
-            var job = JobBuilder.Create<DownloadFilesJob>()
-                .WithIdentity("myJob", "group1")
-                .Build();
-
-            // Trigger the job to run now, and then every 40 seconds
-            var trigger = TriggerBuilder.Create()
-                .WithIdentity("myTrigger", "group1")
-                .StartNow()
-                .WithSimpleSchedule(x => x
-                    .WithIntervalInSeconds(30)
-                    .RepeatForever())
-                .Build();
-    
-            await scheduler.ScheduleJob(job, trigger, stoppingToken);
+            
         }
 
         private async Task LongWorkload(CancellationToken cancellationToken)
