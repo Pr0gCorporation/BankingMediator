@@ -8,7 +8,7 @@ namespace Internship.SftpService.Service.Extentions
 {
     public static class ServerFileDownloadExtention
     {
-        public static IServiceCollection AddDownloader(this IServiceCollection services, ISFTPClientFactory sftpClientFactory)
+        public static IServiceCollection AddSftpDownloader(this IServiceCollection services, ISFTPClientFactory sftpClientFactory)
         {
             services.AddSingleton<IServerFileDownloadable, DownloadFilesFromServer>(provider => 
                 new DownloadFilesFromServer(

@@ -1,15 +1,8 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Internship.SftpService.Service.Jobs;
-using Internship.SftpService.Service.SFTPAccess;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Quartz;
-using Quartz.Impl;
-using Quartz.Impl.Matchers;
-using Quartz.Spi;
 
 namespace Internship.SftpService.Service
 {

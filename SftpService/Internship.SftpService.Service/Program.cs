@@ -22,8 +22,8 @@ namespace Internship.SftpService.Service
                     services.AddHostedService<Worker>();
 
                     ISFTPClientFactory sftpClientFactory = new SftpClientFactory();
-                    services.AddDownloader(sftpClientFactory);
-                    services.AddUploader(sftpClientFactory);
+                    services.AddSftpDownloader(sftpClientFactory);
+                    services.AddSftpUploader(sftpClientFactory);
 
                     var downloadConfiguration = new JobConfiguration("DownloadFilesJob", 
                         "DownloadFilesJob-trigger", 

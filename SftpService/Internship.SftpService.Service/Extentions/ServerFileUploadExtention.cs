@@ -8,7 +8,7 @@ namespace Internship.SftpService.Service.Extentions
 {
     public static class ServerFileUploadExtention
     {
-        public static IServiceCollection AddUploader(this IServiceCollection services, ISFTPClientFactory sftpClientFactory)
+        public static IServiceCollection AddSftpUploader(this IServiceCollection services, ISFTPClientFactory sftpClientFactory)
         {
             services.AddSingleton<IServerFileUploadable, UploadFilesToServer>(provider => 
                 new UploadFilesToServer(
