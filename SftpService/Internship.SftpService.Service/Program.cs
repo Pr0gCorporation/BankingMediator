@@ -1,5 +1,8 @@
+using System;
 using Internship.SftpService.Service.Jobs;
 using Internship.SftpService.Service.SFTPAccess;
+using Internship.SftpService.Service.SFTPActions.DownloadFiles;
+using Internship.SftpService.Service.SFTPActions.UploadFiles;
 using Internship.SftpService.Service.SFTPClient;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -47,8 +50,8 @@ namespace Internship.SftpService.Service
                         // Create a trigger for the job
                         q.AddTrigger(opts => opts
                             .ForJob(jobKey) // link to the DownloadFilesJob
-                            .StartNow()
                             .WithIdentity("DownloadFilesJob-trigger") // give the trigger a unique name
+                            .StartAt(DateTimeOffset.Now)
                             .WithCronSchedule("0/5 * * * * ?")); // run every 5 seconds
                     });
 

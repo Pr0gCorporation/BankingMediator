@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
-using System.Transactions;
+using Internship.SftpService.Service.SFTPAccess;
 using Microsoft.Extensions.Logging;
 using Renci.SshNet;
 
-namespace Internship.SftpService.Service.SFTPAccess
+namespace Internship.SftpService.Service.SFTPActions.UploadFiles
 {
     public class UploadFilesToServer : IServerFileUploadable
     {
@@ -20,38 +20,28 @@ namespace Internship.SftpService.Service.SFTPAccess
         public int Upload(string pathTo, string pathFrom, bool removeFileAfterDownloading = false)
         {
             _sftpClient.Connect();
-            _logger.LogInformation($"Connect to sftp: {_sftpClient.IsConnected} .\n\n");
+            _logger.LogInformation($"Connect to sftp: {_sftpClient.IsConnected}.-------------------\n");
 
             var files = Directory.EnumerateFiles(pathFrom);
-
-            foreach (var file in files)
-            {
-                _logger.LogDebug(file);
-            }
-
+            
             var uploaded = 0;
-/*
- 
+
             foreach (var file in files)
             {
-                if (file.IsDirectory) continue;
-                var fullPath = pathFrom + file.Name;
-                _logger.LogInformation($"Downloading file: {fullPath}\n\n");
-                using (Stream fileStream = File.Create(pathTo + file.Name))
+                _logger.LogWarning(file);
+                using (Stream fileStream = File.OpenRead(file))
                 {
-                    _sftpClient.DownloadFile(fullPath, fileStream);
+                    _sftpClient.UploadFile(fileStream, pathTo + Path.GetFileName(file));
                     uploaded++;
                 }
-
+                
                 if(!removeFileAfterDownloading) continue;
-                _sftpClient.DeleteFile(fullPath);
-                _logger.LogInformation($"File deleted: {fullPath}\n\n");
+                File.Delete(file);
+                _logger.LogInformation($"File deleted: {file}\n\n");
             }
-            
-*/
 
             _sftpClient.Disconnect();
-            _logger.LogInformation($"Connect to sftp: {_sftpClient.IsConnected} .\n\n");
+            _logger.LogInformation($"Connect to sftp: {_sftpClient.IsConnected}.\n" + DateTime.Now+ "\n");
             
             return uploaded;
         }

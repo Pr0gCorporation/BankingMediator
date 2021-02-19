@@ -1,9 +1,8 @@
-﻿using System.IO;
+﻿using Internship.SftpService.Service.SFTPAccess;
 using Microsoft.Extensions.Logging;
 using Renci.SshNet;
-using Renci.SshNet.Sftp;
 
-namespace Internship.SftpService.Service.SFTPAccess
+namespace Internship.SftpService.Service.SFTPActions.DownloadFiles
 {
     public sealed class DownloadFilesFromServer : IServerFileDownloadable
     {
