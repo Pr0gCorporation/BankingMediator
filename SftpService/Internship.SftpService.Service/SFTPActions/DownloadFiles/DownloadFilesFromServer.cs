@@ -1,4 +1,5 @@
-﻿using Internship.SftpService.Service.SFTPAccess;
+﻿using System.IO;
+using Internship.SftpService.Service.SFTPAccess;
 using Microsoft.Extensions.Logging;
 using Renci.SshNet;
 
@@ -29,14 +30,14 @@ namespace Internship.SftpService.Service.SFTPActions.DownloadFiles
                 if (file.IsDirectory) continue;
                 var fullPath = pathFrom + file.Name;
                 _logger.LogInformation($"Downloading file: {fullPath}\n\n");
-                //using (Stream fileStream = File.Create(pathTo + file.Name))
-                //{
-                    //_sftpClient.DownloadFile(fullPath, fileStream);
+                using (Stream fileStream = File.Create(pathTo + file.Name))
+                {
+                    _sftpClient.DownloadFile(fullPath, fileStream);
                     downloaded++;
-                //}
+                }
 
                 if(!removeFileAfterDownloading) continue;
-                //_sftpClient.DeleteFile(fullPath);
+                _sftpClient.DeleteFile(fullPath);
                 _logger.LogInformation($"File deleted: {fullPath}\n\n");
             }
             

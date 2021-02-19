@@ -1,14 +1,10 @@
 using System;
+using Internship.SftpService.Service.Extentions;
 using Internship.SftpService.Service.Jobs;
-using Internship.SftpService.Service.SFTPAccess;
-using Internship.SftpService.Service.SFTPActions.DownloadFiles;
-using Internship.SftpService.Service.SFTPActions.UploadFiles;
+using Internship.SftpService.Service.Jobs.Configuration;
 using Internship.SftpService.Service.SFTPClient;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Quartz;
-using Renci.SshNet;
 
 namespace Internship.SftpService.Service
 {
@@ -26,38 +22,21 @@ namespace Internship.SftpService.Service
                     services.AddHostedService<Worker>();
 
                     ISFTPClientFactory sftpClientFactory = new SftpClientFactory();
-                    services.AddSingleton<IServerFileDownloadable, DownloadFilesFromServer>(provider => 
-                        new DownloadFilesFromServer(
-                            sftpClientFactory.GetSftpClient(), 
-                            provider.GetService<ILogger<DownloadFilesFromServer>>()));
-                    services.AddSingleton<IServerFileUploadable, UploadFilesToServer>(provider => 
-                        new UploadFilesToServer(
-                            sftpClientFactory.GetSftpClient(), 
-                            provider.GetService<ILogger<UploadFilesToServer>>()));
+                    services.AddDownloader(sftpClientFactory);
+                    services.AddUploader(sftpClientFactory);
+
+                    var downloadConfiguration = new JobConfiguration("DownloadFilesJob", 
+                        "DownloadFilesJob-trigger", 
+                        DateTimeOffset.Now, 
+                        "0/15 * * * * ?");
                     
-                    // Add the required Quartz.NET services
-                    services.AddQuartz(q =>  
-                    {
-                        // Use a Scoped container to create jobs.
-                        q.UseMicrosoftDependencyInjectionScopedJobFactory();
+                    var uploadConfiguration = new JobConfiguration("UploadFilesJob", 
+                        "UploadFilesJob-trigger", 
+                        DateTimeOffset.Now, 
+                        "0/15 * * * * ?");
 
-                        // Create a "key" for the job
-                        var jobKey = new JobKey("DownloadFilesJob");
-
-                        // Register the job with the DI container
-                        q.AddJob<UploadFilesJob>(opts => opts.WithIdentity(jobKey));
-
-                        // Create a trigger for the job
-                        q.AddTrigger(opts => opts
-                            .ForJob(jobKey) // link to the DownloadFilesJob
-                            .WithIdentity("DownloadFilesJob-trigger") // give the trigger a unique name
-                            .StartAt(DateTimeOffset.Now)
-                            .WithCronSchedule("0/5 * * * * ?")); // run every 5 seconds
-                    });
-
-                    // Add the Quartz.NET hosted service
-                    services.AddQuartzHostedService(
-                        q => q.WaitForJobsToComplete = true);
+                    //services.AddJob<DownloadFilesJob>(downloadConfiguration);
+                    services.AddJob<UploadFilesJob>(uploadConfiguration);
                 });
     }
 }
