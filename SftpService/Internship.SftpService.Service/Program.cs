@@ -48,11 +48,11 @@ namespace Internship.SftpService.Service
                         q.UseMicrosoftDependencyInjectionScopedJobFactory();
 
                         // Create a "key"s for the jobs
-                        var downloadJobKey = new JobKey(downloadJobConfiguration.JobKey);
+                        // var downloadJobKey = new JobKey(downloadJobConfiguration.JobKey);
                         var uploadJobKey = new JobKey(uploadJobConfiguration.JobKey);
 
                         // Register the jobs with the DI container
-                        q.AddJob<DownloadFilesJob>(opts => opts.WithIdentity(downloadJobKey));
+                        // q.AddJob<DownloadFilesJob>(opts => opts.WithIdentity(downloadJobKey));
                         q.AddJob<UploadFilesJob>(opts => opts.WithIdentity(uploadJobKey));
 
                         // q.AddTrigger(opts => opts
