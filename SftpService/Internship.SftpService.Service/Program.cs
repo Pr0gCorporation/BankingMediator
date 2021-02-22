@@ -55,11 +55,11 @@ namespace Internship.SftpService.Service
                         q.AddJob<DownloadFilesJob>(opts => opts.WithIdentity(downloadJobKey));
                         q.AddJob<UploadFilesJob>(opts => opts.WithIdentity(uploadJobKey));
 
-                        q.AddTrigger(opts => opts
-                            .ForJob(downloadJobKey)
-                            .WithIdentity(downloadJobConfiguration.WithIdentity)
-                            .StartAt(downloadJobConfiguration.StartAt)
-                            .WithCronSchedule(downloadJobConfiguration.CronSchedule));
+                        // q.AddTrigger(opts => opts
+                        //     .ForJob(downloadJobKey)
+                        //     .WithIdentity(downloadJobConfiguration.WithIdentity)
+                        //     .StartAt(downloadJobConfiguration.StartAt)
+                        //     .WithCronSchedule(downloadJobConfiguration.CronSchedule));
                         q.AddTrigger(opts => opts
                             .ForJob(uploadJobKey)
                             .WithIdentity(uploadJobConfiguration.WithIdentity)
