@@ -42,34 +42,36 @@ namespace Internship.SftpService.Service
                         configuration.GetValue<string>("JobConfig:UploadJob:CronSchedule")
                     );
                     
-                    services.AddQuartz(q =>  
-                    {
-                        // Use a Scoped container to create jobs.
-                        q.UseMicrosoftDependencyInjectionScopedJobFactory();
-
-                        // Create a "key"s for the jobs
-                        // var downloadJobKey = new JobKey(downloadJobConfiguration.JobKey);
-                        var uploadJobKey = new JobKey(uploadJobConfiguration.JobKey);
-
-                        // Register the jobs with the DI container
-                        // q.AddJob<DownloadFilesJob>(opts => opts.WithIdentity(downloadJobKey));
-                        q.AddJob<UploadFilesJob>(opts => opts.WithIdentity(uploadJobKey));
-
-                        // q.AddTrigger(opts => opts
-                        //     .ForJob(downloadJobKey)
-                        //     .WithIdentity(downloadJobConfiguration.WithIdentity)
-                        //     .StartAt(downloadJobConfiguration.StartAt)
-                        //     .WithCronSchedule(downloadJobConfiguration.CronSchedule));
-                        q.AddTrigger(opts => opts
-                            .ForJob(uploadJobKey)
-                            .WithIdentity(uploadJobConfiguration.WithIdentity)
-                            .StartAt(uploadJobConfiguration.StartAt)
-                            .WithCronSchedule(uploadJobConfiguration.CronSchedule));
-                    });
+                    
+                    
+                    // services.AddQuartz(q =>  
+                    // {
+                    //     // Use a Scoped container to create jobs.
+                    //     q.UseMicrosoftDependencyInjectionScopedJobFactory();
+                    //
+                    //     // Create a "key"s for the jobs
+                    //     // var downloadJobKey = new JobKey(downloadJobConfiguration.JobKey);
+                    //     var uploadJobKey = new JobKey(uploadJobConfiguration.JobKey);
+                    //
+                    //     // Register the jobs with the DI container
+                    //     // q.AddJob<DownloadFilesJob>(opts => opts.WithIdentity(downloadJobKey));
+                    //     q.AddJob<UploadFilesJob>(opts => opts.WithIdentity(uploadJobKey));
+                    //
+                    //     // q.AddTrigger(opts => opts
+                    //     //     .ForJob(downloadJobKey)
+                    //     //     .WithIdentity(downloadJobConfiguration.WithIdentity)
+                    //     //     .StartAt(downloadJobConfiguration.StartAt)
+                    //     //     .WithCronSchedule(downloadJobConfiguration.CronSchedule));
+                    //     q.AddTrigger(opts => opts
+                    //         .ForJob(uploadJobKey)
+                    //         .WithIdentity(uploadJobConfiguration.WithIdentity)
+                    //         .StartAt(uploadJobConfiguration.StartAt)
+                    //         .WithCronSchedule(uploadJobConfiguration.CronSchedule));
+                    // });
 
                     // Add the Quartz.NET hosted service
-                    services.AddQuartzHostedService(
-                        q => q.WaitForJobsToComplete = true);
+                    //services.AddQuartzHostedService(
+                    //    q => q.WaitForJobsToComplete = true);
                 });
     }
 }

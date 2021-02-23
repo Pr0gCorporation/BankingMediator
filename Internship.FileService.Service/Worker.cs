@@ -17,12 +17,18 @@ namespace Internship.FileService.Service
             _logger = logger;
         }
 
+
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            while (!stoppingToken.IsCancellationRequested)
+            
+        }
+
+        private async Task LongWorkload(CancellationToken cancellationToken)
+        {
+            while (!cancellationToken.IsCancellationRequested)
             {
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-                await Task.Delay(1000, stoppingToken);
+                _logger.LogInformation("Workload running at: {time}", DateTimeOffset.Now);
+                await Task.Delay(500, cancellationToken);
             }
         }
     }

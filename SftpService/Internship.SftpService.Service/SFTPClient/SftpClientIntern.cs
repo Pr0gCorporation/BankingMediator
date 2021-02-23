@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Renci.SshNet;
 using Renci.SshNet.Sftp;
 
@@ -11,19 +13,25 @@ namespace Internship.SftpService.Service.SFTPClient
         public string Host { get; set; }
         public int Port { get; set; }
         public string Username { get; set; }
-        public PasswordAuthenticationMethod Password { get; set; }
+        public string Password { get; set; }
         private SftpClient SftpClient { get; set; }
+        private readonly HostBuilderContext _hostBuilderContext;
 
-        public SftpClientIntern()
+        public SftpClientIntern(HostBuilderContext hostBuilderContext)
         {
-            Host = "localhost";
-            Port = 2222;
-            Username = "foo";
-            Password = new PasswordAuthenticationMethod("foo", "pass");
-            var connectionInfo = new ConnectionInfo(Host, Port, Username, Password);
+            var configuration = _hostBuilderContext.Configuration;
+            Host = configuration.GetValue<string>("SftpConfig:Host");
+            Port = configuration.GetValue<int>("SftpConfig:Port");
+            Username = configuration.GetValue<string>("SftpConfig:Username");
+            Password = configuration.GetValue<string>("SftpConfig:Password");
+            var connectionInfo = new ConnectionInfo(Host, 
+                Port, 
+                Username, 
+                new PasswordAuthenticationMethod(Username, Password));
             SftpClient = new SftpClient(connectionInfo);
+            _hostBuilderContext = hostBuilderContext;
         }
-        
+
         public void Connect()
         {
             SftpClient.Connect();
