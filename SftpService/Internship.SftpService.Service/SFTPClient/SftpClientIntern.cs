@@ -15,11 +15,10 @@ namespace Internship.SftpService.Service.SFTPClient
         public string Username { get; set; }
         public string Password { get; set; }
         private SftpClient SftpClient { get; set; }
-        private readonly HostBuilderContext _hostBuilderContext;
 
         public SftpClientIntern(HostBuilderContext hostBuilderContext)
         {
-            var configuration = _hostBuilderContext.Configuration;
+            var configuration = hostBuilderContext.Configuration;
             Host = configuration.GetValue<string>("SftpConfig:Host");
             Port = configuration.GetValue<int>("SftpConfig:Port");
             Username = configuration.GetValue<string>("SftpConfig:Username");
@@ -29,7 +28,6 @@ namespace Internship.SftpService.Service.SFTPClient
                 Username, 
                 new PasswordAuthenticationMethod(Username, Password));
             SftpClient = new SftpClient(connectionInfo);
-            _hostBuilderContext = hostBuilderContext;
         }
 
         public void Connect()
