@@ -1,11 +1,14 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MassTransit;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Renci.SshNet.Messages;
 
-namespace Internship.SftpService.Service
+namespace Internship.FileService.Service
 {
     public class Worker : BackgroundService
     {
@@ -20,14 +23,15 @@ namespace Internship.SftpService.Service
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            //await LongWorkload(stoppingToken);
+
         }
 
         private async Task LongWorkload(CancellationToken cancellationToken)
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-                await Task.Delay(5000, cancellationToken);
+                _logger.LogInformation("Workload running at: {time}", DateTimeOffset.Now);
+                await Task.Delay(500, cancellationToken);
             }
         }
     }
