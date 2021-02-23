@@ -4,6 +4,7 @@ using Internship.SftpService.Service.Extentions;
 using Internship.SftpService.Service.Jobs;
 using Internship.SftpService.Service.Jobs.Configuration;
 using Internship.SftpService.Service.SFTPClient;
+using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -41,9 +42,17 @@ namespace Internship.SftpService.Service
                         DateTimeOffset.Now,
                         configuration.GetValue<string>("JobConfig:UploadJob:CronSchedule")
                     );
-                    
-                    
-                    
+
+                    services.AddMassTransit(config =>
+                    {
+                        config.UsingRabbitMq((ctx, cfg) =>
+                        {
+                            cfg.Host(configuration.GetValue<string>("BusConfig:Host"));
+                        });
+                    });
+
+                    services.AddMassTransitHostedService();
+
                     // services.AddQuartz(q =>  
                     // {
                     //     // Use a Scoped container to create jobs.

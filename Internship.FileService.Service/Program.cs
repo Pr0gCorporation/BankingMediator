@@ -1,7 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using MassTransit;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -19,6 +19,21 @@ namespace Internship.FileService.Service
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddHostedService<Worker>();
+                    var configuration = hostContext.Configuration;
+                    
+                    services.AddMassTransit(config => {
+                        config.AddConsumer<MessageConsumer>();
+
+                        config.UsingRabbitMq((ctx, cfg) => {
+                            cfg.Host(configuration.GetValue<string>("BusConfig:Host"));
+
+                            cfg.ReceiveEndpoint("file_receive", c => {
+                                c.ConfigureConsumer<MessageConsumer>(ctx);
+                            });
+                        });
+                    });
+
+                    services.AddMassTransitHostedService();
                 });
     }
 }
