@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using Internship.SftpService.Service.SFTPAccess;
 using Internship.SftpService.Service.SFTPClient;
 using Microsoft.Extensions.Logging;
 using Renci.SshNet;

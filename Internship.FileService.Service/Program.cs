@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Internship.FileService.Service.Consumers;
 using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

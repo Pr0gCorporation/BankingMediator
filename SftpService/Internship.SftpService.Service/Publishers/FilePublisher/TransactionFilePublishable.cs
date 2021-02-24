@@ -3,13 +3,13 @@ using System.Threading.Tasks;
 using Internship.SftpService.Service.DTOs;
 using MassTransit;
 
-namespace Internship.SftpService.Service.Publishers
+namespace Internship.SftpService.Service.Publishers.FilePublisher
 {
-    public class TransactionFilePublisher : IFilePublisher
+    public class TransactionFilePublishable : IFilePublishable
     {
         private readonly IBus _publishEndpoint;
 
-        public TransactionFilePublisher(IBus publishEndpoint)
+        public TransactionFilePublishable(IBus publishEndpoint)
         {
             _publishEndpoint = publishEndpoint;
         }

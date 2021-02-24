@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-
-namespace Internship.SftpService.Service.SFTPAccess
+﻿namespace Internship.SftpService.Service.SFTPActions.DownloadFiles
 {
     public interface IServerFileDownloadable
     {

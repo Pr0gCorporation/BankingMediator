@@ -1,11 +1,9 @@
-﻿using System;
-using System.Threading.Tasks;
-using Internship.SftpService.Service;
+﻿using System.Threading.Tasks;
 using Internship.SftpService.Service.DTOs;
 using MassTransit;
 using Microsoft.Extensions.Logging;
 
-namespace Internship.FileService.Service
+namespace Internship.FileService.Service.Consumers
 {
     public class FileConsumer : IConsumer<FileDto>
     {

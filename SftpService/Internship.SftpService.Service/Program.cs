@@ -1,10 +1,11 @@
 using System;
 using System.Linq;
 using Internship.SftpService.Service.Extentions;
-using Internship.SftpService.Service.FileHandlers;
+using Internship.SftpService.Service.FileActions.FileReader;
 using Internship.SftpService.Service.Jobs;
 using Internship.SftpService.Service.Jobs.Configuration;
 using Internship.SftpService.Service.Publishers;
+using Internship.SftpService.Service.Publishers.FilePublisher;
 using Internship.SftpService.Service.SFTPClient;
 using MassTransit;
 using Microsoft.Extensions.Configuration;
@@ -31,7 +32,7 @@ namespace Internship.SftpService.Service
                     services.AddTransient<ISftpClientIntern, SftpClientIntern>();
                     services.AddSftpDownloader();
                     services.AddSftpUploader();
-                    services.AddScoped<IFilePublisher, TransactionFilePublisher>();
+                    services.AddScoped<IFilePublishable, TransactionFilePublishable>();
                     services.AddScoped<IFileReadable, ReadXmlFiles>();
 
                     services.AddMassTransit(config =>
@@ -67,7 +68,7 @@ namespace Internship.SftpService.Service
                         // var uploadJobKey = new JobKey(uploadJobConfiguration.JobKey);
 
                         // Register the jobs with the DI container
-                        q.AddJob<DownloadFilesJob>(opts => opts.WithIdentity(downloadJobKey));
+                        q.AddJob<DownloadPublishFilesJob>(opts => opts.WithIdentity(downloadJobKey));
                         // q.AddJob<UploadFilesJob>(opts => opts.WithIdentity(uploadJobKey));
 
                         q.AddTrigger(opts => opts

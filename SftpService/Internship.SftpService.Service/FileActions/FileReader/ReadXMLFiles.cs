@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Internship.SftpService.Service.DTOs;
 
-namespace Internship.SftpService.Service.FileHandlers
+namespace Internship.SftpService.Service.FileActions.FileReader
 {
     public class ReadXmlFiles : IFileReadable
     {

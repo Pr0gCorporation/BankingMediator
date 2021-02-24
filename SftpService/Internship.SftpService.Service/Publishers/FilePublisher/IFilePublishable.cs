@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Internship.SftpService.Service.DTOs;
 
-namespace Internship.SftpService.Service.Publishers
+namespace Internship.SftpService.Service.Publishers.FilePublisher
 {
-    public interface IFilePublisher
+    public interface IFilePublishable
     {
         /// <summary>
         /// Publish file in a sequence of queries

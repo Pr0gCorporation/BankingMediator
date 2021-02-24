@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Internship.SftpService.Service.DTOs;
 
-namespace Internship.SftpService.Service.FileHandlers
+namespace Internship.SftpService.Service.FileActions.FileReader
 {
     public interface IFileReadable
     {
