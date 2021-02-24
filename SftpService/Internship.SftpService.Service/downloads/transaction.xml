@@ -1,7 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
- - <transaction>
-       <id>28db9692-67a5-4562-a08d-f83a11c3ca02</id>
-       <date>2020-12-29</date>
-       <from>Christopher Roberts</from>
-       <to>Will Smith</to>
-   </transaction>
+<?xml version="1.0" encoding="utf-8"?>
+<Transaction 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<Id>28db9692-67a5-4562-a08d-f83a11c3ca02</Id>
+	<Date>2020-12-29</Date>
+	<From>Christopher Roberts</From>
+	<To>Will Smith</To>
+</Transaction>

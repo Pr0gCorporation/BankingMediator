@@ -23,13 +23,13 @@ namespace Internship.FileService.Service
                     var configuration = hostContext.Configuration;
                     
                     services.AddMassTransit(config => {
-                        config.AddConsumer<FileConsumer>();
+                        config.AddConsumer<TransactionConsumer>();
 
                         config.UsingRabbitMq((ctx, cfg) => {
                             cfg.Host(configuration.GetValue<string>("BusConfig:Host"));
 
                             cfg.ReceiveEndpoint("file_receive", c => {
-                                c.ConfigureConsumer<FileConsumer>(ctx);
+                                c.ConfigureConsumer<TransactionConsumer>(ctx);
                             });
                         });
                     });

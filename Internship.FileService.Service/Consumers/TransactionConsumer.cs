@@ -12,11 +12,11 @@ using Microsoft.Extensions.Logging;
 
 namespace Internship.FileService.Service.Consumers
 {
-    public class FileConsumer : IConsumer<FileDto>
+    public class TransactionConsumer : IConsumer<FileDto>
     {
-        private readonly ILogger<FileConsumer> _logger;
+        private readonly ILogger<TransactionConsumer> _logger;
 
-        public FileConsumer(ILogger<FileConsumer> logger)
+        public TransactionConsumer(ILogger<TransactionConsumer> logger)
         {
             this._logger = logger;
         }
@@ -26,7 +26,7 @@ namespace Internship.FileService.Service.Consumers
             _logger.LogWarning($"Look! I've got a new file: {context.Message.Name}, " +
                                $"\ndate = {context.Message.Date}, " +
                                $"\nbytes[] = {context.Message.File}\n");
-
+            
             await using var memoryStream = new MemoryStream(context.Message.File);
             using var streamReader = new StreamReader(memoryStream);
             var xmlSerializer = new XmlSerializer(typeof(TransactionDto));
