@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Internship.FileService.Service.Consumers;
+using Internship.FileService.Service.Converters;
 using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,6 +22,8 @@ namespace Internship.FileService.Service
                 {
                     services.AddHostedService<Worker>();
                     var configuration = hostContext.Configuration;
+
+                    services.AddScoped<IByteConvertable, ByteArrayToStreamReaderConverter>();
                     
                     services.AddMassTransit(config => {
                         config.AddConsumer<TransactionConsumer>();

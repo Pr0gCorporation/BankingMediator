@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Xml.Serialization;
 
-namespace Internship.FileService.Service.DTOs
+namespace Internship.FileService.Service.Models
 {
     [XmlRoot(ElementName = "Transaction", Namespace = "")]
-    public class TransactionDto
+    public class TransactionModel
     {
         [XmlElement("Id")]
         public Guid Id { get; set; }
