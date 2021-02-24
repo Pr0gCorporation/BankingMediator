@@ -9,11 +9,12 @@ namespace Internship.SftpService.Service.Publishers.FilePublisher
         /// Publish file in a sequence of queries
         /// </summary>
         /// <param name="files"></param>
-        void PublishByOne(IEnumerable<FileDto> files);
+        void PublishByOne(List<FileDto> files);
+
         /// <summary>
         /// Publish all the files in one query
         /// </summary>
         /// <param name="files"></param>
-        void PublishAll(IEnumerable<FileDto> files);
+        void PublishAll(List<FileDto> files);
     }
 }

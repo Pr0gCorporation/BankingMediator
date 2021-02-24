@@ -7,7 +7,7 @@ namespace Internship.SftpService.Service.FileActions.FileReader
 {
     public class ReadXmlFiles : IFileReadable
     {
-        public IEnumerable<FileDto> ReadAllFiles(string path)
+        public List<FileDto> ReadAllFiles(string path)
         {
             var fileDtos = new List<FileDto>();
 

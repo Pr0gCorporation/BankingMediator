@@ -9,7 +9,7 @@ namespace Internship.SftpService.Service.FileActions.FileReader
         /// Read all the files in a specified directory as Enumerable of FileDto
         /// </summary>
         /// <returns>IEnumerable of FileDto</returns>
-        IEnumerable<FileDto> ReadAllFiles(string path);
+        List<FileDto> ReadAllFiles(string path);
         /// <summary>
         /// Read one file, use the full path. Example dir/foo/file.ext
         /// </summary>
