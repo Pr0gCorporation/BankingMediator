@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Internship.SftpService.Service.Extentions;
+using Internship.SftpService.Service.FileHandlers;
 using Internship.SftpService.Service.Jobs;
 using Internship.SftpService.Service.Jobs.Configuration;
 using Internship.SftpService.Service.Publishers;
@@ -31,6 +32,7 @@ namespace Internship.SftpService.Service
                     services.AddSftpDownloader();
                     services.AddSftpUploader();
                     services.AddScoped<IFilePublisher, TransactionFilePublisher>();
+                    services.AddScoped<IFileReadable, ReadXmlFiles>();
 
                     services.AddMassTransit(config =>
                     {

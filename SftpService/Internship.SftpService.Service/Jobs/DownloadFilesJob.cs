@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Internship.SftpService.Service.DTOs;
+using Internship.SftpService.Service.FileHandlers;
 using Internship.SftpService.Service.Publishers;
 using Internship.SftpService.Service.SFTPAccess;
 using MassTransit;
@@ -16,13 +18,15 @@ namespace Internship.SftpService.Service.Jobs
         private readonly IServerFileDownloadable _downloadable;
         private readonly HostBuilderContext _hostBuilderContext;
         private readonly IFilePublisher _publisher;
+        private readonly IFileReadable _reader;
 
         public DownloadFilesJob(IServerFileDownloadable downloadable, HostBuilderContext hostBuilderContext,
-            IFilePublisher publisher)
+            IFilePublisher publisher, IFileReadable reader)
         {
             _downloadable = downloadable;
             _hostBuilderContext = hostBuilderContext;
             _publisher = publisher;
+            _reader = reader;
         }
 
         public Task Execute(IJobExecutionContext context)
@@ -32,7 +36,10 @@ namespace Internship.SftpService.Service.Jobs
                 configuration.GetValue<string>("PathConfig:DownloadFiles:From"),
                 configuration.GetValue<bool>("PathConfig:DownloadFiles:RemoveAfter"));
             
-            _publisher.Publish(configuration.GetValue<string>("PathConfig:DownloadFiles:To"));
+            var files = _reader.ReadAllFiles(
+                configuration.GetValue<string>("PathConfig:DownloadFiles:To"));
+            _publisher.PublishAll(files);
+            
             return Task.CompletedTask;
         }
     }
