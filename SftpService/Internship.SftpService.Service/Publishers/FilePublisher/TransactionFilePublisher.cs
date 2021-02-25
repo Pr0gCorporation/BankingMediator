@@ -6,7 +6,7 @@ using MassTransit;
 
 namespace Internship.SftpService.Service.Publishers.FilePublisher
 {
-    public class TransactionFilePublisher : IFilePublishable
+    public class TransactionFilePublisher
     {
         private readonly IBus _publishEndpoint;
 

@@ -1,4 +1,4 @@
-﻿using System.Data.SqlTypes;
+﻿using System;
 
 namespace Internship.SftpService.Service.Models
 {
@@ -6,6 +6,6 @@ namespace Internship.SftpService.Service.Models
     {
         public byte[] File { get; set; }
         public string Name { get; set; }
-        public SqlDateTime Date { get; set; }
+        public DateTime Date { get; set; }
     }
 }

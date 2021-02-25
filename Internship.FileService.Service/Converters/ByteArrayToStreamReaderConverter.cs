@@ -5,7 +5,7 @@ namespace Internship.FileService.Service.Converters
 {
     public class ByteArrayToStreamReaderConverter : IByteConvertable
     {
-        public StreamReader Convert(byte[] input)
+        public StreamReader Convert(byte[] input) // useless
         {
             var memoryStream = new MemoryStream(input);
             var streamReader = new StreamReader(memoryStream);

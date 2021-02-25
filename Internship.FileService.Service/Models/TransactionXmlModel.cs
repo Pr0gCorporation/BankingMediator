@@ -15,5 +15,6 @@ namespace Internship.FileService.Service.Models
         [XmlElement("To")]
         public string To { get; set; }
         public string FileName { get; set; }
+        public byte[] File { get; set; }
     }
 }

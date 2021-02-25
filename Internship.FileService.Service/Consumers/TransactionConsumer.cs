@@ -34,6 +34,8 @@ namespace Internship.FileService.Service.Consumers
             _logger.LogWarning($"Look! I've got a new file: {context.Message.Name}, " +
                                $"\ndate = {context.Message.Date}, " +
                                $"\nbytes[] = {context.Message.File}\n");
+            
+            // TODO: add try/catch
 
             using var streamReader = _converter.Convert(context.Message.File);
             var xmlSerializer = new XmlSerializer(typeof(TransactionXmlModel));
@@ -42,7 +44,7 @@ namespace Internship.FileService.Service.Consumers
             // Insert to DB
 
             var configuration = _hostBuilderContext.Configuration;
-
+            
             if (transaction != null)
             {
                 transaction.FileName = context.Message.Name;
