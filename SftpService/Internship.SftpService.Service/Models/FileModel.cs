@@ -1,9 +1,8 @@
-﻿using System;
-using System.Data.SqlTypes;
+﻿using System.Data.SqlTypes;
 
-namespace Internship.SftpService.Service.DTOs
+namespace Internship.SftpService.Service.Models
 {
-    public class FileDto
+    public class FileModel
     {
         public byte[] File { get; set; }
         public string Name { get; set; }

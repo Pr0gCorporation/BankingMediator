@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Internship.SftpService.Service.DTOs;
+using Internship.SftpService.Service.Models;
 using MassTransit;
 
 namespace Internship.SftpService.Service.Publishers.FilePublisher
@@ -15,17 +15,17 @@ namespace Internship.SftpService.Service.Publishers.FilePublisher
             _publishEndpoint = publishEndpoint;
         }
         
-        public async void PublishByOne(List<FileDto> files)
+        public async void PublishByOne(List<FileModel> files)
         {
             await PublishFiles(files);
         }
         
-        public async void PublishAll(List<FileDto> files)
+        public async void PublishAll(List<FileModel> files)
         {
             await _publishEndpoint.Publish(files);
         }
 
-        private async Task PublishFiles(List<FileDto> files)
+        private async Task PublishFiles(List<FileModel> files)
         {
             try
             {

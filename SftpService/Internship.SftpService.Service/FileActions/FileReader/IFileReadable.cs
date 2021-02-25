@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Internship.SftpService.Service.DTOs;
+using Internship.SftpService.Service.Models;
 
 namespace Internship.SftpService.Service.FileActions.FileReader
 {
@@ -9,11 +9,11 @@ namespace Internship.SftpService.Service.FileActions.FileReader
         /// Read all the files in a specified directory as Enumerable of FileDto
         /// </summary>
         /// <returns>IEnumerable of FileDto</returns>
-        List<FileDto> ReadAllFiles(string path);
+        List<FileModel> ReadAllFiles(string path);
         /// <summary>
         /// Read one file, use the full path. Example dir/foo/file.ext
         /// </summary>
         /// <returns>Single FileDto instance</returns>
-        FileDto ReadFile(string path);
+        FileModel ReadFile(string path);
     }
 }

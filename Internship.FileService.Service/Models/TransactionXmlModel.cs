@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 namespace Internship.FileService.Service.Models
 {
     [XmlRoot(ElementName = "Transaction", Namespace = "")]
-    public class TransactionModel
+    public class TransactionXmlModel
     {
         [XmlElement("Id")]
         public Guid Id { get; set; }

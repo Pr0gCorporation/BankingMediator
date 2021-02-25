@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Internship.SftpService.Service.DTOs;
+using Internship.SftpService.Service.Models;
 
 namespace Internship.SftpService.Service.Publishers.FilePublisher
 {
@@ -9,12 +9,12 @@ namespace Internship.SftpService.Service.Publishers.FilePublisher
         /// Publish file in a sequence of queries
         /// </summary>
         /// <param name="files"></param>
-        void PublishByOne(List<FileDto> files);
+        void PublishByOne(List<FileModel> files);
 
         /// <summary>
         /// Publish all the files in one query
         /// </summary>
         /// <param name="files"></param>
-        void PublishAll(List<FileDto> files);
+        void PublishAll(List<FileModel> files);
     }
 }

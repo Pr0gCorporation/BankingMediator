@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Internship.SftpService.Service.DTOs;
 using Internship.SftpService.Service.FileActions.FileReader;
 using Internship.SftpService.Service.Publishers;
 using Internship.SftpService.Service.Publishers.FilePublisher;

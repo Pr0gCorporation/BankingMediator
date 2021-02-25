@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 using Internship.FileService.Service.Converters;
 using Internship.FileService.Service.DBAccess;
 using Internship.FileService.Service.Models;
-using Internship.SftpService.Service.DTOs;
+using Internship.SftpService.Service.Models;
 using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -13,7 +13,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Internship.FileService.Service.Consumers
 {
-    public class TransactionConsumer : IConsumer<FileDto>
+    public class TransactionConsumer : IConsumer<FileModel>
     {
         private readonly ILogger<TransactionConsumer> _logger;
         private readonly IByteConvertable _converter;
@@ -29,15 +29,15 @@ namespace Internship.FileService.Service.Consumers
             _inserter = inserter;
         }
 
-        public async Task Consume(ConsumeContext<FileDto> context)
+        public async Task Consume(ConsumeContext<FileModel> context)
         {
             _logger.LogWarning($"Look! I've got a new file: {context.Message.Name}, " +
                                $"\ndate = {context.Message.Date}, " +
                                $"\nbytes[] = {context.Message.File}\n");
 
             using var streamReader = _converter.Convert(context.Message.File);
-            var xmlSerializer = new XmlSerializer(typeof(TransactionModel));
-            var transaction = (TransactionModel) xmlSerializer.Deserialize(streamReader);
+            var xmlSerializer = new XmlSerializer(typeof(TransactionXmlModel));
+            var transaction = (TransactionXmlModel) xmlSerializer.Deserialize(streamReader);
 
             // Insert to DB
 
