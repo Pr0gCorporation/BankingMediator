@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.SqlTypes;
 
 namespace Internship.SftpService.Service.DTOs
 {
@@ -6,6 +7,6 @@ namespace Internship.SftpService.Service.DTOs
     {
         public byte[] File { get; set; }
         public string Name { get; set; }
-        public DateTime Date { get; set; }
+        public SqlDateTime Date { get; set; }
     }
 }

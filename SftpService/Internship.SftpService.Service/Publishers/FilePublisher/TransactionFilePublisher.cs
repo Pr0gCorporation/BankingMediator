@@ -6,11 +6,11 @@ using MassTransit;
 
 namespace Internship.SftpService.Service.Publishers.FilePublisher
 {
-    public class TransactionFilePublishable : IFilePublishable
+    public class TransactionFilePublisher : IFilePublishable
     {
         private readonly IBus _publishEndpoint;
 
-        public TransactionFilePublishable(IBus publishEndpoint)
+        public TransactionFilePublisher(IBus publishEndpoint)
         {
             _publishEndpoint = publishEndpoint;
         }
@@ -27,11 +27,18 @@ namespace Internship.SftpService.Service.Publishers.FilePublisher
 
         private async Task PublishFiles(List<FileDto> files)
         {
-            if (files.Count == 0) throw new ArgumentException("Value cannot be an empty collection.", nameof(files));
-            
-            foreach (var file in files)
+            try
             {
-                await _publishEndpoint.Publish(file);
+                if (files.Count == 0) throw new ArgumentException("No files found.", nameof(files));
+            
+                foreach (var file in files)
+                {
+                    await _publishEndpoint.Publish(file);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
             }
         }
     }

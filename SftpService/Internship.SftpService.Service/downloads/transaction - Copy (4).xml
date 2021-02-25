@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Transaction 
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-	<Id>18bd1492-57a5-4511-a08d-f83a12c3caca</Id>
-	<Date>1922-09-29</Date>
-	<From>Christopher Smith</From>
-	<To>Robert William</To>
-</Transaction>
