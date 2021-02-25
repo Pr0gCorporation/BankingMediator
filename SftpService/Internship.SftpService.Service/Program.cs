@@ -1,10 +1,8 @@
 using System;
-using System.Linq;
 using Internship.SftpService.Service.Extentions;
 using Internship.SftpService.Service.FileActions.FileReader;
 using Internship.SftpService.Service.Jobs;
 using Internship.SftpService.Service.Jobs.Configuration;
-using Internship.SftpService.Service.Publishers;
 using Internship.SftpService.Service.Publishers.FilePublisher;
 using Internship.SftpService.Service.SFTPClient;
 using MassTransit;

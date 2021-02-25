@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Data.SqlClient;
+using System.IO;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
-using Internship.FileService.Service.Converters;
 using Internship.FileService.Service.DBAccess;
 using Internship.FileService.Service.Models;
 using Internship.SftpService.Service.Models;
@@ -16,15 +16,13 @@ namespace Internship.FileService.Service.Consumers
     public class TransactionConsumer : IConsumer<FileModel>
     {
         private readonly ILogger<TransactionConsumer> _logger;
-        private readonly IByteConvertable _converter;
         private readonly HostBuilderContext _hostBuilderContext;
         private readonly InsertTransactionToDb _inserter;
 
-        public TransactionConsumer(ILogger<TransactionConsumer> logger, IByteConvertable converter,
+        public TransactionConsumer(ILogger<TransactionConsumer> logger,
             HostBuilderContext hostBuilderContext, InsertTransactionToDb inserter)
         {
             this._logger = logger;
-            _converter = converter;
             _hostBuilderContext = hostBuilderContext;
             _inserter = inserter;
         }
@@ -34,27 +32,32 @@ namespace Internship.FileService.Service.Consumers
             _logger.LogWarning($"Look! I've got a new file: {context.Message.Name}, " +
                                $"\ndate = {context.Message.Date}, " +
                                $"\nbytes[] = {context.Message.File}\n");
-            
-            // TODO: add try/catch
 
-            using var streamReader = _converter.Convert(context.Message.File);
-            var xmlSerializer = new XmlSerializer(typeof(TransactionXmlModel));
-            var transaction = (TransactionXmlModel) xmlSerializer.Deserialize(streamReader);
-
-            // Insert to DB
-
-            var configuration = _hostBuilderContext.Configuration;
-            
-            if (transaction != null)
+            try
             {
-                transaction.FileName = context.Message.Name;
-                await _inserter.Insert(
-                    new SqlConnection(configuration.GetConnectionString("MSSQLSERVERConnection")),
-                    transaction);
+                await using var memoryStream = new MemoryStream(context.Message.File);
+                using var streamReader = new StreamReader(memoryStream);
+                var xmlSerializer = new XmlSerializer(typeof(TransactionXmlModel));
+                var transaction = (TransactionXmlModel) xmlSerializer.Deserialize(streamReader);
+
+                var configuration = _hostBuilderContext.Configuration;
+            
+                if (transaction != null)
+                {
+                    transaction.FileName = context.Message.Name;
+                    await _inserter.Insert(
+                        new SqlConnection(configuration.GetConnectionString("MSSQLSERVERConnection")),
+                        transaction);
+                }
+                else
+                {
+                    _logger.LogWarning($"Wrong transaction!");
+                }
             }
-            else
+            catch (Exception e)
             {
-                _logger.LogWarning($"Wrong transaction!");
+                Console.WriteLine(e);
+                throw;
             }
         }
     }
