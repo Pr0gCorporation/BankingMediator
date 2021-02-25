@@ -15,6 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Internship.FileService.Domain\Internship.FileService.Domain.csproj" />
       <ProjectReference Include="..\SftpService\Internship.SftpService.Service\Internship.SftpService.Service.csproj" />
     </ItemGroup>
 </Project>

@@ -3,8 +3,8 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using Internship.FileService.Domain.Models;
 using Internship.FileService.Service.DBAccess;
-using Internship.FileService.Service.Models;
 using Internship.SftpService.Service.Models;
 using MassTransit;
 using Microsoft.Extensions.Configuration;
@@ -30,15 +30,14 @@ namespace Internship.FileService.Service.Consumers
         public async Task Consume(ConsumeContext<FileModel> context)
         {
             _logger.LogWarning($"Look! I've got a new file: {context.Message.Name}, " +
-                               $"\ndate = {context.Message.Date}, " +
                                $"\nbytes[] = {context.Message.File}\n");
 
             try
             {
                 await using var memoryStream = new MemoryStream(context.Message.File);
                 using var streamReader = new StreamReader(memoryStream);
-                var xmlSerializer = new XmlSerializer(typeof(TransactionXmlModel));
-                var transaction = (TransactionXmlModel) xmlSerializer.Deserialize(streamReader);
+                var xmlSerializer = new XmlSerializer(typeof(TransactionModel));
+                var transaction = (TransactionModel) xmlSerializer.Deserialize(streamReader);
 
                 var configuration = _hostBuilderContext.Configuration;
             
@@ -48,6 +47,7 @@ namespace Internship.FileService.Service.Consumers
                     await _inserter.Insert(
                         new SqlConnection(configuration.GetConnectionString("MSSQLSERVERConnection")),
                         transaction);
+                    _logger.LogInformation($"Inserted successfully!");
                 }
                 else
                 {
