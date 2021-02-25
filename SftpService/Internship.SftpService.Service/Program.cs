@@ -32,7 +32,7 @@ namespace Internship.SftpService.Service
                     services.AddTransient<ISftpClientIntern, SftpClientIntern>();
                     services.AddSftpDownloader();
                     services.AddSftpUploader();
-                    services.AddScoped<IFilePublishable, TransactionFilePublishable>();
+                    services.AddScoped<IFilePublishable, TransactionFilePublisher>();
                     services.AddScoped<IFileReadable, ReadXmlFiles>();
 
                     services.AddMassTransit(config =>
