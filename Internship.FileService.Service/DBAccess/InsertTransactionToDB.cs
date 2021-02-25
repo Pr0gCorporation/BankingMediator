@@ -47,10 +47,6 @@ namespace Internship.FileService.Service.DBAccess
                 else 
                     _logger.LogCritical(sqlException.Message);
             }
-            finally
-            {
-                await sqlConnection.CloseAsync();
-            }
         }
     }
 }
