@@ -14,10 +14,10 @@ namespace Internship.SftpService.Service.Jobs
         private readonly IServerFileDownloadable _downloadable;
         private readonly HostBuilderContext _hostBuilderContext;
         private readonly TransactionFilePublisher _publisher;
-        private readonly IFileReadable _reader;
+        private readonly ReadXmlFiles _reader;
 
         public DownloadPublishFilesJob(IServerFileDownloadable downloadable, HostBuilderContext hostBuilderContext,
-            TransactionFilePublisher publisher, IFileReadable reader)
+            TransactionFilePublisher publisher, ReadXmlFiles reader)
         {
             _downloadable = downloadable;
             _hostBuilderContext = hostBuilderContext;

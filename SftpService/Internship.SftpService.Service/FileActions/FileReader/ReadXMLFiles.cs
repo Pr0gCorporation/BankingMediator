@@ -5,7 +5,7 @@ using Internship.SftpService.Service.Models;
 
 namespace Internship.SftpService.Service.FileActions.FileReader
 {
-    public class ReadXmlFiles : IFileReadable
+    public class ReadXmlFiles
     {
         public List<FileModel> ReadAllFiles(string path)
         {
@@ -22,7 +22,6 @@ namespace Internship.SftpService.Service.FileActions.FileReader
                     {
                         File = File.ReadAllBytes(file),
                         Name = Path.GetFileName(file),
-                        Date = DateTime.Now
                     });
             }
 
@@ -35,7 +34,6 @@ namespace Internship.SftpService.Service.FileActions.FileReader
             {
                 File = File.ReadAllBytes(path),
                 Name = Path.GetFileName(path),
-                Date = DateTime.Now
             };
         }
     }

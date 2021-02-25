@@ -22,7 +22,6 @@ namespace Internship.FileService.Service.DBAccess
             insertTransaction.Parameters.Add("@FileName", SqlDbType.NVarChar, 50).Value = transaction.FileName;
 
             await sqlConnection.OpenAsync();
-
             await insertTransaction.ExecuteNonQueryAsync();
         }
     }
