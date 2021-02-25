@@ -11,6 +11,7 @@
         <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="7.2.0-develop.3299" />
         <PackageReference Include="MassTransit.RabbitMQ" Version="7.2.0-develop.3299" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
+        <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
     </ItemGroup>
 
     <ItemGroup>

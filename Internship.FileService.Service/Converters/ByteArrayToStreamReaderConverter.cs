@@ -5,10 +5,10 @@ namespace Internship.FileService.Service.Converters
 {
     public class ByteArrayToStreamReaderConverter : IByteConvertable
     {
-        public async Task<StreamReader> Convert(byte[] input)
+        public StreamReader Convert(byte[] input)
         {
-            await using var memoryStream = new MemoryStream(input);
-            using var streamReader = new StreamReader(memoryStream);
+            var memoryStream = new MemoryStream(input);
+            var streamReader = new StreamReader(memoryStream);
             return streamReader;
         }
     }
