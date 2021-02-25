@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Transaction 
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-	<Id>28db9682-67a5-4562-a08d-f83a11c3ab20</Id>
-	<Date>2002-03-08</Date>
-	<From>Christopher Roberts</From>
-	<To>Will Smith</To>
-</Transaction>

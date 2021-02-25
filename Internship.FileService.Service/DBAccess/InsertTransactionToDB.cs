@@ -40,9 +40,12 @@ namespace Internship.FileService.Service.DBAccess
                 _ = await insertTransaction.ExecuteNonQueryAsync();
                 _logger.LogInformation($"Inserted to the {sqlConnection.Database} successfully!");
             }
-            catch
+            catch (SqlException sqlException)
             {
-                _logger.LogWarning($"Record already exists {transaction.Id}!");
+                if (sqlException.Message.Contains("Violation of PRIMARY KEY constraint"))
+                    _logger.LogWarning($"Record already exists {transaction.Id}!");
+                else 
+                    _logger.LogCritical(sqlException.Message);
             }
             finally
             {
