@@ -1,28 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
 using Internship.SftpService.Service.DTOs;
-using MassTransit;
 
-namespace Internship.SftpService.Service.Publishers
+namespace Internship.SftpService.Service.FileActions.FileReader
 {
-    public class TransactionFilePublisher : IFilePublisher
+    public class ReadXmlFiles : IFileReadable
     {
-        private readonly IBus _publishEndpoint;
-
-        public TransactionFilePublisher(IBus publishEndpoint)
-        {
-            _publishEndpoint = publishEndpoint;
-        }
-
-        public async void Publish(string path)
-        {
-            await PublishFiles(ReadFiles(path));
-        }
-
-        private IEnumerable<FileDto> ReadFiles(string path)
+        public List<FileDto> ReadAllFiles(string path)
         {
             var fileDtos = new List<FileDto>();
 
@@ -44,12 +29,14 @@ namespace Internship.SftpService.Service.Publishers
             return fileDtos;
         }
 
-        private async Task PublishFiles(IEnumerable<FileDto> files)
+        public FileDto ReadFile(string path)
         {
-            foreach (var file in files)
+            return new FileDto
             {
-                await _publishEndpoint.Publish(file);
-            }
+                File = File.ReadAllBytes(path),
+                Name = Path.GetFileName(path),
+                Date = DateTime.Now
+            };
         }
     }
 }

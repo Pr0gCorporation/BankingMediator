@@ -1,4 +1,4 @@
-﻿namespace Internship.SftpService.Service.SFTPAccess
+﻿namespace Internship.SftpService.Service.SFTPActions.UploadFiles
 {
     public interface IServerFileUploadable
     {

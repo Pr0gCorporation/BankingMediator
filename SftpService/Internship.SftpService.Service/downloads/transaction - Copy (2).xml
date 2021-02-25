@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Transaction 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<Id>18bb9692-67a5-9562-f83a-a08d11c3ca02</Id>
+	<Date>2020-12-09</Date>
+	<From>Maxim William</From>
+	<To>Will Smith</To>
+</Transaction>

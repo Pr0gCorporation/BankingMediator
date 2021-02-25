@@ -1,5 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
+using Internship.FileService.Service.Consumers;
+using Internship.FileService.Service.Converters;
+using Internship.FileService.Service.DBAccess;
 using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,15 +23,18 @@ namespace Internship.FileService.Service
                 {
                     services.AddHostedService<Worker>();
                     var configuration = hostContext.Configuration;
+
+                    services.AddScoped<IByteConvertable, ByteArrayToStreamReaderConverter>();
+                    services.AddScoped<InsertTransactionToDb>();
                     
                     services.AddMassTransit(config => {
-                        config.AddConsumer<FileConsumer>();
+                        config.AddConsumer<TransactionConsumer>();
 
                         config.UsingRabbitMq((ctx, cfg) => {
                             cfg.Host(configuration.GetValue<string>("BusConfig:Host"));
 
                             cfg.ReceiveEndpoint("file_receive", c => {
-                                c.ConfigureConsumer<FileConsumer>(ctx);
+                                c.ConfigureConsumer<TransactionConsumer>(ctx);
                             });
                         });
                     });

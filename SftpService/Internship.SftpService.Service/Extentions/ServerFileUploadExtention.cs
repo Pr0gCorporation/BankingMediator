@@ -1,5 +1,4 @@
-﻿using Internship.SftpService.Service.SFTPAccess;
-using Internship.SftpService.Service.SFTPActions.UploadFiles;
+﻿using Internship.SftpService.Service.SFTPActions.UploadFiles;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Renci.SshNet;
