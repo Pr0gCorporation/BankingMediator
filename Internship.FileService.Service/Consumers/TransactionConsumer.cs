@@ -34,26 +34,20 @@ namespace Internship.FileService.Service.Consumers
 
             try
             {
-                await using var memoryStream = new MemoryStream(context.Message.File);
-                using var streamReader = new StreamReader(memoryStream);
-                var xmlSerializer = new XmlSerializer(typeof(TransactionModel));
-                var transaction = (TransactionModel) xmlSerializer.Deserialize(streamReader);
+                var transaction = new TransactionModel()
+                {
+                    Date = DateTime.Now,
+                    Type = "incoming",
+                    FileName = context.Message.FileName,
+                    File = context.Message.File
+                };
 
                 var configuration = _hostBuilderContext.Configuration;
-            
-                if (transaction != null)
-                {
-                    await _inserter.Insert(
-                        new SqlConnection(configuration.GetConnectionString("MYSQLConnection")),
-                        transaction, 
-                        context.Message.FileName,
-                        context.Message.File);
-                    _logger.LogInformation($"Inserted successfully!");
-                }
-                else
-                {
-                    _logger.LogWarning($"Wrong transaction!");
-                }
+
+                await InsertTransactionToDb.Insert(
+                    new SqlConnection(configuration.GetConnectionString("MYSQLConnection")),
+                    transaction);
+                _logger.LogInformation($"Inserted successfully!");
             }
             catch (Exception e)
             {
