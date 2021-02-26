@@ -17,8 +17,8 @@ namespace Internship.FileService.Service.DBAccess
             
             await using var insertTransaction = new SqlCommand(sqlExpressionInsertTransaction, sqlConnection);
             
-            insertTransaction.Parameters.Add("@From", SqlDbType.NVarChar, 50).Value = transaction.From;
-            insertTransaction.Parameters.Add("@To", SqlDbType.NVarChar, 50).Value = transaction.To;
+            insertTransaction.Parameters.Add("@From", SqlDbType.NVarChar, 50).Value = transaction.Creditor;
+            insertTransaction.Parameters.Add("@To", SqlDbType.NVarChar, 50).Value = transaction.Debtor;
             insertTransaction.Parameters.Add("@FileName", SqlDbType.NVarChar, 50).Value = transaction.FileName;
 
             await sqlConnection.OpenAsync();

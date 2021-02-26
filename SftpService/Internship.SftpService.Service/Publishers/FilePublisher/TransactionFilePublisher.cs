@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Internship.SftpService.Service.Models;
+using Internship.SftpService.Domain.Models;
 using MassTransit;
 
 namespace Internship.SftpService.Service.Publishers.FilePublisher

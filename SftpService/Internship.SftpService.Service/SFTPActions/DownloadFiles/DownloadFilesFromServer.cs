@@ -7,10 +7,10 @@ namespace Internship.SftpService.Service.SFTPActions.DownloadFiles
 {
     public sealed class DownloadFilesFromServer : IServerFileDownloadable
     {
-        private readonly ISftpClientIntern _sftpClient;
+        private readonly SftpClientIntern _sftpClient;
         private readonly ILogger<DownloadFilesFromServer> _logger;
 
-        public DownloadFilesFromServer(ISftpClientIntern sftpClient, ILogger<DownloadFilesFromServer> logger)
+        public DownloadFilesFromServer(SftpClientIntern sftpClient, ILogger<DownloadFilesFromServer> logger)
         {
             _sftpClient = sftpClient;
             _logger = logger;

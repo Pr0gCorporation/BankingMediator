@@ -8,7 +8,7 @@ using Renci.SshNet.Sftp;
 
 namespace Internship.SftpService.Service.SFTPClient
 {
-    public class SftpClientIntern : ISftpClientIntern
+    public class SftpClientIntern
     {
         public string Host { get; set; }
         public int Port { get; set; }

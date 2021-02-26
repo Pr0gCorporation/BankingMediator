@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Internship.SftpService.Service.Models;
+using Internship.SftpService.Domain.Models;
 
 namespace Internship.SftpService.Service.FileActions.FileReader
 {
@@ -21,7 +21,7 @@ namespace Internship.SftpService.Service.FileActions.FileReader
                     new FileModel
                     {
                         File = File.ReadAllBytes(file),
-                        Name = Path.GetFileName(file),
+                        FileName = Path.GetFileName(file),
                     });
             }
 
@@ -33,7 +33,7 @@ namespace Internship.SftpService.Service.FileActions.FileReader
             return new FileModel
             {
                 File = File.ReadAllBytes(path),
-                Name = Path.GetFileName(path),
+                FileName = Path.GetFileName(path),
             };
         }
     }

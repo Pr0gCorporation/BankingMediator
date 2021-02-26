@@ -27,7 +27,7 @@ namespace Internship.SftpService.Service
                     var configuration = hostContext.Configuration;
 
                     services.AddHostedService<Worker>();
-                    services.AddTransient<ISftpClientIntern, SftpClientIntern>();
+                    services.AddTransient<SftpClientIntern>();
                     services.AddSftpDownloader();
                     services.AddSftpUploader();
                     services.AddScoped<TransactionFilePublisher>();
