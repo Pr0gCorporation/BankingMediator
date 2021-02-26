@@ -43,10 +43,11 @@ namespace Internship.FileService.Service.Consumers
             
                 if (transaction != null)
                 {
-                    transaction.FileName = context.Message.FileName;
                     await _inserter.Insert(
-                        new SqlConnection(configuration.GetConnectionString("MSSQLSERVERConnection")),
-                        transaction);
+                        new SqlConnection(configuration.GetConnectionString("MYSQLConnection")),
+                        transaction, 
+                        context.Message.FileName,
+                        context.Message.File);
                     _logger.LogInformation($"Inserted successfully!");
                 }
                 else
