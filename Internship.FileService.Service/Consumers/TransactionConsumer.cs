@@ -44,9 +44,10 @@ namespace Internship.FileService.Service.Consumers
 
                 var configuration = _hostBuilderContext.Configuration;
 
-                await InsertTransactionToDb.Insert(
-                    new SqlConnection(configuration.GetConnectionString("MYSQLConnection")),
+                await _inserter.Insert(
+                    configuration.GetConnectionString("MYSQLConnection"),
                     transaction);
+                
                 _logger.LogInformation($"Inserted successfully!");
             }
             catch (Exception e)
