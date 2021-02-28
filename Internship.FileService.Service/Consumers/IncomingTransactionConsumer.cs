@@ -13,13 +13,13 @@ using Microsoft.Extensions.Logging;
 
 namespace Internship.FileService.Service.Consumers
 {
-    public class TransactionConsumer : IConsumer<FileModel>
+    public class IncomingTransactionConsumer : IConsumer<FileModel>
     {
-        private readonly ILogger<TransactionConsumer> _logger;
+        private readonly ILogger<IncomingTransactionConsumer> _logger;
         private readonly HostBuilderContext _hostBuilderContext;
         private readonly InsertTransactionToDb _inserter;
 
-        public TransactionConsumer(ILogger<TransactionConsumer> logger,
+        public IncomingTransactionConsumer(ILogger<IncomingTransactionConsumer> logger,
             HostBuilderContext hostBuilderContext, InsertTransactionToDb inserter)
         {
             _logger = logger;
@@ -34,19 +34,13 @@ namespace Internship.FileService.Service.Consumers
 
             try
             {
-                var transaction = new TransactionModel()
-                {
-                    Date = DateTime.Now,
-                    Type = "incoming",
-                    FileName = context.Message.FileName,
-                    File = context.Message.File
-                };
-
                 var configuration = _hostBuilderContext.Configuration;
 
                 await _inserter.Insert(
                     configuration.GetConnectionString("MYSQLConnection"),
-                    transaction);
+                    DateTime.Now,  "incoming",
+                    context.Message.FileName, 
+                    context.Message.File);
                 
                 _logger.LogInformation($"Inserted successfully!");
             }

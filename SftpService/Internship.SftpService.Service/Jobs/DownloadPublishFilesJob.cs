@@ -34,7 +34,7 @@ namespace Internship.SftpService.Service.Jobs
             
             var files = _reader.ReadAllFiles(
                 configuration.GetValue<string>("PathConfig:DownloadFiles:To"));
-            _publisher.PublishByOne(files);
+            _publisher.PublishFiles(files);
             
             return Task.CompletedTask;
         }

@@ -24,13 +24,18 @@ namespace Internship.FileService.Service
                     services.AddScoped<InsertTransactionToDb>();
                     
                     services.AddMassTransit(config => {
-                        config.AddConsumer<TransactionConsumer>();
+                        config.AddConsumer<IncomingTransactionConsumer>();
+                        config.AddConsumer<OutgoingPaymentConsumer>();
 
                         config.UsingRabbitMq((ctx, cfg) => {
                             cfg.Host(configuration.GetValue<string>("BusConfig:Host"));
 
                             cfg.ReceiveEndpoint("file_receive", c => {
-                                c.ConfigureConsumer<TransactionConsumer>(ctx);
+                                c.ConfigureConsumer<IncomingTransactionConsumer>(ctx);
+                            });
+                            
+                            cfg.ReceiveEndpoint("file_send", c => {
+                                c.ConfigureConsumer<OutgoingPaymentConsumer>(ctx);
                             });
                         });
                     });

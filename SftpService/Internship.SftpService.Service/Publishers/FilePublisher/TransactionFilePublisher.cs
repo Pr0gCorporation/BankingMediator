@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Internship.SftpService.Domain.Models;
 using MassTransit;
 
@@ -14,31 +12,14 @@ namespace Internship.SftpService.Service.Publishers.FilePublisher
         {
             _publishEndpoint = publishEndpoint;
         }
-        
-        public async void PublishByOne(List<FileModel> files)
-        {
-            await PublishFiles(files);
-        }
-        
-        public async void PublishAll(List<FileModel> files)
-        {
-            await _publishEndpoint.Publish(files);
-        }
 
-        private async Task PublishFiles(List<FileModel> files)
+        public async void PublishFiles(IEnumerable<FileModel> files)
         {
-            try
-            {
-                if (files.Count == 0) throw new ArgumentException("No files found.", nameof(files));
+            if (files is null) return;
             
-                foreach (var file in files)
-                {
-                    await _publishEndpoint.Publish(file);
-                }
-            }
-            catch (Exception e)
+            foreach (var file in files)
             {
-                Console.WriteLine(e);
+                await _publishEndpoint.Publish(file);
             }
         }
     }
