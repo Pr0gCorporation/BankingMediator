@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using Internship.SftpService.Service.DTOs;
+using Internship.FileService.Domain.Models;
 
 namespace Internship.SftpService.Service.FileActions.FileReader
 {
-    public class ReadXmlFiles : IFileReadable
+    public class ReadXmlFiles
     {
-        public List<FileDto> ReadAllFiles(string path)
+        public List<IncomingFile> ReadAllFiles(string path)
         {
-            var fileDtos = new List<FileDto>();
+            var fileDtos = new List<IncomingFile>();
 
             var files = Directory.GetFiles(path);
 
@@ -18,24 +17,22 @@ namespace Internship.SftpService.Service.FileActions.FileReader
                 if(Path.GetExtension(file) is not ".xml") continue;
                 
                 fileDtos.Add(
-                    new FileDto
+                    new IncomingFile
                     {
                         File = File.ReadAllBytes(file),
-                        Name = Path.GetFileName(file),
-                        Date = DateTime.Now
+                        FileName = Path.GetFileName(file),
                     });
             }
 
             return fileDtos;
         }
 
-        public FileDto ReadFile(string path)
+        public IncomingFile ReadFile(string path)
         {
-            return new FileDto
+            return new IncomingFile
             {
                 File = File.ReadAllBytes(path),
-                Name = Path.GetFileName(path),
-                Date = DateTime.Now
+                FileName = Path.GetFileName(path),
             };
         }
     }

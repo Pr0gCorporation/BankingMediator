@@ -19,4 +19,9 @@
     <ItemGroup>
       <Folder Include="downloads" />
     </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Internship.FileService.Domain\Internship.FileService.Domain.csproj" />
+      <ProjectReference Include="..\Internship.SftpService.Domain\Internship.SftpService.Domain.csproj" />
+    </ItemGroup>
 </Project>

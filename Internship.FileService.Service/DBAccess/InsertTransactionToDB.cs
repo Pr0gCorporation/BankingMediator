@@ -1,52 +1,28 @@
 ﻿using System;
-using System.Data;
-using System.Data.SqlClient;
 using System.Threading.Tasks;
-using Internship.FileService.Service.Consumers;
-using Internship.FileService.Service.Models;
-using Microsoft.Extensions.Logging;
+using Internship.FileService.Domain.Models;
+using MySql.Data.MySqlClient;
 
 namespace Internship.FileService.Service.DBAccess
 {
     public class InsertTransactionToDb
     {
-        private readonly ILogger<TransactionConsumer> _logger;
-
-        public InsertTransactionToDb(ILogger<TransactionConsumer> logger)
+        public async Task Insert(string connectionString, DateTime date, string type, string filename, byte[] file)
         {
-            _logger = logger;
-        }
+            await using var sqlConnection = new MySqlConnection(connectionString);
 
-        public async Task Insert(SqlConnection connection, TransactionModel transaction)
-        {
-            await using var sqlConnection = connection;
+            var sqlExpressionInsertTransaction = "INSERT INTO `db`.`payments`"+
+                                                 "(`date`, `type`, `filename`, `file`) VALUES (@Date, @Type, @FileName, @File);";
 
-            var sqlExpressionInsertTransaction = $"INSERT INTO Transactions (Id, Date, [From], [To], FileName) " +
-                                                 $"VALUES ('{transaction.Id}', '{transaction.Date}'," +
-                                                 " @From, @To, @FileName)";
-            SqlCommand insertTransaction;
-
-            await using (insertTransaction = new SqlCommand(sqlExpressionInsertTransaction, sqlConnection))
-            {
-                insertTransaction.Parameters.Add("@From", SqlDbType.NVarChar, 50).Value = transaction.From;
-                insertTransaction.Parameters.Add("@To", SqlDbType.NVarChar, 50).Value = transaction.To;
-                insertTransaction.Parameters.Add("@FileName", SqlDbType.NVarChar, 50).Value = transaction.FileName;
-            }
+            await using var insertTransaction = new MySqlCommand(sqlExpressionInsertTransaction, sqlConnection);
+            
+            insertTransaction.Parameters.Add("@Date", MySqlDbType.DateTime, 50).Value = date;
+            insertTransaction.Parameters.Add("@Type", MySqlDbType.VarChar, 50).Value = type;
+            insertTransaction.Parameters.Add("@FileName", MySqlDbType.VarChar, 50).Value = filename;
+            insertTransaction.Parameters.Add("@File", MySqlDbType.Blob, 350).Value = file;
 
             await sqlConnection.OpenAsync();
-
-            try
-            {
-                _ = await insertTransaction.ExecuteNonQueryAsync();
-                _logger.LogInformation($"Inserted to the {sqlConnection.Database} successfully!");
-            }
-            catch (SqlException sqlException)
-            {
-                if (sqlException.Message.Contains("Violation of PRIMARY KEY constraint"))
-                    _logger.LogWarning($"Record already exists {transaction.Id}!");
-                else 
-                    _logger.LogCritical(sqlException.Message);
-            }
+            await insertTransaction.ExecuteNonQueryAsync();
         }
     }
 }

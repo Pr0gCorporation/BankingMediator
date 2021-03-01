@@ -3,5 +3,6 @@
     public interface IServerFileUploadable
     {
         int Upload(string pathTo, string pathFrom, bool removeFileAfterDownloading); 
+        void Upload(string pathTo, byte[] file, string filename); 
     }
 }

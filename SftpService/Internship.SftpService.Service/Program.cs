@@ -1,10 +1,9 @@
 using System;
-using System.Linq;
+using Internship.SftpService.Service.Consumers;
 using Internship.SftpService.Service.Extentions;
 using Internship.SftpService.Service.FileActions.FileReader;
 using Internship.SftpService.Service.Jobs;
 using Internship.SftpService.Service.Jobs.Configuration;
-using Internship.SftpService.Service.Publishers;
 using Internship.SftpService.Service.Publishers.FilePublisher;
 using Internship.SftpService.Service.SFTPClient;
 using MassTransit;
@@ -29,17 +28,23 @@ namespace Internship.SftpService.Service
                     var configuration = hostContext.Configuration;
 
                     services.AddHostedService<Worker>();
-                    services.AddTransient<ISftpClientIntern, SftpClientIntern>();
+                    services.AddTransient<SftpClientIntern>();
                     services.AddSftpDownloader();
                     services.AddSftpUploader();
-                    services.AddScoped<IFilePublishable, TransactionFilePublisher>();
-                    services.AddScoped<IFileReadable, ReadXmlFiles>();
-
+                    services.AddScoped<TransactionFilePublisher>();
+                    services.AddScoped<ReadXmlFiles>();
+                    
                     services.AddMassTransit(config =>
                     {
+                        config.AddConsumer<OutgoingFileConsumer>();
+                        
                         config.UsingRabbitMq((ctx, cfg) =>
                         {
                             cfg.Host(configuration.GetValue<string>("BusConfig:Host"));
+                            
+                             cfg.ReceiveEndpoint("file_save", c => {
+                                 c.ConfigureConsumer<OutgoingFileConsumer>(ctx);
+                             });
                         });
                     });
                     
