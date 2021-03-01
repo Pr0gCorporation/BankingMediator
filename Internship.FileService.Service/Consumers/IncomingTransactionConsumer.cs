@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Internship.FileService.Domain.Models;
 using Internship.FileService.Service.DBAccess;
-using Internship.SftpService.Domain.Models;
 using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -13,7 +12,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Internship.FileService.Service.Consumers
 {
-    public class IncomingTransactionConsumer : IConsumer<FileModel>
+    public class IncomingTransactionConsumer : IConsumer<IncomingFile>
     {
         private readonly ILogger<IncomingTransactionConsumer> _logger;
         private readonly HostBuilderContext _hostBuilderContext;
@@ -27,7 +26,7 @@ namespace Internship.FileService.Service.Consumers
             _inserter = inserter;
         }
 
-        public async Task Consume(ConsumeContext<FileModel> context)
+        public async Task Consume(ConsumeContext<IncomingFile> context)
         {
             _logger.LogWarning($"Look! I've got a new file: {context.Message.FileName}, " +
                                $"\nbytes[] = {context.Message.File}\n");

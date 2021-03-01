@@ -17,13 +17,15 @@ namespace Internship.FileService.Service.Consumers
         private readonly ILogger<OutgoingPaymentConsumer> _logger;
         private readonly HostBuilderContext _hostBuilderContext;
         private readonly InsertTransactionToDb _inserter;
-        
+        private readonly IBus _publishEndpoint;
+
         public OutgoingPaymentConsumer(ILogger<OutgoingPaymentConsumer> logger,
-            HostBuilderContext hostBuilderContext, InsertTransactionToDb inserter)
+            HostBuilderContext hostBuilderContext, InsertTransactionToDb inserter, IBus publishEndpoint)
         {
             _logger = logger;
             _hostBuilderContext = hostBuilderContext;
             _inserter = inserter;
+            _publishEndpoint = publishEndpoint;
         }
         
         public async Task Consume(ConsumeContext<Transaction> context)
@@ -42,10 +44,10 @@ namespace Internship.FileService.Service.Consumers
 
             var xmlTransactionBytes = Encoding.ASCII.GetBytes(xmlTransactionString);
             
+            var configuration = _hostBuilderContext.Configuration;
+            
             try
             {
-                var configuration = _hostBuilderContext.Configuration;
-
                 await _inserter.Insert(
                     configuration.GetConnectionString("MYSQLConnection"),
                     DateTime.Now, "outgoing",
@@ -56,10 +58,17 @@ namespace Internship.FileService.Service.Consumers
                     xmlTransactionBytes);
                 
                 _logger.LogInformation($"Inserted successfully!");
+
+                await _publishEndpoint.Publish(new OutgoingFile()
+                {
+                    FileName = GenerateFileName(
+                        context.Message.Creditor, 
+                        context.Message.Debtor, 
+                        context.Message.Date),
+                    File = xmlTransactionBytes
+                });
                 
-                //
-                // TODO: publish to sftp endpoint
-                //
+                _logger.LogInformation($"Sent to SFTP successfully!");
             }
             catch (Exception e)
             {
@@ -70,7 +79,7 @@ namespace Internship.FileService.Service.Consumers
 
         private string GenerateFileName(string creditor, string debtor, DateTime date)
         {
-            return $"{creditor}_{debtor}_{date.Date}";
+            return $"{creditor}_{debtor}_{date.Date.Millisecond + date.Date.Minute}.xml";
         }
     }
 }

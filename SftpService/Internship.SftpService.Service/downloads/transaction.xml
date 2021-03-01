@@ -2,7 +2,7 @@
 <Transaction 
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
     xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-	<PaymentId>19db9692-67b5-4562-a08d-f83a11c3ca02</PaymentId>
+	<TransactionId>4524</TransactionId>
 	<Sum>2000</Sum>
 	<Date>2013-10-02T11:30:58+03:00</Date>
 	<Creditor>Will Smith</Creditor>

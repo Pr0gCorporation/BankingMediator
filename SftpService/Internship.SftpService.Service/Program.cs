@@ -1,4 +1,5 @@
 using System;
+using Internship.SftpService.Service.Consumers;
 using Internship.SftpService.Service.Extentions;
 using Internship.SftpService.Service.FileActions.FileReader;
 using Internship.SftpService.Service.Jobs;
@@ -32,12 +33,18 @@ namespace Internship.SftpService.Service
                     services.AddSftpUploader();
                     services.AddScoped<TransactionFilePublisher>();
                     services.AddScoped<ReadXmlFiles>();
-
+                    
                     services.AddMassTransit(config =>
                     {
+                        config.AddConsumer<OutgoingFileConsumer>();
+                        
                         config.UsingRabbitMq((ctx, cfg) =>
                         {
                             cfg.Host(configuration.GetValue<string>("BusConfig:Host"));
+                            
+                             cfg.ReceiveEndpoint("file_save", c => {
+                                 c.ConfigureConsumer<OutgoingFileConsumer>(ctx);
+                             });
                         });
                     });
                     
