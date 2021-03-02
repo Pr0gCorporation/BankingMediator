@@ -21,7 +21,7 @@ namespace Internship.FileService.PaymentProcessing
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            var payment = new Transaction()
+            var payment = new TransactionToFile()
             {
                 TransactionId = DateTime.Now.Second + DateTime.Now.Millisecond,
                 Sum = (decimal) 2020.52 + DateTime.Now.Second,

@@ -12,13 +12,13 @@ using Microsoft.Extensions.Logging;
 
 namespace Internship.FileService.Service.Consumers
 {
-    public class IncomingTransactionConsumer : IConsumer<IncomingFile>
+    public class IncomingFileConsumer : IConsumer<IncomingFile>
     {
-        private readonly ILogger<IncomingTransactionConsumer> _logger;
+        private readonly ILogger<IncomingFileConsumer> _logger;
         private readonly HostBuilderContext _hostBuilderContext;
         private readonly InsertTransactionToDb _inserter;
 
-        public IncomingTransactionConsumer(ILogger<IncomingTransactionConsumer> logger,
+        public IncomingFileConsumer(ILogger<IncomingFileConsumer> logger,
             HostBuilderContext hostBuilderContext, InsertTransactionToDb inserter)
         {
             _logger = logger;
@@ -31,13 +31,14 @@ namespace Internship.FileService.Service.Consumers
             _logger.LogWarning($"Look! I've got a new file: {context.Message.FileName}, " +
                                $"\nbytes[] = {context.Message.File}\n");
 
+            const bool isIncomingTransaction = true;
             try
             {
                 var configuration = _hostBuilderContext.Configuration;
 
                 await _inserter.Insert(
                     configuration.GetConnectionString("MYSQLConnection"),
-                    DateTime.Now,  "incoming",
+                    DateTime.Now,  isIncomingTransaction,
                     context.Message.FileName, 
                     context.Message.File);
                 

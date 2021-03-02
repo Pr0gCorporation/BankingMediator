@@ -49,8 +49,7 @@ namespace Internship.SftpService.Service.SFTPActions.UploadFiles
         public void Upload(string pathTo, byte[] file, string filename)
         {
             _sftpClient.Connect();
-            _logger.LogInformation($"Connect to sftp: {_sftpClient.IsConnected()}.-------------------\n");
-
+            
             using (var stream = new MemoryStream())
             {
                 stream.Write(file, 0, file.Length);
@@ -59,7 +58,6 @@ namespace Internship.SftpService.Service.SFTPActions.UploadFiles
             }
 
             _sftpClient.Disconnect();
-            _logger.LogInformation($"Connect to sftp: {_sftpClient.IsConnected()}.\n" + DateTime.Now + "\n");
         }
     }
 }

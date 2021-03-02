@@ -12,14 +12,14 @@ using Microsoft.Extensions.Logging;
 
 namespace Internship.FileService.Service.Consumers
 {
-    public class OutgoingPaymentConsumer : IConsumer<Transaction>
+    public class TransactionToFileConsumer : IConsumer<TransactionToFile>
     {
-        private readonly ILogger<OutgoingPaymentConsumer> _logger;
+        private readonly ILogger<TransactionToFileConsumer> _logger;
         private readonly HostBuilderContext _hostBuilderContext;
         private readonly InsertTransactionToDb _inserter;
         private readonly IBus _publishEndpoint;
 
-        public OutgoingPaymentConsumer(ILogger<OutgoingPaymentConsumer> logger,
+        public TransactionToFileConsumer(ILogger<TransactionToFileConsumer> logger,
             HostBuilderContext hostBuilderContext, InsertTransactionToDb inserter, IBus publishEndpoint)
         {
             _logger = logger;
@@ -28,7 +28,7 @@ namespace Internship.FileService.Service.Consumers
             _publishEndpoint = publishEndpoint;
         }
         
-        public async Task Consume(ConsumeContext<Transaction> context)
+        public async Task Consume(ConsumeContext<TransactionToFile> context)
         {
             var serializer = new XmlSerializer(context.Message.GetType());
 
@@ -45,12 +45,13 @@ namespace Internship.FileService.Service.Consumers
             var xmlTransactionBytes = Encoding.ASCII.GetBytes(xmlTransactionString);
             
             var configuration = _hostBuilderContext.Configuration;
-            
+
+            const bool isIncomingTransaction = false;
             try
             {
                 await _inserter.Insert(
                     configuration.GetConnectionString("MYSQLConnection"),
-                    DateTime.Now, "outgoing",
+                    DateTime.Now, isIncomingTransaction,
                     GenerateFileName(
                         context.Message.Creditor, 
                         context.Message.Debtor, 

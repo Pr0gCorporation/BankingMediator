@@ -25,22 +25,23 @@ namespace Internship.SftpService.Service.Consumers
         
         public async Task Consume(ConsumeContext<OutgoingFile> context)
         {
-            _logger.LogWarning($"Look! I've got a new file: {context.Message.FileName}, " +
-                               $"\nbytes[] = {context.Message.File}\n");
+            _logger.LogInformation($"Received new message: {context.MessageId}, of type {context.GetType()}");
 
             try
             {
                 var configuration = _hostBuilderContext.Configuration;
 
+                _logger.LogInformation($"Uploading file with filename: {context.Message.FileName}, msgId: {context.MessageId}");
                 _uploadable.Upload(
                     configuration.GetValue<string>("PathConfig:UploadFiles:To"), 
                     context.Message.File, context.Message.FileName);
                 
-                _logger.LogInformation($"Uploaded successfully!");
+                _logger.LogInformation($"File uploaded successfully! From message: {context.MessageId}");
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                _logger.LogError(e, $"Upload failed for message {context.MessageId}");
+                _logger.LogDebug($"File size (bytes): {context.Message.File.Length.ToString()}");
                 throw;
             }
         }
