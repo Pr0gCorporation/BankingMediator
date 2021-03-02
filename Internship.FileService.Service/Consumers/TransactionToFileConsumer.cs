@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Internship.FileService.Service.Consumers
 {
-    public class TransactionToFileConsumer : IConsumer<TransactionToFile>
+    public class TransactionToFileConsumer : IConsumer<Transaction>
     {
         private readonly ILogger<TransactionToFileConsumer> _logger;
         private readonly HostBuilderContext _hostBuilderContext;
@@ -28,7 +28,7 @@ namespace Internship.FileService.Service.Consumers
             _publishEndpoint = publishEndpoint;
         }
         
-        public async Task Consume(ConsumeContext<TransactionToFile> context)
+        public async Task Consume(ConsumeContext<Transaction> context)
         {
             var serializer = new XmlSerializer(context.Message.GetType());
 
@@ -58,7 +58,7 @@ namespace Internship.FileService.Service.Consumers
                         context.Message.Date), 
                     xmlTransactionBytes);
                 
-                _logger.LogInformation($"Inserted successfully!");
+                _logger.LogInformation($"Transaction {context.Message.TransactionId} inserted successfully!");
 
                 await _publishEndpoint.Publish(new OutgoingFile()
                 {
@@ -69,7 +69,7 @@ namespace Internship.FileService.Service.Consumers
                     File = xmlTransactionBytes
                 });
                 
-                _logger.LogInformation($"Sent to SFTP successfully!");
+                _logger.LogInformation($"Transaction {context.Message.TransactionId} sent to SFTP successfully!");
             }
             catch (Exception e)
             {

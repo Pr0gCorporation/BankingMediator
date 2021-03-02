@@ -28,8 +28,7 @@ namespace Internship.FileService.Service.Consumers
 
         public async Task Consume(ConsumeContext<IncomingFile> context)
         {
-            _logger.LogWarning($"Look! I've got a new file: {context.Message.FileName}, " +
-                               $"\nbytes[] = {context.Message.File}\n");
+            _logger.LogInformation($"Received new message: {context.MessageId}, of type {context.GetType()}");
 
             const bool isIncomingTransaction = true;
             try
@@ -38,15 +37,16 @@ namespace Internship.FileService.Service.Consumers
 
                 await _inserter.Insert(
                     configuration.GetConnectionString("MYSQLConnection"),
-                    DateTime.Now,  isIncomingTransaction,
-                    context.Message.FileName, 
+                    DateTime.Now, isIncomingTransaction,
+                    context.Message.FileName,
                     context.Message.File);
-                
-                _logger.LogInformation($"Inserted successfully!");
+
+                _logger.LogInformation($"File {context.Message.FileName} inserted successfully!");
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                _logger.LogError(e, $"Inserting failed {context.MessageId}");
+                _logger.LogDebug($"File size (bytes): {context.Message.File.Length.ToString()}");
                 throw;
             }
         }

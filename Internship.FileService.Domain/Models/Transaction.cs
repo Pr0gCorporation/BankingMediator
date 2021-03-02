@@ -2,7 +2,10 @@
 
 namespace Internship.FileService.Domain.Models
 {
-    public class TransactionToFile
+    /// <summary>
+    /// Transaction File model
+    /// </summary>
+    public class Transaction
     {
         public int TransactionId { get; set; }
         public decimal Sum { get; set; }
