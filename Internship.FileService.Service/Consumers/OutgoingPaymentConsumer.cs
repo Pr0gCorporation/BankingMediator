@@ -79,7 +79,7 @@ namespace Internship.FileService.Service.Consumers
 
         private string GenerateFileName(string creditor, string debtor, DateTime date)
         {
-            return $"{creditor}_{debtor}_{date.Date.Millisecond + date.Date.Minute}.xml";
+            return $"{creditor}_{debtor}_{date.Date.TimeOfDay}.xml";
         }
     }
 }
