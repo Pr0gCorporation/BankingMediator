@@ -23,7 +23,7 @@ namespace Internship.FileService.PaymentProcessing
         {
             var payment = new Transaction()
             {
-                TransactionId = DateTime.Now.Second + DateTime.Now.Millisecond,
+                Id = DateTime.Now.Second + DateTime.Now.Millisecond,
                 Amount = (decimal) 2020.52 + DateTime.Now.Second,
                 Date = DateTime.Now,
                 Creditor = "Will Smith",

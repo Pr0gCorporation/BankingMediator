@@ -7,10 +7,11 @@ namespace Internship.FileService.Domain.Models
     /// </summary>
     public class Transaction
     {
-        public int TransactionId { get; set; }
+        public int Id { get; set; }
         public decimal Amount { get; set; }
         public DateTime Date { get; set; }
         public string Creditor { get; set; }
         public string Debtor { get; set; }
+        public Guid TransactionId { get; set; }
     }
 }
