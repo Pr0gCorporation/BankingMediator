@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Internship.TransactionService.Infrastructure.Extentions
 {
-    public static class InfastructureExtentions
+    public static class InfrastructureExtentions
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
