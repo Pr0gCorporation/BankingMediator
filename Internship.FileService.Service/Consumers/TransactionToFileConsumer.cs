@@ -58,7 +58,7 @@ namespace Internship.FileService.Service.Consumers
                         context.Message.Date), 
                     xmlTransactionBytes);
                 
-                _logger.LogInformation($"Transaction {context.Message.TransactionId} inserted successfully!");
+                _logger.LogInformation($"Transaction {context.Message.Id} inserted successfully!");
 
                 await _publishEndpoint.Publish(new OutgoingFile()
                 {
@@ -69,7 +69,7 @@ namespace Internship.FileService.Service.Consumers
                     File = xmlTransactionBytes
                 });
                 
-                _logger.LogInformation($"Transaction {context.Message.TransactionId} sent to SFTP successfully!");
+                _logger.LogInformation($"Transaction {context.Message.Id} sent to SFTP successfully!");
             }
             catch (Exception e)
             {

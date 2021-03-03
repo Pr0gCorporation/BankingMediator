@@ -1,3 +1,4 @@
+using System;
 using Internship.TransactionService.Infrastructure.Extentions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -22,6 +23,7 @@ namespace Internship.TransactionService.API
         {
             services.AddControllers();
             services.AddInfrastructure();
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "Internship.TransactionService.API", Version = "v1"});

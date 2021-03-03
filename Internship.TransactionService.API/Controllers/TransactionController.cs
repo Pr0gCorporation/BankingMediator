@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Internship.FileService.Domain.Models;
+using Internship.TransactionService.API.DTOs.Account;
 using Internship.TransactionService.API.DTOs.Transaction;
+using Internship.TransactionService.Application.Repository.TransactionRepository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Internship.TransactionService.API.Controllers
@@ -10,14 +13,13 @@ namespace Internship.TransactionService.API.Controllers
     [ApiController]
     public class TransactionController : Controller
     {
-        // private readonly IUserRepo _repository;
-        // private readonly IMapper _mapper;
-        //
-        // public TransactionController(IUserRepo repository, IMapper mapper)
-        // {
-        //     this._repository = repository;
-        //     this._mapper = mapper;
-        // }
+        private readonly ITransactionRepository _transactionRepository;
+        
+        public TransactionController(
+            ITransactionRepository transactionTransactionRepository)
+        {
+             _transactionRepository = transactionTransactionRepository;
+        }
         
         // GET: api/Transactions
         [HttpGet]
@@ -28,22 +30,58 @@ namespace Internship.TransactionService.API.Controllers
                 new TransactionReadDto()
                 {
                     Amount = 290,
-                    DebtorId = 2940,
-                    CreditorId = 4364,
+                    Debtor = new AccountReadDto()
+                    {
+                        AccountNumber = "432523",
+                        BankId = "4422",
+                        FirstName = "John",
+                        LastName = "Smith"
+                    },
+                    Creditor = new AccountReadDto()
+                    {
+                        AccountNumber = "432444",
+                        BankId = "3324",
+                        FirstName = "Will",
+                        LastName = "Brendon"
+                    },
                     TransactionId = new Guid()
                 },
                 new TransactionReadDto()
                 {
                     Amount = 5344,
-                    DebtorId = 4643,
-                    CreditorId = 2345,
+                    Debtor = new AccountReadDto()
+                    {
+                        AccountNumber = "432655",
+                        BankId = "3342",
+                        FirstName = "Deni",
+                        LastName = "Washington"
+                    },
+                    Creditor = new AccountReadDto()
+                    {
+                        AccountNumber = "782444",
+                        BankId = "3334",
+                        FirstName = "Will",
+                        LastName = "Cargo"
+                    },
                     TransactionId = new Guid()
                 },
                 new TransactionReadDto()
                 {
                     Amount = 13999,
-                    DebtorId = 2355,
-                    CreditorId = 1121,
+                    Debtor = new AccountReadDto()
+                    {
+                        AccountNumber = "434544",
+                        BankId = "8777",
+                        FirstName = "John",
+                        LastName = "Mankind"
+                    },
+                    Creditor = new AccountReadDto()
+                    {
+                        AccountNumber = "343423",
+                        BankId = "1265",
+                        FirstName = "Brad",
+                        LastName = "Smith"
+                    },
                     TransactionId = new Guid()
                 }
             });
