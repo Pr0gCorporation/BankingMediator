@@ -1,12 +1,13 @@
 ﻿using System;
+using Internship.TransactionService.API.DTOs.Account;
 
 namespace Internship.TransactionService.API.DTOs.Transaction
 {
     public class TransactionReadDto
     {
-        public int DebtorId { get; set; }
-        public int CreditorId { get; set; }
-        public decimal Amount { get; set; } = 0;
+        public AccountReadDto Debtor { get; set; }
+        public AccountReadDto Creditor { get; set; }
+        public decimal Amount { get; set; }
         public Guid TransactionId { get; set; }
     }
 }
