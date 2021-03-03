@@ -30,6 +30,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Internship.TransactionServi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Internship.TransactionService.API", "Internship.TransactionService.API\Internship.TransactionService.API.csproj", "{28A67D0A-B26F-4720-A960-563B9B3AAF06}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Internship.TransactionService.Application", "Internship.TransactionService.Application\Internship.TransactionService.Application.csproj", "{36E36561-FA46-4F19-B52E-A5F3C18D94BD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -84,6 +86,10 @@ Global
 		{28A67D0A-B26F-4720-A960-563B9B3AAF06}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28A67D0A-B26F-4720-A960-563B9B3AAF06}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28A67D0A-B26F-4720-A960-563B9B3AAF06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36E36561-FA46-4F19-B52E-A5F3C18D94BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36E36561-FA46-4F19-B52E-A5F3C18D94BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36E36561-FA46-4F19-B52E-A5F3C18D94BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36E36561-FA46-4F19-B52E-A5F3C18D94BD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{78BE91DA-8C0F-43E9-8F42-5A009BAB4E96} = {38DB35A0-8514-4E95-BCD3-03852ADB593D}
@@ -98,5 +104,6 @@ Global
 		{282C8E0E-058D-4EAA-9609-9BDA3C2628AB} = {BCACDA8D-9565-4E6A-8ABD-EE23FCF03405}
 		{4CFBC7A0-36C2-49E9-A7C0-F012DD89C5ED} = {BCACDA8D-9565-4E6A-8ABD-EE23FCF03405}
 		{28A67D0A-B26F-4720-A960-563B9B3AAF06} = {BCACDA8D-9565-4E6A-8ABD-EE23FCF03405}
+		{36E36561-FA46-4F19-B52E-A5F3C18D94BD} = {BCACDA8D-9565-4E6A-8ABD-EE23FCF03405}
 	EndGlobalSection
 EndGlobal
