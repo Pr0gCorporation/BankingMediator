@@ -7,7 +7,7 @@ namespace Internship.TransactionService.Domain.Models
         public int Id { get; set; }
         public AccountModel Debtor { get; set; }
         public AccountModel Creditor { get; set; }
-        public decimal Amount { get; set; } = 0;
+        public decimal Amount { get; set; }
         public Guid TransactionId { get; set; }
     }
 }
