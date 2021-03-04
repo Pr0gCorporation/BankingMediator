@@ -16,9 +16,9 @@ namespace Internship.FileService.Service.DBAccess
 
             await using var insertTransaction = new MySqlCommand(sqlExpressionInsertTransaction, sqlConnection);
             
-            insertTransaction.Parameters.Add("@Date", MySqlDbType.DateTime, 50).Value = date;
-            insertTransaction.Parameters.Add("@Type", MySqlDbType.Bit, 50).Value = type;
-            insertTransaction.Parameters.Add("@FileName", MySqlDbType.VarChar, 50).Value = filename;
+            insertTransaction.Parameters.Add("@Date", MySqlDbType.DateTime).Value = date;
+            insertTransaction.Parameters.Add("@Type", MySqlDbType.Bit).Value = type;
+            insertTransaction.Parameters.Add("@FileName", MySqlDbType.VarChar).Value = filename;
             insertTransaction.Parameters.Add("@File", MySqlDbType.Blob).Value = file;
 
             await sqlConnection.OpenAsync();
