@@ -1,5 +1,6 @@
 using System;
 using Internship.TransactionService.Infrastructure.Extentions;
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -28,6 +29,20 @@ namespace Internship.TransactionService.API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "Internship.TransactionService.API", Version = "v1"});
             });
+            
+            services.AddMassTransit(config =>
+            {
+                config.UsingRabbitMq((ctx, cfg) =>
+                {
+                    cfg.Host(Configuration.GetValue<string>("BusConfig:Host"));
+                });
+            });
+                    
+            services.AddMassTransitHostedService();
+            
+            services.AddCors(option => option.AddPolicy("APIPolicy", builder => {
+                builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+            }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,6 +59,8 @@ namespace Internship.TransactionService.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            
+            app.UseCors("APIPolicy");
 
             app.UseAuthorization();
 
