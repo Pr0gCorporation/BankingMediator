@@ -55,10 +55,10 @@ namespace Internship.FileService.Service.Consumers
                     GenerateFileName(
                         context.Message.Creditor, 
                         context.Message.Debtor, 
-                        context.Message.Date), 
+                        context.Message.Date).Substring(0, 45), 
                     xmlTransactionBytes);
                 
-                _logger.LogInformation($"Transaction {context.Message.Id} inserted successfully!");
+                _logger.LogInformation($"Transaction {context.MessageId} inserted successfully!");
 
                 await _publishEndpoint.Publish(new OutgoingFile()
                 {
@@ -69,7 +69,7 @@ namespace Internship.FileService.Service.Consumers
                     File = xmlTransactionBytes
                 });
                 
-                _logger.LogInformation($"Transaction {context.Message.Id} sent to SFTP successfully!");
+                _logger.LogInformation($"Transaction {context.MessageId} sent to SFTP successfully!");
             }
             catch (Exception e)
             {
