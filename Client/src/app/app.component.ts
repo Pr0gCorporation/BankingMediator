@@ -5,6 +5,9 @@ import { Component } from '@angular/core';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
+
 export class AppComponent {
-  title = 'BankingInternshipClient';
+  title: string = 'BankingInternshipClient';
+  appTitle: string = "Banking Internship Project!";
+  response: any;
 }
