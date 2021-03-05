@@ -1,0 +1,45 @@
+.transaction-form {
+  margin: 2% 2% 10% 2%;
+}
+
+.error {
+  color: #ff4444;
+  font-weight: 600;
+}
+
+.cards {
+  width: 80%;
+  margin: 0 auto;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.center {
+  margin: 0 auto;
+}
+
+.button-wide {
+  width: 80%;
+}
+
+.card {
+  padding: 2%;
+  margin: 2% 0 2% 0;
+
+  &_item {
+    display: flex;
+    justify-content: space-between;
+    margin: 2% 0 2% 0;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .cards {
+    width: 90% !important;
+  }
+  .card_item {
+    font-size: 12px;
+  }
+}

@@ -1,0 +1,73 @@
+<form action="#" class="transaction-form needs-validation">
+    <div class="cards">
+        <div class="card">
+        <div class="card_item">
+            <label for="dfname"><span class="error">*</span>Debtor first name:</label>
+            <input type="text" id="dfname" name="dfname" #debtorFirstName required>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+            <div class="invalid-feedback">
+                Please choose a first name for debtor.
+            </div>
+        </div>
+
+        <div class="card_item">
+            <label for="dlname"><span class="error">*</span>Debtor last name:</label>
+            <input type="text" id="dlname" name="dlname" #debtorLastName required>
+        </div>
+
+        <div class="card_item">
+            <label for="dac"><span class="error">*</span>Debtor account number:</label>
+            <input type="text" id="dac" name="dac" #debtorAccountNumber required>
+        </div>
+
+        <div class="card_item">
+            <label for="dbi"><span class="error">*</span>Debtor bank id:</label>
+            <input type="text" id="dbi" name="dbi" #debtorBankId required>
+        </div>
+        </div>
+
+        <div class="card">
+        <div class="card_item">
+            <label for="cfname"><span class="error">*</span>Creditor first name:</label>
+            <input type="text" id="cfname" name="cfname" #creditorFirstName required>
+        </div>
+
+        <div class="card_item">
+            <label for="clname"><span class="error">*</span>Creditor last name:</label>
+            <input type="text" id="clname" name="clname" #creditorLastName required>
+        </div>
+
+        <div class="card_item">
+            <label for="cac"><span class="error">*</span>Creditor account number:</label>
+            <input type="text" id="cac" name="cac" #creditorAccountNumber required>
+        </div>
+
+        <div class="card_item">
+            <label for="cbi"><span class="error">*</span>Creditor bank id:</label>
+            <input type="text" id="cbi" name="cbi" #creditorBankId required>
+        </div>
+        </div>
+
+        <div class="card">
+        <div class="card_item">
+            <label for="tamount"><span class="error">*</span>Amount:</label>
+            <input type="text" id="tamount" name="tamount" #amount required>
+        </div>
+
+        <div class="card_item">
+            <label for="transactionId"><span class="error">*</span>Transaction ID:</label>
+            <input type="text" id="transactionId" name="transactionId" #transactionId required>
+        </div>
+        </div>
+
+        <div class="center text-center">
+            <input type="submit" value="Submit" class="btn btn-primary center button-wide" (click)="addTransaction(
+                debtorFirstName.value, debtorLastName.value, debtorAccountNumber.value, debtorBankId.value,
+                creditorFirstName.value, creditorLastName.value, creditorAccountNumber.value, creditorBankId.value,
+                amount.value, transactionId.value
+            )">
+        </div>
+    </div>
+</form> 
