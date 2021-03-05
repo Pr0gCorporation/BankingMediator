@@ -85,7 +85,6 @@ namespace Internship.TransactionService.API.Controllers
                 // Publish to file endpoint
                 await _publisher.Publish(transactionFile);
                 _logger.LogInformation($"Publish the transaction: {transaction.TransactionId}");
-
                 return NoContent();
             }
             catch (Exception e)
