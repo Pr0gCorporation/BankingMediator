@@ -1,5 +1,5 @@
 using System;
-using Internship.TransactionService.Infrastructure.Extentions;
+using Internship.TransactionService.Infrastructure.Repositories;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -23,11 +23,11 @@ namespace Internship.TransactionService.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddInfrastructure();
+            services.AddTransient<ITransactionRepository, TransactionRepository>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo {Title = "Internship.TransactionService.API", Version = "v1"});
+                c.SwaggerDoc("v1", new OpenApiInfo {Title = "Internship.TransactionService.Service", Version = "v1"});
             });
             
             services.AddMassTransit(config =>
@@ -53,7 +53,7 @@ namespace Internship.TransactionService.API
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c =>
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Internship.TransactionService.API v1"));
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Internship.TransactionService.Service v1"));
             }
 
             app.UseHttpsRedirection();

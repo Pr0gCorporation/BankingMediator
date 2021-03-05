@@ -1,14 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using AutoMapper;
+﻿using AutoMapper;
+using Internship.Shared.Files;
 using Internship.TransactionService.API.DTOs.Transaction;
 using Internship.TransactionService.Domain.Models;
 
-namespace Internship.TransactionService.API.Mapping
+namespace Internship.TransactionService.API.MappingProfiles
 {
-    public class TransactionDomainToReadProfile : Profile
+    public class TransactionDomainToReadMappingProfile : Profile
     {
-        public TransactionDomainToReadProfile()
+        public TransactionDomainToReadMappingProfile()
         {
             CreateMap<TransactionModel, TransactionReadDto>();
             CreateMap<TransactionReadDto, TransactionModel>();
