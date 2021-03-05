@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
-using Internship.TransactionService.Application.Repository.TransactionRepository;
 using Internship.TransactionService.Domain.Models;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
@@ -21,105 +20,88 @@ namespace Internship.TransactionService.Infrastructure.Repositories
 
         public async Task<IEnumerable<TransactionModel>> GetAll()
         {
-            var sqlExpressionToGetAllTransactions = @"SELECT trans.id,
-    trans.transaction_id as TransactionId,
-    trans.amount as Amount,
-    debtor.id as Id,
-    debtor.first_name as FirstName,
-    debtor.last_name as LastName,
-    debtor.account_number as AccountNumber,
-    debtor.bank_id as BankId,
-    creditor.id as Id,
-    creditor.first_name as FirstName,
-    creditor.last_name as LastName,
-    creditor.account_number as AccountNumber,
-    creditor.bank_id as BankId
-FROM transactionservice_db.transactions trans
-left JOIN transactionservice_db.accounts debtor
-ON (trans.debtor_id = debtor.id)
-left JOIN transactionservice_db.accounts creditor
-ON (trans.creditor_id = creditor.id);";
+            var sqlExpressionToGetAllTransactions = @"SELECT `transactions`.`id` as Id,
+                                                        `transactions`.`debtor_first_name` as DebtorFirstName,
+                                                        `transactions`.`debtor_last_name` as DebtorLastName,
+                                                        `transactions`.`debtor_account_number` as DebtorAccountNumber,
+                                                        `transactions`.`debtor_bank_id` as DebtorBankId,
+                                                        `transactions`.`creditor_first_name` as CreditorFirstName,
+                                                        `transactions`.`creditor_last_name` as CreditorLastName,
+                                                        `transactions`.`creditor_account_number` as CreditorAccountNumber,
+                                                        `transactions`.`creditor_bank_id` as CreditorBankId,
+                                                        `transactions`.`transaction_id` as TransactionId,
+                                                        `transactions`.`amount` as Amount
+                                                    FROM `transactionservice_db`.`transactions`;";
 
             await using var connection = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection"));
             connection.Open();
 
             var transactions =
-                await connection.QueryAsync<TransactionModel, AccountModel, AccountModel, TransactionModel>(
-                    sqlExpressionToGetAllTransactions,
-                    (transaction, debtor, creditor) =>
-                    {
-                        transaction.Debtor = debtor;
-                        transaction.Creditor = creditor;
-                        return transaction;
-                    },
-                    splitOn: "Id,Id");
+                await connection.QueryAsync<TransactionModel>(sqlExpressionToGetAllTransactions);
 
             return transactions;
         }
-        
-        public async Task<TransactionModel> GetByTransactionId(Guid transactionId)
+
+        public async Task<TransactionModel> GetById(int id)
         {
-            var sqlExpressionToGetAllTransactions = @"SELECT trans.id,
-    trans.transaction_id as TransactionId,
-    trans.amount as Amount,
-    debtor.id as Id,
-    debtor.first_name as FirstName,
-    debtor.last_name as LastName,
-    debtor.account_number as AccountNumber,
-    debtor.bank_id as BankId,
-    creditor.id as Id,
-    creditor.first_name as FirstName,
-    creditor.last_name as LastName,
-    creditor.account_number as AccountNumber,
-    creditor.bank_id as BankId
-FROM transactionservice_db.transactions trans
-left JOIN transactionservice_db.accounts debtor
-ON (trans.debtor_id = debtor.id)
-left JOIN transactionservice_db.accounts creditor
-ON (trans.creditor_id = creditor.id)
-WHERE trans.transaction_id = @transId;";
+            var sqlExpressionToGetAllTransactions = @"SELECT `transactions`.`id` as Id,
+                                                        `transactions`.`debtor_first_name` as DebtorFirstName,
+                                                        `transactions`.`debtor_last_name` as DebtorLastName,
+                                                        `transactions`.`debtor_account_number` as DebtorAccountNumber,
+                                                        `transactions`.`debtor_bank_id` as DebtorBankId,
+                                                        `transactions`.`creditor_first_name` as CreditorFirstName,
+                                                        `transactions`.`creditor_last_name` as CreditorLastName,
+                                                        `transactions`.`creditor_account_number` as CreditorAccountNumber,
+                                                        `transactions`.`creditor_bank_id` as CreditorBankId,
+                                                        `transactions`.`transaction_id` as TransactionId,
+                                                        `transactions`.`amount` as Amount
+                                                    FROM `transactionservice_db`.`transactions`
+                                                    WHERE id = @id;";
 
             await using var connection = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection"));
             connection.Open();
 
             var transactions =
-                await connection.QueryAsync<TransactionModel, AccountModel, AccountModel, TransactionModel>(
-                    sqlExpressionToGetAllTransactions,
-                    (transaction, debtor, creditor) =>
+                await connection.QuerySingleAsync<TransactionModel>(sqlExpressionToGetAllTransactions,
+                    new
                     {
-                        transaction.Debtor = debtor;
-                        transaction.Creditor = creditor;
-                        return transaction;
-                    },
-                    new { transId = transactionId },
-                    splitOn: "Id,Id");
+                        id = id
+                    });
 
-            return transactions.FirstOrDefault();
+            return transactions;
         }
 
-        public async Task Add(TransactionModel entity)
+        public async Task<int> Add(TransactionModel transactionModel)
         {
             var sqlExpressionToInsert = @"INSERT INTO `transactionservice_db`.`transactions`
-(`transaction_id`,
-`debtor_id`,
-`creditor_id`,
-`amount`)
-VALUES
-(@Id,
-@DID,
-@CID,
-@Amount);";
+                                            (`debtor_first_name`, `debtor_last_name`, `debtor_account_number`, `debtor_bank_id`,
+                                            `creditor_first_name`, `creditor_last_name`, `creditor_account_number`, `creditor_bank_id`,
+                                            `transaction_id`, `amount`)
+                                            VALUES
+                                            (@debtor_first_name, @debtor_last_name, @debtor_account_number, @debtor_bank_id,
+                                            @creditor_first_name, @creditor_last_name, @creditor_account_number, @creditor_bank_id,
+                                            @transaction_id, @amount);";
 
             await using var connection = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection"));
             connection.Open();
 
-            await connection.ExecuteAsync(sqlExpressionToInsert, new
+            var inserted = await connection.ExecuteAsync(sqlExpressionToInsert, new
             {
-                Id = entity.TransactionId,
-                DID = entity.Debtor.Id,
-                CID = entity.Creditor.Id,
-                Amount = entity.Amount
+                debtor_first_name = transactionModel.DebtorFirstName,
+                debtor_last_name = transactionModel.DebtorLastName,
+                debtor_account_number = transactionModel.DebtorAccountNumber,
+                debtor_bank_id = transactionModel.DebtorBankId,
+
+                creditor_first_name = transactionModel.CreditorFirstName,
+                creditor_last_name = transactionModel.CreditorLastName,
+                creditor_account_number = transactionModel.CreditorAccountNumber,
+                creditor_bank_id = transactionModel.CreditorBankId,
+
+                transaction_id = transactionModel.TransactionId,
+                amount = transactionModel.Amount
             });
+
+            return inserted;
         }
     }
 }
