@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Internship.FileService.Domain.Models;
 using Internship.FileService.Service.DBAccess;
+using Internship.Shared;
+using Internship.Shared.Files;
 using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -12,7 +14,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Internship.FileService.Service.Consumers
 {
-    public class TransactionToFileConsumer : IConsumer<Transaction>
+    public class TransactionToFileConsumer : IConsumer<TransactionToFile>
     {
         private readonly ILogger<TransactionToFileConsumer> _logger;
         private readonly HostBuilderContext _hostBuilderContext;
@@ -28,7 +30,7 @@ namespace Internship.FileService.Service.Consumers
             _publishEndpoint = publishEndpoint;
         }
         
-        public async Task Consume(ConsumeContext<Transaction> context)
+        public async Task Consume(ConsumeContext<TransactionToFile> context)
         {
             var serializer = new XmlSerializer(context.Message.GetType());
 
@@ -53,9 +55,9 @@ namespace Internship.FileService.Service.Consumers
                     configuration.GetConnectionString("MYSQLConnection"),
                     DateTime.Now, isIncomingTransaction,
                     GenerateFileName(
-                        context.Message.Creditor, 
-                        context.Message.Debtor, 
-                        context.Message.Date).Substring(0, 45), 
+                        context.Message.CreditorAccountNumber, 
+                        context.Message.DebtorAccountNumber, 
+                        context.Message.Date), 
                     xmlTransactionBytes);
                 
                 _logger.LogInformation($"Transaction {context.MessageId} inserted successfully!");
@@ -63,8 +65,8 @@ namespace Internship.FileService.Service.Consumers
                 await _publishEndpoint.Publish(new OutgoingFile()
                 {
                     FileName = GenerateFileName(
-                        context.Message.Creditor, 
-                        context.Message.Debtor, 
+                        context.Message.CreditorAccountNumber, 
+                        context.Message.DebtorAccountNumber, 
                         context.Message.Date),
                     File = xmlTransactionBytes
                 });
@@ -80,7 +82,8 @@ namespace Internship.FileService.Service.Consumers
 
         private string GenerateFileName(string creditor, string debtor, DateTime date)
         {
-            return $"{creditor}_{debtor}_{date.Date.TimeOfDay}.xml";
+            var random = new Random();
+            return $"{creditor}_{debtor}_{random.Next(random.Next(21532))}.xml";
         }
     }
 }
