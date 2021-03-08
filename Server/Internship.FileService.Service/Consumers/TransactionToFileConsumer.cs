@@ -55,8 +55,8 @@ namespace Internship.FileService.Service.Consumers
                     configuration.GetConnectionString("MYSQLConnection"),
                     DateTime.Now, isIncomingTransaction,
                     GenerateFileName(
-                        context.Message.CreditorAccountNumber, 
-                        context.Message.DebtorAccountNumber, 
+                        context.Message.Creditor.AccountNumber, 
+                        context.Message.Debtor.AccountNumber, 
                         context.Message.Date), 
                     xmlTransactionBytes);
                 
@@ -65,8 +65,8 @@ namespace Internship.FileService.Service.Consumers
                 await _publishEndpoint.Publish(new OutgoingFile()
                 {
                     FileName = GenerateFileName(
-                        context.Message.CreditorAccountNumber, 
-                        context.Message.DebtorAccountNumber, 
+                        context.Message.Creditor.AccountNumber, 
+                        context.Message.Debtor.AccountNumber, 
                         context.Message.Date),
                     File = xmlTransactionBytes
                 });
