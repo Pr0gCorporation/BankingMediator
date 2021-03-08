@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Transaction } from '../Interfaces/Transaction';
 import { TransactionsService } from '../shared/transactions.service';
+import { Guid } from 'guid-typescript';
 
 @Component({
   selector: 'app-add-transaction',
@@ -11,20 +12,14 @@ export class AddTransactionComponent implements OnInit {
 
   constructor(public transactionService: TransactionsService) { }
 
+  transaction = new Transaction('', '', '', '', '', '', '', '', 0, 
+  Guid.create().toString());
+
   ngOnInit(): void {
   }
 
-  addTransaction(debtorFirstName: string, debtorLastName: string, debtorAccountNumber: string, debtorBankId: string, 
-    creditorFirstName: string, creditorLastName: string, creditorAccountNumber: string, creditorBankId: string, 
-    amount: string, transactionId: string) {
-      let transaction: Transaction = {
-        debtorFirstName, debtorLastName, debtorAccountNumber, debtorBankId,
-        creditorFirstName, creditorLastName, creditorAccountNumber, creditorBankId,
-        amount: Number(amount), transactionId
-      };
-
-      // TODO: validate transaction
-
-      this.transactionService.postTransaction(transaction);
+  onSubmit() {
+    this.transactionService.postTransaction(this.transaction);
+    console.log("Transaction added.");
   }
 }

@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { Transaction } from '../Interfaces/Transaction';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from "rxjs";
-import { catchError, map, tap } from "rxjs/operators";
+import { tap } from "rxjs/operators";
 import { environment } from "../../environments/environment";
 
 @Injectable({providedIn: 'root'})
@@ -14,7 +14,9 @@ export class TransactionsService {
 
   fetchTransactions() : Observable<Array<Transaction>> {
       return this.http.get<Array<Transaction>>(this.transactionUrl)
-      .pipe(tap(transactions => this.transactions = transactions));
+      .pipe(tap(transactions => {
+        return this.transactions = transactions;
+      }));
   }
 
   postTransaction(transaction: Transaction) {
