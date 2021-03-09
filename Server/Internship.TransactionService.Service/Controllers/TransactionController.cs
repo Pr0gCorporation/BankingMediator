@@ -39,7 +39,8 @@ namespace Internship.TransactionService.API.Controllers
             {
                 var transactions = await _transactionRepository.GetAll();
                 _logger.LogInformation("Verb: GET, Desc: Get all the transactions from the database");
-                return Ok(_mapper.Map<IEnumerable<TransactionReadDto>>(transactions));
+                var transactionsRead = _mapper.Map<IEnumerable<TransactionReadDto>>(transactions);
+                return Ok(transactionsRead);
             }
             catch (Exception e)
             {
