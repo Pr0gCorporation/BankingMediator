@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Internship.FileService.Domain\Internship.FileService.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Dapper" Version="2.0.78" />
+      <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.0-preview.1.21102.12" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0-preview.1.21102.12" />
+      <PackageReference Include="MySql.Data" Version="8.0.23" />
+      <PackageReference Include="MySqlConnector" Version="1.3.0" />
+    </ItemGroup>
+
+</Project>
