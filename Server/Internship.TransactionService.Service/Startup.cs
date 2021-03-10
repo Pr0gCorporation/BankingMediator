@@ -1,4 +1,5 @@
 using System;
+using Internship.TransactionService.Domain.Interfaces;
 using Internship.TransactionService.Infrastructure.Repositories;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
@@ -8,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 
-namespace Internship.TransactionService.API
+namespace Internship.TransactionService.Service
 {
     public class Startup
     {

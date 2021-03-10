@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Internship.Shared.DTOs.Transaction;
-using Internship.Shared.Files;
-using Internship.TransactionService.API.DTOs.Transaction;
+using Internship.TransactionService.Domain.Interfaces;
 using Internship.TransactionService.Domain.Models;
-using Internship.TransactionService.Infrastructure.Repositories;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace Internship.TransactionService.API.Controllers
+namespace Internship.TransactionService.Service.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -74,23 +72,23 @@ namespace Internship.TransactionService.API.Controllers
             {
                 // Instance to insert
                 var transactionModel = _mapper.Map<TransactionModel>(transaction);
-                _logger.LogInformation($"Verb: POST, Desc: Post transaction, param: transaction = {transaction.TransactionId}");
+                _logger.LogInformation($"Verb: POST, Desc: Post transaction, param: transaction = {transactionModel.TransactionId}");
 
                 // Insert to DB
                 await _transactionRepository.Add(transactionModel);
-                _logger.LogInformation($"Insert to the database the transaction: {transaction.TransactionId}");
+                _logger.LogInformation($"Insert to the database the transaction: {transactionModel.TransactionId}");
 
                 // Instance to publish
-                var transactionFile = _mapper.Map<TransactionToFile>(transactionModel);
+                var transactionFile = _mapper.Map<TransactionToFileDto>(transactionModel);
 
                 // Publish to file endpoint
                 await _publisher.Publish(transactionFile);
-                _logger.LogInformation($"Publish the transaction: {transaction.TransactionId}");
+                _logger.LogInformation($"Publish the transaction: {transactionModel.TransactionId}");
                 return NoContent();
             }
             catch (Exception e)
             {
-                _logger.LogError($"Error while posting a transaction {transaction.TransactionId}: {e}");
+                _logger.LogError($"Error while posting a transaction: {e}");
                 return BadRequest("Either incorrect data or an error with the server occured.");
             }
         }

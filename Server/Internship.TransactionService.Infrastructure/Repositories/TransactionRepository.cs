@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Dapper;
+using Internship.TransactionService.Domain.Interfaces;
 using Internship.TransactionService.Domain.Models;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
