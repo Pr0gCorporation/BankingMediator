@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Internship.TransactionService.API.DTOs.Transaction
+namespace Internship.Shared.DTOs.Transaction
 {
     public class TransactionReadDto
     {

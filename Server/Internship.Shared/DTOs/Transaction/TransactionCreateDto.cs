@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Internship.Shared.DTOs.Transaction
+﻿namespace Internship.Shared.DTOs.Transaction
 {
     public class TransactionCreateDto
     {
@@ -12,7 +10,6 @@ namespace Internship.Shared.DTOs.Transaction
         public string CreditorLastName { get; set; }
         public string CreditorAccountNumber { get; set; }
         public string CreditorBankId { get; set; }
-        public decimal Amount { get; set; } = 0;
-        public Guid TransactionId { get; set; }
+        public decimal Amount { get; set; }
     }
 }
