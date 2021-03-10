@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <UserSecretsId>dotnet-Internship.SftpService.Service-8BE61795-ACCA-40D5-9438-EDE07870DA80</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="MassTransit" Version="7.2.0-develop.3299" />
+        <PackageReference Include="MassTransit.AspNetCore" Version="7.2.0-develop.3299" />
+        <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="7.2.0-develop.3299" />
+        <PackageReference Include="MassTransit.RabbitMQ" Version="7.2.0-develop.3299" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
+        <PackageReference Include="Quartz" Version="3.2.4" />
+        <PackageReference Include="Quartz.Extensions.Hosting" Version="3.2.4" />
+        <PackageReference Include="SSH.NET" Version="2020.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="downloads" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Internship.FileService.Domain\Internship.FileService.Domain.csproj" />
+      <ProjectReference Include="..\Internship.SftpService.Domain\Internship.SftpService.Domain.csproj" />
+    </ItemGroup>
+</Project>
