@@ -1,0 +1,58 @@
+.transaction-form {
+  margin: 2% 2% 10% 2%;
+}
+
+.error {
+  color: #ff4444;
+  font-weight: 600;
+}
+
+.cards {
+  width: 90%;
+  margin: 0 auto;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.content-center {
+  justify-content: center;
+}
+
+.center {
+  margin: 0 auto;
+}
+
+.button-wide {
+  width: 80%;
+}
+
+.card {
+  padding: 2%;
+  margin: 2% 0 2% 0;
+
+  &_item {
+    display: flex;
+    justify-content: space-between;
+    margin: 2% 0 2% 0;
+  }
+}
+
+.ng-valid[required],
+.ng-valid.required {
+  border-left: 5px solid #42a948;
+}
+
+.ng-invalid:not(form) {
+  border-left: 5px solid #a94442;
+}
+
+@media screen and (max-width: 992px) {
+  .cards {
+    width: 90% !important;
+  }
+  .card_item {
+    font-size: 12px;
+  }
+}
