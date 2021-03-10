@@ -3,42 +3,40 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using Internship.FileService.Domain.Interfaces;
 using Internship.FileService.Domain.Models;
-using Internship.FileService.Service.DBAccess;
-using Internship.Shared;
-using Internship.Shared.Files;
+using Internship.FileService.Domain.Models.Transaction;
+using Internship.Shared.DTOs.Transaction;
 using MassTransit;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace Internship.FileService.Service.Consumers
 {
-    public class TransactionToFileConsumer : IConsumer<TransactionToFile>
+    public class TransactionToFileConsumer : IConsumer<TransactionToFileDto>
     {
         private readonly ILogger<TransactionToFileConsumer> _logger;
-        private readonly HostBuilderContext _hostBuilderContext;
-        private readonly InsertTransactionToDb _inserter;
+        private readonly IFileRepository _inserter;
         private readonly IBus _publishEndpoint;
 
         public TransactionToFileConsumer(ILogger<TransactionToFileConsumer> logger,
-            HostBuilderContext hostBuilderContext, InsertTransactionToDb inserter, IBus publishEndpoint)
+            IFileRepository inserter, IBus publishEndpoint)
         {
             _logger = logger;
-            _hostBuilderContext = hostBuilderContext;
             _inserter = inserter;
             _publishEndpoint = publishEndpoint;
         }
-        
-        public async Task Consume(ConsumeContext<TransactionToFile> context)
+
+        public async Task Consume(ConsumeContext<TransactionToFileDto> context)
         {
-            var serializer = new XmlSerializer(context.Message.GetType());
+            var transactionFileModel = TransactionDtoToFileModel(context.Message);
+            
+            var serializer = new XmlSerializer(transactionFileModel.GetType());
 
             string xmlTransactionString;
             
             await using(var memoryStream = new MemoryStream())
             {
-                serializer.Serialize(memoryStream, context.Message);
+                serializer.Serialize(memoryStream, transactionFileModel);
 
                 memoryStream.Position = 0;
                 xmlTransactionString = await new StreamReader(memoryStream).ReadToEndAsync();
@@ -46,28 +44,25 @@ namespace Internship.FileService.Service.Consumers
 
             var xmlTransactionBytes = Encoding.ASCII.GetBytes(xmlTransactionString);
             
-            var configuration = _hostBuilderContext.Configuration;
-
             const bool isIncomingTransaction = false;
+            
+            var fileName = GenerateFileName(
+                transactionFileModel.Creditor.AccountNumber,
+                transactionFileModel.Debtor.AccountNumber,
+                transactionFileModel.Date);
+            
             try
             {
-                await _inserter.Insert(
-                    configuration.GetConnectionString("MYSQLConnection"),
+                await _inserter.Add(
                     DateTime.Now, isIncomingTransaction,
-                    GenerateFileName(
-                        context.Message.Creditor.AccountNumber, 
-                        context.Message.Debtor.AccountNumber, 
-                        context.Message.Date), 
+                    fileName, 
                     xmlTransactionBytes);
                 
                 _logger.LogInformation($"Transaction {context.MessageId} inserted successfully!");
 
                 await _publishEndpoint.Publish(new OutgoingFile()
                 {
-                    FileName = GenerateFileName(
-                        context.Message.Creditor.AccountNumber, 
-                        context.Message.Debtor.AccountNumber, 
-                        context.Message.Date),
+                    FileName = fileName,
                     File = xmlTransactionBytes
                 });
                 
@@ -78,6 +73,30 @@ namespace Internship.FileService.Service.Consumers
                 Console.WriteLine(e);
                 throw;
             }
+        }
+        
+        private TransactionToFile TransactionDtoToFileModel(TransactionToFileDto fileDto)
+        {
+            return new()
+            {
+                Debtor = new AccountToFile()
+                {
+                    FirstName = fileDto.DebtorFirstName,
+                    LastName = fileDto.DebtorLastName,
+                    AccountNumber = fileDto.DebtorAccountNumber,
+                    BankId = fileDto.DebtorBankId
+                },
+                Creditor = new AccountToFile()
+                {
+                    FirstName = fileDto.CreditorFirstName,
+                    LastName = fileDto.CreditorLastName,
+                    AccountNumber = fileDto.CreditorAccountNumber,
+                    BankId = fileDto.CreditorBankId
+                },
+                Amount = fileDto.Amount,
+                Date = fileDto.Date,
+                TransactionId = fileDto.TransactionId
+            };
         }
 
         private string GenerateFileName(string creditor, string debtor, DateTime date)

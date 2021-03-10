@@ -1,5 +1,6 @@
+using Internship.FileService.Domain.Interfaces;
+using Internship.FileService.Infrastructure.DAL;
 using Internship.FileService.Service.Consumers;
-using Internship.FileService.Service.DBAccess;
 using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,7 +22,7 @@ namespace Internship.FileService.Service
                     services.AddHostedService<Worker>();
                     var configuration = hostContext.Configuration;
                     
-                    services.AddScoped<InsertTransactionToDb>();
+                    services.AddTransient<IFileRepository, FileRepository>();
                     
                     services.AddMassTransit(config => {
                         config.AddConsumer<IncomingFileConsumer>();
