@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Transaction } from '../Interfaces/Transaction';
+import { TransactionCreateModel } from '../Models/Transactions';
 import { TransactionsService } from '../shared/transactions.service';
-import { Guid } from 'guid-typescript';
 
 @Component({
   selector: 'app-add-transaction',
@@ -12,14 +11,23 @@ export class AddTransactionComponent implements OnInit {
 
   constructor(public transactionService: TransactionsService) { }
 
-  transaction = new Transaction('', '', '', '', '', '', '', '', 0, 
-  Guid.create().toString());
+  showMsg: boolean = false;
+  transaction = new TransactionCreateModel();
 
   ngOnInit(): void {
   }
 
   onSubmit() {
-    this.transactionService.postTransaction(this.transaction);
-    console.log("Transaction added.");
+    let transactionPostedSuccessfully = this.transactionService.postTransaction(this.transaction);
+
+    if(transactionPostedSuccessfully)
+    {
+      this.transaction = new TransactionCreateModel();
+      this.showMsg= true;
+      setTimeout(() => { this.showMsg= false; }, 10 * 1000);
+      console.log("Transaction added.");
+    } else {
+      console.log("Transaction failed.");
+    }
   }
 }
