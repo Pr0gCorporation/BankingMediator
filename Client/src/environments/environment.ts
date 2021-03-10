@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  transactionUrl: 'https://localhost:5001/api/Transaction'
+  baseUrl: 'https://localhost:5001/api',
+  transactionUrlPart: '/Transaction'
 };
 
 /*
