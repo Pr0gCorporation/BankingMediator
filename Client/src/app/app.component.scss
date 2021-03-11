@@ -19,6 +19,13 @@
   width: 50%;
 }
 
+.scrollable {
+  height: 50vh;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  border: 2px solid #333;
+}
+
 @media screen and (max-width: 992px) {
   .container {
     width: 100% !important;

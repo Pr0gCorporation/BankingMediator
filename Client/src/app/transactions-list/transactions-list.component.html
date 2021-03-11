@@ -2,24 +2,24 @@
     <ul class="transactions">
         <li class="transactions_item" *ngFor="let transaction of transactionService.transactions; let i = index;">
             <div class="center mark">
-                <div class="mt-2 mb-2">DebtorFirstName: {{ transaction.debtorFirstName }}</div>
-                <div class="mt-2 mb-2">DebtorLastName: {{ transaction.debtorLastName }}</div> 
-                <div class="mt-2 mb-2">DebtorAccountNumber: {{ transaction.debtorAccountNumber }}</div>
-                <div class="mt-2 mb-2">DebtorBankId: {{ transaction.debtorBankId }}</div> 
+                <div class="mt-2 mb-2">{{ 'TRANSACTION.DEBTORFIRSTNAME' | translate }}: {{ transaction.debtorFirstName }}</div>
+                <div class="mt-2 mb-2">{{ 'TRANSACTION.DEBTORLASTNAME' | translate }}: {{ transaction.debtorLastName }}</div> 
+                <div class="mt-2 mb-2">{{ 'TRANSACTION.DEBTORACCOUNTNUMBER' | translate }}: {{ transaction.debtorAccountNumber }}</div>
+                <div class="mt-2 mb-2">{{ 'TRANSACTION.DEBTORBANKID' | translate }}: {{ transaction.debtorBankId }}</div> 
             </div>
             <div class="center mark">
-                <div class="mt-2 mb-2">CreditorFirstName: {{ transaction.creditorFirstName }}</div>
-                <div class="mt-2 mb-2">CreditorLastName: {{transaction.creditorLastName }}</div> 
-                <div class="mt-2 mb-2">CreditorAccountNumber: {{ transaction.creditorAccountNumber }}</div>
-                <div class="mt-2 mb-2">CreditorBankId: {{transaction.creditorBankId }}</div> 
+                <div class="mt-2 mb-2">{{ 'TRANSACTION.CREDITORFIRSTNAME' | translate }}: {{ transaction.creditorFirstName }}</div>
+                <div class="mt-2 mb-2">{{ 'TRANSACTION.CREDITORLASTNAME' | translate }}: {{transaction.creditorLastName }}</div> 
+                <div class="mt-2 mb-2">{{ 'TRANSACTION.CREDITORACCOUNTNUMBER' | translate }}: {{ transaction.creditorAccountNumber }}</div>
+                <div class="mt-2 mb-2">{{ 'TRANSACTION.CREDITORBANKID' | translate }}: {{transaction.creditorBankId }}</div> 
             </div>
             <div class="center mark">
-                <div class="mt-2 mb-2">Amount: {{ transaction.amount }}</div>
-                <div class="mt-2 mb-2">TransactionId: {{ transaction.transactionId }}</div>
+                <div class="mt-2 mb-2">{{ 'TRANSACTION.AMOUNT' | translate }}: {{ transaction.amount }}</div>
+                <div class="mt-2 mb-2">{{ 'TRANSACTION.TRANSACTIONID' | translate }}: {{ transaction.transactionId }}</div>
             </div>
         </li>
     </ul>
 </aside>
 <aside *ngIf="loading">
-    <p>Loading....</p>
+    <p>{{ 'TIME.LOADING' | translate }}....</p>
 </aside>
