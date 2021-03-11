@@ -8,6 +8,6 @@ import { Component } from '@angular/core';
 
 export class AppComponent {
   title: string = 'BankingInternshipClient';
-  appTitle: string = "Banking Internship!";
+  appTitle: string = "Banking Internship LOL!";
   response: any;
 }
