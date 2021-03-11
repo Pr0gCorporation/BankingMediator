@@ -1,16 +1,16 @@
 <form (ngSubmit)="onSubmit()" #transactionForm="ngForm" class="transaction-form needs-validation">
     <div class="row center d-flex content-center"  *ngIf="showMsg">
         <div class="col-xs-12">
-          <p class="alert alert-success">
-              <strong>Transaction posted</strong> Thanks!.
-          </p>
-        </div>
-      </div>
+            <p class="alert alert-success">
+                <strong>{{ 'ACTION.TRANSACTIONPOSTED' | translate }}</strong> {{ 'COMMONWORDS.THANKS' | translate }}!.
+            </p>
+        </div> 
+    </div>
 
     <div class="cards">
         <div class="card">
             <div class="card_item">
-                <label for="debtorFirstName"><span class="error">*</span>Debtor first name:</label>
+                <label for="debtorFirstName"><span class="error">*</span>{{ 'TRANSACTION.DEBTORFIRSTNAME' | translate }}:</label>
                 <input type="text" id="debtorFirstName" 
                 name="debtorFirstName" 
                 #debtorFirstName="ngModel" 
@@ -20,11 +20,11 @@
             </div>
             <div [hidden]="debtorFirstName.valid || debtorFirstName.pristine"
                 class="alert alert-danger">
-                Debtor First Name is too short
+                {{ 'VALIDATION.DEBTORFIRSTNAMESHORT' | translate }}
             </div>
 
             <div class="card_item">
-                <label for="debtorLastName"><span class="error">*</span>Debtor last name:</label>
+                <label for="debtorLastName"><span class="error">*</span>{{ 'TRANSACTION.DEBTORLASTNAME' | translate }}:</label>
                 <input type="text" id="debtorLastName" 
                 name="debtorLastName" 
                 #debtorLastName="ngModel" 
@@ -34,11 +34,11 @@
             </div>
             <div [hidden]="debtorLastName.valid || debtorLastName.pristine"
             class="alert alert-danger">
-                Debtor Last Name is too short
+            {{ 'VALIDATION.DEBTORLASTNAMESHORT' | translate }}
             </div>
 
             <div class="card_item">
-                <label for="debtorAccountNumber"><span class="error">*</span>Debtor account number:</label>
+                <label for="debtorAccountNumber"><span class="error">*</span>{{ 'TRANSACTION.DEBTORACCOUNTNUMBER' | translate }}:</label>
                 <input type="text" id="debtorAccountNumber" 
                 name="debtorAccountNumber" 
                 #debtorAccountNumber="ngModel" 
@@ -48,11 +48,11 @@
             </div>
             <div [hidden]="debtorAccountNumber.valid || debtorAccountNumber.pristine"
             class="alert alert-danger">
-                Debtor Account number must be [4-6] symbols
+            {{ 'VALIDATION.DEBTORACCOUNTNUMBERBETWEEN' | translate }}
             </div>
 
             <div class="card_item">
-                <label for="debtorBankId"><span class="error">*</span>Debtor bank id:</label>
+                <label for="debtorBankId"><span class="error">*</span>{{ 'TRANSACTION.DEBTORBANKID' | translate }}:</label>
                 <input type="text" id="debtorBankId" 
                 name="debtorBankId"
                 #debtorBankId="ngModel" 
@@ -62,13 +62,13 @@
             </div>
             <div [hidden]="debtorBankId.valid || debtorBankId.pristine"
             class="alert alert-danger">
-                Debtor bank ID has to be 4 symbols
+            {{ 'VALIDATION.DEBTORBANKIDWRONG' | translate }}
             </div>
         </div>
 
         <div class="card">
             <div class="card_item">
-                <label for="creditorFirstName"><span class="error">*</span>Creditor first name:</label>
+                <label for="creditorFirstName"><span class="error">*</span>{{ 'TRANSACTION.CREDITORFIRSTNAME' | translate }}:</label>
                 <input type="text" id="creditorFirstName"
                 name="creditorFirstName" 
                 #creditorFirstName="ngModel" 
@@ -78,11 +78,11 @@
             </div>
             <div [hidden]="creditorFirstName.valid || creditorFirstName.pristine"
             class="alert alert-danger">
-                Creditor First Name is too short
+            {{ 'VALIDATION.CREDITORFIRSTNAMESHORT' | translate }}
             </div>
 
             <div class="card_item">
-                <label for="creditorLastName"><span class="error">*</span>Creditor last name:</label>
+                <label for="creditorLastName"><span class="error">*</span>{{ 'TRANSACTION.CREDITORLASTNAME' | translate }}:</label>
                 <input type="text" id="creditorLastName" 
                 name="creditorLastName" 
                 #creditorLastName="ngModel" 
@@ -92,11 +92,11 @@
             </div>
             <div [hidden]="creditorLastName.valid || creditorLastName.pristine"
             class="alert alert-danger">
-                Creditor Last Name is too short
+            {{ 'VALIDATION.CREDITORLASTNAMESHORT' | translate }}
             </div>
 
             <div class="card_item">
-                <label for="creditorAccountNumber"><span class="error">*</span>Creditor account number:</label>
+                <label for="creditorAccountNumber"><span class="error">*</span>{{ 'TRANSACTION.CREDITORACCOUNTNUMBER' | translate }}:</label>
                 <input type="text" id="creditorAccountNumber" 
                 name="creditorAccountNumber" 
                 #creditorAccountNumber="ngModel" 
@@ -106,11 +106,11 @@
             </div>
             <div [hidden]="creditorAccountNumber.valid || creditorAccountNumber.pristine"
             class="alert alert-danger">
-                Creditor Account number must be [4-6] symbols
+            {{ 'VALIDATION.CREDITORACCOUNTNUMBERBETWEEN' | translate }}
             </div>
 
             <div class="card_item">
-                <label for="creditorBankId"><span class="error">*</span>Creditor bank id:</label>
+                <label for="creditorBankId"><span class="error">*</span>{{ 'TRANSACTION.CREDITORBANKID' | translate }}:</label>
                 <input type="text" id="creditorBankId" 
                 name="creditorBankId" 
                 #creditorBankId="ngModel" 
@@ -120,13 +120,13 @@
             </div>
             <div [hidden]="creditorBankId.valid || creditorBankId.pristine"
             class="alert alert-danger">
-                Creditor bank ID has to be 4 symbols
+            {{ 'VALIDATION.CREDITORBANKIDWRONG' | translate }}
             </div>
         </div>
 
         <div class="card">
             <div class="card_item">
-                <label for="amount"><span class="error">*</span>Amount:</label>
+                <label for="amount"><span class="error">*</span>{{ 'TRANSACTION.AMOUNT' | translate }}:</label>
                 <input type="text" id="amount" 
                 name="amount" 
                 #amount="ngModel" 
@@ -137,14 +137,14 @@
             </div>
             <div [hidden]="amount.valid || amount.pristine"
             class="alert alert-danger">
-                Amount is required
+            {{ 'VALIDATION.AMOUNTREQUIRED' | translate }}
             </div>
         </div>
 
         <div class="center text-center">
             <button type="submit" class="btn btn-primary center button-wide" 
                 [disabled]="!transactionForm.form.valid">
-                Submit
+                {{ 'ACTION.SUBMIT' | translate }}
             </button>
         </div>
     </div>

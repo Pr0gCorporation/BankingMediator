@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TransactionCreateModel } from '../Models/Transactions';
 import { TransactionsService } from '../shared/transactions.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-add-transaction',
@@ -9,8 +10,15 @@ import { TransactionsService } from '../shared/transactions.service';
 })
 export class AddTransactionComponent implements OnInit {
 
-  constructor(public transactionService: TransactionsService) { }
+  constructor(public transactionService: TransactionsService, 
+    public translate: TranslateService)
+  {
+    translate.addLangs(['en', 'nl']);
+    translate.setDefaultLang('en');
 
+    const browserLang = translate.getBrowserLang();
+    translate.use(browserLang.match(/en|nl/) ? browserLang : 'en');
+  }
   showMsg: boolean = false;
   transaction = new TransactionCreateModel();
 
