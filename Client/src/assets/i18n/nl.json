@@ -1,0 +1,42 @@
+{
+    "HOME": {
+        "ASIDES": {
+            "VIEWTRANSACTIONS": "Bekijk transacties",
+            "ADDTRANSACTION": "Voeg transactie toe"
+        },
+        "SELECT": "Selecteer taal"
+    },
+    "TRANSACTION": {
+        "DEBTORFIRSTNAME": "Voornaam schuldenaar",
+        "DEBTORLASTNAME": "Achternaam schuldenaar",
+        "DEBTORACCOUNTNUMBER": "Debiteur rekeningnummer",
+        "DEBTORBANKID": "Debiteur BankId",
+        "CREDITORFIRSTNAME": "Voornaam schuldeiser",
+        "CREDITORLASTNAME": "Achternaam crediteur",
+        "CREDITORACCOUNTNUMBER": "Rekeningnummer van de crediteur",
+        "CREDITORBANKID": "BankID crediteur",
+        "AMOUNT": "Bedrag",
+        "TRANSACTIONID": "Transactie Id"
+    },
+    "TIME": {
+        "LOADING": "Bezig met laden"
+    },
+    "ACTION": {
+        "SUBMIT": "Verzenden",
+        "TRANSACTIONPOSTED": "Transactie geboekt"
+    },
+    "COMMONWORDS": {
+        "THANKS": "Bedankt"
+    },
+    "VALIDATION": {
+        "DEBTORFIRSTNAMESHORT": "Voornaam schuldenaar is te kort",
+        "DEBTORLASTNAMESHORT": "Achternaam schuldenaar is te kort",
+        "DEBTORACCOUNTNUMBERBETWEEN": "Debiteuren Rekeningnummer moet uit [4-6] symbolen bestaan",
+        "DEBTORBANKIDWRONG": "Bank-ID van de debiteur moet uit 4 symbolen bestaan",
+        "CREDITORFIRSTNAMESHORT": "Voornaam schuldeiser is te kort",
+        "CREDITORLASTNAMESHORT": "Achternaam crediteur is te kort",
+        "CREDITORACCOUNTNUMBERBETWEEN": "Het rekeningnummer van de crediteur moet uit [4-6] symbolen bestaan",
+        "CREDITORBANKIDWRONG": "De bank-ID van de crediteur moet uit 4 symbolen bestaan",
+        "AMOUNTREQUIRED": "Bedrag is vereist"
+    }
+}
