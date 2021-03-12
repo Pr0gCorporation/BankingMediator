@@ -15,5 +15,7 @@ namespace Internship.TransactionService.Domain.Models
         public string CreditorBankId { get; set; }
         public decimal Amount { get; set; }
         public Guid TransactionId { get; set; }
+        public string Status { get; set; }
+        public DateTime DateStatusChanged { get; set; }
     }
 }

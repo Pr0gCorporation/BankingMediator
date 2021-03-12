@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Internship.Shared.DTOs.Transaction;
+using Internship.TransactionService.Domain.Enums;
+using Internship.TransactionService.Domain.Enums.EnumExtentions;
 using Internship.TransactionService.Domain.Interfaces;
 using Internship.TransactionService.Domain.Models;
 using MassTransit;
@@ -68,6 +70,7 @@ namespace Internship.TransactionService.Service.Controllers
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] TransactionCreateDto transaction)
         {
+            const TransactionStatus transactionStatus = TransactionStatus.Created;
             try
             {
                 // Instance to insert
@@ -78,6 +81,16 @@ namespace Internship.TransactionService.Service.Controllers
                 await _transactionRepository.Add(transactionModel);
                 _logger.LogInformation($"Insert to the database the transaction: {transactionModel.TransactionId}");
 
+                // Insert to DB (status of the transaction is created)
+                await _transactionRepository.UpdateStatus(new TransactionStatusModel()
+                {
+                    Status = transactionStatus.ToFriendlyString(),
+                    Reason = "",
+                    Date = DateTime.Now,
+                    TransactionId = transactionModel.TransactionId
+                });
+                _logger.LogInformation($"Insert to the database the transaction status: {transactionModel.TransactionId}, {transactionStatus}");
+                
                 // Instance to publish
                 var transactionFile = _mapper.Map<TransactionToFileDto>(transactionModel);
 
