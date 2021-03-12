@@ -9,5 +9,6 @@ namespace Internship.TransactionService.Domain.Interfaces
         Task<IEnumerable<TransactionModel>> GetAll();
         Task<TransactionModel> GetById(int id);
         Task<int> Add(TransactionModel transactionModel);
+        Task<int> UpdateStatus(TransactionStatusModel transactionStatusModel);
     }
 }
