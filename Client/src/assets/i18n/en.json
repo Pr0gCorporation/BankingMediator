@@ -16,7 +16,9 @@
         "CREDITORACCOUNTNUMBER": "Creditor Account Number",
         "CREDITORBANKID": "Creditor BankId",
         "AMOUNT": "Amount",
-        "TRANSACTIONID": "Transaction Id"
+        "TRANSACTIONID": "Transaction Id",
+        "STATUS": "Status",
+        "DATE": "Modified"
     },
     "TIME": {
         "LOADING": "Loading"
