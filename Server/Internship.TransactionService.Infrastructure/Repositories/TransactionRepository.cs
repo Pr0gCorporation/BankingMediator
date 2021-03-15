@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Dapper;
 using Internship.TransactionService.Domain.Interfaces;
@@ -86,7 +87,7 @@ namespace Internship.TransactionService.Infrastructure.Repositories
                 await connection.QuerySingleAsync<TransactionModel>(sqlExpressionToGetTransactionById,
                     new
                     {
-                        id = id
+                        id
                     });
 
             return transactions;
@@ -144,6 +145,39 @@ namespace Internship.TransactionService.Infrastructure.Repositories
             });
 
             return inserted;
+        }
+
+        public async Task<TransactionStatusModel> GetStatusByTransactionId(Guid transaction_id)
+        {
+            var sqlExpressionToGetTransactionById = @"SELECT t.id as Id
+	                          , t.transaction_id          as TransactionId
+                              , tStatus.status            as Status
+                              , tStatus.reason            as Reason
+                              , tStatus.dateStatusChanged as DateStatusChanged
+                            FROM transactionservice_db.transactions as t
+                            left join (
+		                        select row_number() over (partition by ts_i.transaction_id
+				                        order by ts_i.dateStatusChanged desc) as rOrder
+                                             , ts_i.transaction_id
+                                             , ts_i.status
+                                             , ts_i.reason
+                                             , ts_i.dateStatusChanged
+				                        from transactionservice_db.transactionStatus as ts_i
+				                        ) as tStatus on tStatus.transaction_id = t.transaction_id
+                                                      and tStatus.rOrder = 1
+                                                      where t.transaction_id = @id;";
+
+            await using var connection = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            connection.Open();
+
+            var transaction =
+                await connection.QuerySingleAsync<TransactionStatusModel>(sqlExpressionToGetTransactionById,
+                    new
+                    {
+                        id = transaction_id
+                    });
+
+            return transaction;
         }
     }
 }

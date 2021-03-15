@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Internship.TransactionService.Domain.Models;
 
@@ -10,5 +11,6 @@ namespace Internship.TransactionService.Domain.Interfaces
         Task<TransactionModel> GetById(int id);
         Task<int> Add(TransactionModel transactionModel);
         Task<int> UpdateStatus(TransactionStatusModel transactionStatusModel);
+        Task<TransactionStatusModel> GetStatusByTransactionId(Guid transaction_id);
     }
 }
