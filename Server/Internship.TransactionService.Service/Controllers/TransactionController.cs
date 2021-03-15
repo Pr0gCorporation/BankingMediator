@@ -30,7 +30,7 @@ namespace Internship.TransactionService.Service.Controllers
             _publisher = publisher;
             _logger = logger;
         }
-        
+
         // GET: api/Transactions
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TransactionReadDto>>> Get()
@@ -48,7 +48,7 @@ namespace Internship.TransactionService.Service.Controllers
                 return NotFound("Either no data found or an error with the server occured.");
             }
         }
-        
+
         // GET: api/Transactions/{id}
         [HttpGet("/id")]
         public async Task<ActionResult<IEnumerable<TransactionReadDto>>> Get(int id)
@@ -90,7 +90,7 @@ namespace Internship.TransactionService.Service.Controllers
                     TransactionId = transactionModel.TransactionId
                 });
                 _logger.LogInformation($"Insert to the database the transaction status: {transactionModel.TransactionId}, {transactionStatus}");
-                
+
                 // Instance to publish
                 var transactionFile = _mapper.Map<TransactionToFileDto>(transactionModel);
 
@@ -104,6 +104,50 @@ namespace Internship.TransactionService.Service.Controllers
                 _logger.LogError($"Error while posting a transaction: {e}");
                 return BadRequest("Either incorrect data or an error with the server occured.");
             }
+        }
+
+        // POST: api/Transactions/cancel
+        [HttpPost("/cancel")]
+        public async Task<ActionResult> Cancel([FromBody] TransactionCancelDto transaction)
+        {
+            const TransactionStatus transactionStatus = TransactionStatus.Canceled;
+            try
+            {
+                // Instance to insert
+                _logger.LogInformation($"Verb: POST, Desc: Cancel transaction, param: transaction = {transaction.TransactionId}");
+
+                // Check transaction by cancelness
+                var transactionStatusModel = await _transactionRepository.GetStatusByTransactionId(transaction.TransactionId);
+                if (CanBeCanceled(transactionStatusModel.Status))
+                {
+                    // Insert to DB (status of the transaction is canceled)
+                    await _transactionRepository.UpdateStatus(new TransactionStatusModel()
+                    {
+                        Status = transactionStatus.ToFriendlyString(),
+                        Reason = "",
+                        Date = DateTime.Now,
+                        TransactionId = transaction.TransactionId
+                    });
+                    _logger.LogInformation($"Insert to the database the transaction status: {transaction.TransactionId}, {transactionStatus}");
+                }
+                else
+                {
+                    _logger.LogInformation($"Transaction cannot be canceled, because of {transaction.TransactionId} is already {transactionStatus}");
+                }
+
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Error while posting a transaction: {e}");
+                return BadRequest("Either incorrect data or an error with the server occured.");
+            }
+        }
+
+        private static bool CanBeCanceled(string status)
+        {
+            return status != TransactionStatus.Completed.ToFriendlyString() &&
+                status != TransactionStatus.Canceled.ToFriendlyString();
         }
     }
 }
