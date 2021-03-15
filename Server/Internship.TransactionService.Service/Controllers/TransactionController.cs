@@ -111,6 +111,7 @@ namespace Internship.TransactionService.Service.Controllers
         public async Task<ActionResult> Cancel([FromBody] TransactionCancelDto transaction)
         {
             const TransactionStatus transactionStatus = TransactionStatus.Canceled;
+            ActionResult result = NotFound();
             try
             {
                 // Instance to insert
@@ -132,10 +133,11 @@ namespace Internship.TransactionService.Service.Controllers
                 }
                 else
                 {
+                    result = BadRequest($"Transaction cannot be canceled, because of {transaction.TransactionId} is already {transactionStatus}");
                     _logger.LogInformation($"Transaction cannot be canceled, because of {transaction.TransactionId} is already {transactionStatus}");
                 }
 
-                return NoContent();
+                return result;
             }
             catch (Exception e)
             {
