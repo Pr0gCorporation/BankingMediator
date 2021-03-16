@@ -21,6 +21,10 @@
                 <div class="mt-2 mb-2">{{ 'TRANSACTION.STATUS' | translate }}: {{ transaction.status }}</div>
                 <div class="mt-2 mb-2">{{ 'TRANSACTION.DATE' | translate }}: {{ transaction.dateStatusChanged }}</div>
             </div>
+            <div *ngIf="transaction.status !== 'completed' && transaction.status !== 'canceled'" class="cancel">
+                <button class="btn btn-danger button-wide"
+                 (click)="cancelTransactionDialog(transaction.transactionId, '')">{{ 'TRANSACTION.CANCEL' | translate }}</button>
+            </div>
         </li>
     </ul>
 </aside>
