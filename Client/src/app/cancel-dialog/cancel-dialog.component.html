@@ -1,0 +1,9 @@
+<h2 mat-dialog-title>{{ 'CANCELDIALOG.CANCELTRANSACTION' | translate }}</h2>
+<mat-dialog-content class="lead">{{ 'CANCELDIALOG.TRANSACTION' | translate }} <strong class="mark d-block">{{ transaction.transactionId }}</strong> 
+    {{ 'CANCELDIALOG.MESSAGE' | translate }} </mat-dialog-content>
+<mat-dialog-actions>
+    <input class="form-control mb-4 mt-2" type="text" #reason placeholder="{{ 'CANCELDIALOG.PLACEHOLDER' | translate }}">
+    <button mat-button mat-dialog-close class="btn btn-secondary mr-3">{{ 'COMMONWORDS.NO' | translate }}</button>
+    <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
+    <button mat-button [mat-dialog-close]="generateCancelTransactionResult(reason.value)" class="btn btn-danger">{{ 'COMMONWORDS.YESSURE' | translate }}</button>
+</mat-dialog-actions>
