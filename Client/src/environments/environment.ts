@@ -4,9 +4,9 @@
 
 export const environment = {
   production: false,
-  baseUrl: 'https://localhost:44374',
-  transactionUrlPart: '/api/Transaction',
-  transactionCancelUrlPart: '/cancel',
+  baseUrl: 'https://localhost:44374/api',
+  transactionUrlPart: '/Transaction',
+  transactionCancelUrlPart: '/Transaction/cancel',
 };
 
 /*

@@ -50,7 +50,7 @@ namespace Internship.TransactionService.Service.Controllers
         }
 
         // GET: api/Transactions/{id}
-        [HttpGet("/id")]
+        [HttpGet("id")]
         public async Task<ActionResult<IEnumerable<TransactionReadDto>>> Get(int id)
         {
             try
@@ -107,7 +107,7 @@ namespace Internship.TransactionService.Service.Controllers
         }
 
         // POST: api/Transactions/cancel
-        [HttpPost("/cancel")]
+        [HttpPost("cancel")]
         public async Task<ActionResult> Cancel([FromBody] TransactionCancelDto transaction)
         {
             const TransactionStatus transactionStatus = TransactionStatus.Canceled;
@@ -122,7 +122,7 @@ namespace Internship.TransactionService.Service.Controllers
                 if (CanBeCanceled(transactionStatusModel.Status))
                 {
                     // Insert to DB (status of the transaction is canceled)
-                    await _transactionRepository.UpdateStatus(new TransactionStatusModel()
+                    _ = await _transactionRepository.UpdateStatus(new TransactionStatusModel()
                     {
                         Status = transactionStatus.ToFriendlyString(),
                         Reason = "",
