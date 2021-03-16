@@ -17,13 +17,19 @@
 
 .aside {
   width: 50%;
+
+  &-wider {
+    width: 65%;
+  }
 }
 
 .scrollable {
   height: 70vh;
   overflow-x: hidden;
   overflow-y: scroll;
-  border: 2px solid #333;
+  -webkit-box-shadow: inset 1px 1px 5px 1px #000000; 
+  box-shadow: inset 1px 1px 5px 1px #333;
+  padding: 1.5%;
 }
 
 @media screen and (max-width: 992px) {
