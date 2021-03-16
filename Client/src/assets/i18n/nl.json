@@ -18,7 +18,8 @@
         "AMOUNT": "Bedrag",
         "TRANSACTIONID": "Transactie Id",
         "STATUS": "Toestand",
-        "DATE": "Gewijzigd"
+        "DATE": "Gewijzigd",
+        "CANCEL": "Annuleren"
     },
     "TIME": {
         "LOADING": "Bezig met laden"
@@ -28,7 +29,9 @@
         "TRANSACTIONPOSTED": "Transactie geboekt"
     },
     "COMMONWORDS": {
-        "THANKS": "Bedankt"
+        "THANKS": "Bedankt",
+        "NO": "Nee",
+        "YESSURE": "Ja ik weet het zeker"
     },
     "VALIDATION": {
         "DEBTORFIRSTNAMESHORT": "Voornaam schuldenaar is te kort",
@@ -40,5 +43,11 @@
         "CREDITORACCOUNTNUMBERBETWEEN": "Het rekeningnummer van de crediteur moet uit [4-6] symbolen bestaan",
         "CREDITORBANKIDWRONG": "De bank-ID van de crediteur moet uit 4 symbolen bestaan",
         "AMOUNTREQUIRED": "Bedrag is vereist"
+    },
+    "CANCELDIALOG": {
+        "CANCELTRANSACTION": "Annuleer transactie",
+        "TRANSACTION": "Transactie",
+        "MESSAGE": "zal voor altijd worden geannuleerd, als je het zeker weet, schrijf dan de reden voor het annuleren:",
+        "PLACEHOLDER": "Schrijf een reden"
     }
 }
