@@ -111,7 +111,7 @@ namespace Internship.TransactionService.Service.Controllers
         public async Task<ActionResult> Cancel([FromBody] TransactionCancelDto transaction)
         {
             const TransactionStatus transactionStatus = TransactionStatus.Canceled;
-            ActionResult result = NotFound();
+            ActionResult result = NoContent();
             try
             {
                 // Instance to insert
