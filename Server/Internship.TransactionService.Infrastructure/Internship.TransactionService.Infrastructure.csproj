@@ -13,7 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Internship.TransactionService.Application\Internship.TransactionService.Application.csproj" />
+      <ProjectReference Include="..\Internship.TransactionService.Domain\Internship.TransactionService.Domain.csproj" />
     </ItemGroup>
 
 </Project>
