@@ -12,6 +12,7 @@ namespace Internship.TransactionService.Infrastructure.Repositories
     public class TransactionRepository : ITransactionRepository
     {
         private readonly IConfiguration _configuration;
+        private const string ConnectionStringName = "DefaultConnection";
 
         public TransactionRepository(IConfiguration configuration)
         {
@@ -44,7 +45,7 @@ namespace Internship.TransactionService.Infrastructure.Repositories
                       ) as tStatus on tStatus.transaction_id = t.transaction_id
                                   and tStatus.rOrder = 1;";
 
-            await using var connection = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            await using var connection = new MySqlConnection(_configuration.GetConnectionString(ConnectionStringName));
             connection.Open();
 
             var transactions =
@@ -80,7 +81,7 @@ namespace Internship.TransactionService.Infrastructure.Repositories
                               and tStatus.rOrder = 1
                               where t.id = @id;";
 
-            await using var connection = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            await using var connection = new MySqlConnection(_configuration.GetConnectionString(ConnectionStringName));
             connection.Open();
 
             var transactions =
@@ -104,7 +105,7 @@ namespace Internship.TransactionService.Infrastructure.Repositories
                                             @creditor_first_name, @creditor_last_name, @creditor_account_number, @creditor_bank_id,
                                             @transaction_id, @amount);";
 
-            await using var connection = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            await using var connection = new MySqlConnection(_configuration.GetConnectionString(ConnectionStringName));
             connection.Open();
 
             var inserted = await connection.ExecuteAsync(sqlExpressionToInsert, new
@@ -133,7 +134,7 @@ namespace Internship.TransactionService.Infrastructure.Repositories
 	                                        VALUES
 	                                        (@status, @reason, @date, @transaction_id);";
 
-            await using var connection = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            await using var connection = new MySqlConnection(_configuration.GetConnectionString(ConnectionStringName));
             connection.Open();
 
             var inserted = await connection.ExecuteAsync(sqlExpressionToInsert, new
@@ -167,7 +168,7 @@ namespace Internship.TransactionService.Infrastructure.Repositories
                                                       and tStatus.rOrder = 1
                                                       where t.transaction_id = @id;";
 
-            await using var connection = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            await using var connection = new MySqlConnection(_configuration.GetConnectionString(ConnectionStringName));
             connection.Open();
 
             var transaction =
