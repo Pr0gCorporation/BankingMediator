@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Internship.Shared.DTOs.Transaction;
 using Internship.TransactionService.Domain.Enums;
-using Internship.TransactionService.Domain.Enums.EnumExtentions;
 using Internship.TransactionService.Domain.Interfaces;
 using Internship.TransactionService.Domain.Models;
 using MassTransit;
@@ -84,7 +83,7 @@ namespace Internship.TransactionService.Service.Controllers
                 // Insert to DB (status of the transaction is created)
                 await _transactionRepository.UpdateStatus(new TransactionStatusModel()
                 {
-                    Status = transactionStatus.ToLowerString(),
+                    Status = transactionStatus.ToString("g"),
                     Reason = "",
                     Date = DateTime.Now,
                     TransactionId = transactionModel.TransactionId
@@ -124,7 +123,7 @@ namespace Internship.TransactionService.Service.Controllers
                     // Insert to DB (status of the transaction is canceled)
                     _ = await _transactionRepository.UpdateStatus(new TransactionStatusModel()
                     {
-                        Status = transactionStatus.ToLowerString(),
+                        Status = transactionStatus.ToString("g"),
                         Reason = "",
                         Date = DateTime.Now,
                         TransactionId = transaction.TransactionId
@@ -148,8 +147,8 @@ namespace Internship.TransactionService.Service.Controllers
 
         private static bool CanBeCanceled(string status)
         {
-            return status != TransactionStatus.Completed.ToLowerString() &&
-                status != TransactionStatus.Canceled.ToLowerString();
+            return status != TransactionStatus.Completed.ToString("g") &&
+                status != TransactionStatus.Canceled.ToString("g");
         }
     }
 }

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
@@ -16,6 +16,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Internship.Shared\Internship.Shared.csproj" />
+      <ProjectReference Include="..\Internship.TransactionService.Domain\Internship.TransactionService.Domain.csproj" />
       <ProjectReference Include="..\Internship.TransactionService.Infrastructure\Internship.TransactionService.Infrastructure.csproj" />
     </ItemGroup>
 
