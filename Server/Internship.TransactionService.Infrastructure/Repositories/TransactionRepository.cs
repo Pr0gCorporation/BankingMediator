@@ -104,7 +104,7 @@ namespace Internship.TransactionService.Infrastructure.Repositories
                 await connection.QuerySingleAsync<TransactionModel>(sqlExpressionToGetTransactionById,
                     new
                     {
-                        id = id
+                        id
                     });
 
             return transactions;
