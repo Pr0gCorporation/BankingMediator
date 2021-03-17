@@ -18,7 +18,8 @@
         "AMOUNT": "Amount",
         "TRANSACTIONID": "Transaction Id",
         "STATUS": "Status",
-        "DATE": "Modified"
+        "DATE": "Modified",
+        "CANCEL": "Cancel"
     },
     "TIME": {
         "LOADING": "Loading"
@@ -28,7 +29,9 @@
         "TRANSACTIONPOSTED": "Transaction posted"
     },
     "COMMONWORDS": {
-        "THANKS": "Thanks"
+        "THANKS": "Thanks",
+        "NO": "No",
+        "YESSURE": "Yes, I'm sure"
     },
     "VALIDATION": {
         "DEBTORFIRSTNAMESHORT": "Debtor First Name is too short",
@@ -40,5 +43,11 @@
         "CREDITORACCOUNTNUMBERBETWEEN": "Creditor Account number must be [4-6] symbols",
         "CREDITORBANKIDWRONG": "Creditor bank ID has to be 4 symbols",
         "AMOUNTREQUIRED": "Amount is required"
+    },
+    "CANCELDIALOG": {
+        "CANCELTRANSACTION": "Cancel transaction",
+        "TRANSACTION": "Transaction",
+        "MESSAGE": "will be canceled forever, if you are sure, then write the reason for canceling:",
+        "PLACEHOLDER": "Write a reason"
     }
 }

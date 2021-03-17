@@ -10,6 +10,9 @@ import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import { AppComponent } from './app.component';
 import { TransactionsListComponent } from './transactions-list/transactions-list.component';
 import { AddTransactionComponent } from './add-transaction/add-transaction.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CancelDialogComponent } from './cancel-dialog/cancel-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(httpClient: HttpClient) {
@@ -21,6 +24,10 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     AppComponent,
     TransactionsListComponent,
     AddTransactionComponent,
+    CancelDialogComponent,
+  ],
+  entryComponents: [
+    CancelDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -33,7 +40,9 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
         useFactory: HttpLoaderFactory,
         deps: [HttpClient]
       }
-    })
+    }),
+    BrowserAnimationsModule,
+    MatDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]

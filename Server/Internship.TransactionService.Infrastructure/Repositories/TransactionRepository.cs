@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Dapper;
 using Internship.TransactionService.Domain.Interfaces;
@@ -11,6 +12,7 @@ namespace Internship.TransactionService.Infrastructure.Repositories
     public class TransactionRepository : ITransactionRepository
     {
         private readonly IConfiguration _configuration;
+        private const string ConnectionStringName = "DefaultConnection";
 
         public TransactionRepository(IConfiguration configuration)
         {
@@ -19,40 +21,31 @@ namespace Internship.TransactionService.Infrastructure.Repositories
 
         public async Task<IEnumerable<TransactionModel>> GetAll()
         {
-            var sqlExpressionToGetAllTransactions = @"SELECT `transactions`.`id` as Id,
-                        `transactions`.`debtor_first_name` as DebtorFirstName,
-                        `transactions`.`debtor_last_name` as DebtorLastName,
-                        `transactions`.`debtor_account_number` as DebtorAccountNumber,
-                        `transactions`.`debtor_bank_id` as DebtorBankId,
-                        `transactions`.`creditor_first_name` as CreditorFirstName,
-                        `transactions`.`creditor_last_name` as CreditorLastName,
-                        `transactions`.`creditor_account_number` as CreditorAccountNumber,
-                        `transactions`.`creditor_bank_id` as CreditorBankId,
-                        `transactions`.`transaction_id` as TransactionId,
-                        `transactions`.`amount` as Amount,
-                        tstatus.status as Status,
-                        tstatus.dateStatusChanged as DateStatusChanged
-                    FROM `transactionservice_db`.`transactions` transactions
-                    LEFT JOIN 
-                    (
-	                    -- select all the needed info about statuses
-	                    SELECT tstatus.status as status, tstatus.transaction_id, tstatus.dateStatusChanged
-			                    FROM `transactionservice_db`.`transactionStatus` tstatus 
-                                -- join the status column with the transaction_id column with the maximum date
-                                INNER JOIN
-                                (
-                                -- select transaction_id column with the maximum date
-				                    SELECT tstatus.transaction_id, MAX(tstatus.dateStatusChanged) AS dateStatusChanged
-					                     FROM `transactionservice_db`.`transactionStatus` tstatus 
-					                     GROUP BY tstatus.transaction_id
-                                ) groupedtstatus
-                                ON tstatus.transaction_id = groupedtstatus.transaction_id
-                                AND tstatus.dateStatusChanged = groupedtstatus.dateStatusChanged
-	                    -- this querry selects all the transaction statuses, where each transaction status is selected only with the latest date
-                    ) tstatus
-                    ON transactions.transaction_id = tstatus.transaction_id;";
+            var sqlExpressionToGetAllTransactions = @"SELECT t.id as Id
+                     , t.debtor_first_name       as DebtorFirstName
+                     , t.debtor_last_name        as DebtorLastName
+                     , t.debtor_account_number   as DebtorAccountNumber
+                     , t.debtor_bank_id          as DebtorBankId
+                     , t.creditor_first_name     as CreditorFirstName
+                     , t.creditor_last_name      as CreditorLastName
+                     , t.creditor_account_number as CreditorAccountNumber
+                     , t.creditor_bank_id        as CreditorBankId
+                     , t.transaction_id          as TransactionId
+                     , t.amount                  as Amount
+                     , tStatus.status            as Status
+                     , tStatus.dateStatusChanged as DateStatusChanged
+                  FROM transactionservice_db.transactions as t
+                  left join (
+                    select row_number() over (partition by ts_i.transaction_id
+                                order by ts_i.dateStatusChanged desc) as rOrder
+                         , ts_i.transaction_id
+                         , ts_i.status
+                         , ts_i.dateStatusChanged
+                      from transactionservice_db.transactionStatus as ts_i
+                      ) as tStatus on tStatus.transaction_id = t.transaction_id
+                                  and tStatus.rOrder = 1;";
 
-            await using var connection = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            await using var connection = new MySqlConnection(_configuration.GetConnectionString(ConnectionStringName));
             connection.Open();
 
             var transactions =
@@ -63,41 +56,32 @@ namespace Internship.TransactionService.Infrastructure.Repositories
 
         public async Task<TransactionModel> GetById(int id)
         {
-            var sqlExpressionToGetTransactionById = @"SELECT `transactions`.`id` as Id,
-                            `transactions`.`debtor_first_name` as DebtorFirstName,
-                            `transactions`.`debtor_last_name` as DebtorLastName,
-                            `transactions`.`debtor_account_number` as DebtorAccountNumber,
-                            `transactions`.`debtor_bank_id` as DebtorBankId,
-                            `transactions`.`creditor_first_name` as CreditorFirstName,
-                            `transactions`.`creditor_last_name` as CreditorLastName,
-                            `transactions`.`creditor_account_number` as CreditorAccountNumber,
-                            `transactions`.`creditor_bank_id` as CreditorBankId,
-                            `transactions`.`transaction_id` as TransactionId,
-                            `transactions`.`amount` as Amount,
-	                        tstatus.status as Status,
-	                        tstatus.dateStatusChanged as DateStatusChanged
-                        FROM `transactionservice_db`.`transactions`
-                        LEFT JOIN 
-                        (
-                            -- select all the needed info about statuses
-                            SELECT tstatus.status as status, tstatus.transaction_id, tstatus.dateStatusChanged
-                                    FROM `transactionservice_db`.`transactionStatus` tstatus 
-                                    -- join the status column with the transaction_id column with the maximum date
-                                    INNER JOIN
-                                    (
-                                    -- select transaction_id column with the maximum date
-                                        SELECT tstatus.transaction_id, MAX(tstatus.dateStatusChanged) AS dateStatusChanged
-                                                FROM `transactionservice_db`.`transactionStatus` tstatus 
-                                                GROUP BY tstatus.transaction_id
-                                    ) groupedtstatus
-                                    ON tstatus.transaction_id = groupedtstatus.transaction_id
-                                    AND tstatus.dateStatusChanged = groupedtstatus.dateStatusChanged
-                            -- this querry selects all the transaction statuses, where each transaction status is selected only with the latest date
-                        ) tstatus
-                        ON transactions.transaction_id = tstatus.transaction_id
-                        WHERE id = @id;";
+            var sqlExpressionToGetTransactionById = @"SELECT t.id as Id
+                 , t.debtor_first_name       as DebtorFirstName
+                 , t.debtor_last_name        as DebtorLastName
+                 , t.debtor_account_number   as DebtorAccountNumber
+                 , t.debtor_bank_id          as DebtorBankId
+                 , t.creditor_first_name     as CreditorFirstName
+                 , t.creditor_last_name      as CreditorLastName
+                 , t.creditor_account_number as CreditorAccountNumber
+                 , t.creditor_bank_id        as CreditorBankId
+                 , t.transaction_id          as TransactionId
+                 , t.amount                  as Amount
+                 , tStatus.status            as Status
+                 , tStatus.dateStatusChanged as DateStatusChanged
+              FROM transactionservice_db.transactions as t
+              left join (
+                select row_number() over (partition by ts_i.transaction_id
+                            order by ts_i.dateStatusChanged desc) as rOrder
+                     , ts_i.transaction_id
+                     , ts_i.status
+                     , ts_i.dateStatusChanged
+                  from transactionservice_db.transactionStatus as ts_i
+                  ) as tStatus on tStatus.transaction_id = t.transaction_id
+                              and tStatus.rOrder = 1
+                              where t.id = @id;";
 
-            await using var connection = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            await using var connection = new MySqlConnection(_configuration.GetConnectionString(ConnectionStringName));
             connection.Open();
 
             var transactions =
@@ -121,7 +105,7 @@ namespace Internship.TransactionService.Infrastructure.Repositories
                                             @creditor_first_name, @creditor_last_name, @creditor_account_number, @creditor_bank_id,
                                             @transaction_id, @amount);";
 
-            await using var connection = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            await using var connection = new MySqlConnection(_configuration.GetConnectionString(ConnectionStringName));
             connection.Open();
 
             var inserted = await connection.ExecuteAsync(sqlExpressionToInsert, new
@@ -150,7 +134,7 @@ namespace Internship.TransactionService.Infrastructure.Repositories
 	                                        VALUES
 	                                        (@status, @reason, @date, @transaction_id);";
 
-            await using var connection = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            await using var connection = new MySqlConnection(_configuration.GetConnectionString(ConnectionStringName));
             connection.Open();
 
             var inserted = await connection.ExecuteAsync(sqlExpressionToInsert, new
@@ -162,6 +146,39 @@ namespace Internship.TransactionService.Infrastructure.Repositories
             });
 
             return inserted;
+        }
+
+        public async Task<TransactionStatusModel> GetStatusByTransactionId(Guid transaction_id)
+        {
+            var sqlExpressionToGetTransactionById = @"SELECT t.id as Id
+	                          , t.transaction_id          as TransactionId
+                              , tStatus.status            as Status
+                              , tStatus.reason            as Reason
+                              , tStatus.dateStatusChanged as DateStatusChanged
+                            FROM transactionservice_db.transactions as t
+                            left join (
+		                        select row_number() over (partition by ts_i.transaction_id
+				                        order by ts_i.dateStatusChanged desc) as rOrder
+                                             , ts_i.transaction_id
+                                             , ts_i.status
+                                             , ts_i.reason
+                                             , ts_i.dateStatusChanged
+				                        from transactionservice_db.transactionStatus as ts_i
+				                        ) as tStatus on tStatus.transaction_id = t.transaction_id
+                                                      and tStatus.rOrder = 1
+                                                      where t.transaction_id = @id;";
+
+            await using var connection = new MySqlConnection(_configuration.GetConnectionString(ConnectionStringName));
+            connection.Open();
+
+            var transaction =
+                await connection.QuerySingleAsync<TransactionStatusModel>(sqlExpressionToGetTransactionById,
+                    new
+                    {
+                        id = transaction_id
+                    });
+
+            return transaction;
         }
     }
 }

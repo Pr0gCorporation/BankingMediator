@@ -28,6 +28,16 @@ export class TransactionReadModel {
    }
 }
 
+export class TransactionCancelModel {
+  public transactionId: string;
+  public reason: string;
+
+  constructor() {
+    this.transactionId = '';
+    this.reason = '';
+  }
+}
+
 export class TransactionCreateModel {
   public debtorFirstName: string;
     public debtorLastName: string;

@@ -133,6 +133,8 @@
                 type="number"
                 maxlength="20"
                 max="15000"
+                min="0"
+                step="5"
                 required [(ngModel)]="transaction.amount">
             </div>
             <div [hidden]="amount.valid || amount.pristine"

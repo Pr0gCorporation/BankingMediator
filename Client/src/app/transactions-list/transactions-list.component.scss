@@ -6,5 +6,12 @@
 .transactions_item {
   margin: 2% 0 2% 0;
   padding: 1%;
+  border: 5px solid #333;
   list-style: none;
+  font-size: 1.3em;
+  line-height: 2em;
+}
+
+.button-wide {
+  width: 100%;
 }
