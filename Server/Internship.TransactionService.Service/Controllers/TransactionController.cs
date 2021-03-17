@@ -84,7 +84,7 @@ namespace Internship.TransactionService.Service.Controllers
                 // Insert to DB (status of the transaction is created)
                 await _transactionRepository.UpdateStatus(new TransactionStatusModel()
                 {
-                    Status = transactionStatus.ToFriendlyString(),
+                    Status = transactionStatus.ToLowerString(),
                     Reason = "",
                     Date = DateTime.Now,
                     TransactionId = transactionModel.TransactionId
@@ -124,7 +124,7 @@ namespace Internship.TransactionService.Service.Controllers
                     // Insert to DB (status of the transaction is canceled)
                     _ = await _transactionRepository.UpdateStatus(new TransactionStatusModel()
                     {
-                        Status = transactionStatus.ToFriendlyString(),
+                        Status = transactionStatus.ToLowerString(),
                         Reason = "",
                         Date = DateTime.Now,
                         TransactionId = transaction.TransactionId
@@ -148,8 +148,8 @@ namespace Internship.TransactionService.Service.Controllers
 
         private static bool CanBeCanceled(string status)
         {
-            return status != TransactionStatus.Completed.ToFriendlyString() &&
-                status != TransactionStatus.Canceled.ToFriendlyString();
+            return status != TransactionStatus.Completed.ToLowerString() &&
+                status != TransactionStatus.Canceled.ToLowerString();
         }
     }
 }

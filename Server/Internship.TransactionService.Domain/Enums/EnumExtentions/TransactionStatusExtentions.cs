@@ -2,7 +2,7 @@
 {
     public static class TransactionStatusExtentions
     {
-        public static string ToFriendlyString(this TransactionStatus me)
+        public static string ToLowerString(this TransactionStatus me)
         {
             return me switch
             {
