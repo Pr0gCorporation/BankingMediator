@@ -9,6 +9,8 @@ export class TransactionReadModel {
     public creditorBankId: string;
     public amount: number;
     public transactionId: string;
+    public status: string;
+    public dateStatusChanged: string;
 
   constructor() { 
     this.debtorFirstName = '';
@@ -21,6 +23,8 @@ export class TransactionReadModel {
     this.creditorBankId = '';
     this.amount = 0;
     this.transactionId = '';
+    this.status = '';
+    this.dateStatusChanged = '';
    }
 }
 

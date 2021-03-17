@@ -12,7 +12,9 @@ namespace Internship.Shared.DTOs.Transaction
         public string CreditorLastName { get; set; }
         public string CreditorAccountNumber { get; set; }
         public string CreditorBankId { get; set; }
-        public decimal Amount { get; set; } = 0;
+        public decimal Amount { get; set; }
         public Guid TransactionId { get; set; }
+        public string Status { get; set; }
+        public DateTime DateStatusChanged { get; set; }
     }
 }

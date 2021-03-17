@@ -9,7 +9,7 @@ import {TranslateService} from '@ngx-translate/core';
 
 export class AppComponent {
   title: string = 'BankingInternshipClient';
-  appTitle: string = "Banking Internship!";
+  appTitle: string = "Banking Internship!!!";
   response: any;
 
   constructor(public translate: TranslateService) {

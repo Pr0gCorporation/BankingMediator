@@ -16,7 +16,9 @@
         "CREDITORACCOUNTNUMBER": "Rekeningnummer van de crediteur",
         "CREDITORBANKID": "BankID crediteur",
         "AMOUNT": "Bedrag",
-        "TRANSACTIONID": "Transactie Id"
+        "TRANSACTIONID": "Transactie Id",
+        "STATUS": "Toestand",
+        "DATE": "Gewijzigd"
     },
     "TIME": {
         "LOADING": "Bezig met laden"
