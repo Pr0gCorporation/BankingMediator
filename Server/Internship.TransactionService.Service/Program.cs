@@ -11,7 +11,7 @@ namespace Internship.TransactionService.Service
         public static void Main(string[] args)
         {
             var configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.Development.json")
+                .AddJsonFile("appsettings.json")
                 .Build();
 
             Log.Logger = new LoggerConfiguration()
@@ -30,6 +30,7 @@ namespace Internship.TransactionService.Service
             }
             finally
             {
+                Log.Information("Application Stopping Down");
                 Log.CloseAndFlush();
             }
         }
