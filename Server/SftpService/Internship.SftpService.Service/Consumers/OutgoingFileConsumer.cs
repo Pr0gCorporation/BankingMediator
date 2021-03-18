@@ -53,7 +53,7 @@ namespace Internship.SftpService.Service.Consumers
                 _logger.LogInformation($"Uploading the archived file with filename: {context.Message.FileName}, msgId: {context.MessageId}");
                 _uploadable.Upload(
                     configuration.GetValue<string>("PathConfig:UploadFiles:To"),
-                    compressedBytes, context.Message.FileName);
+                    compressedBytes, fileNameZip);
 
                 _logger.LogInformation($"The archived file uploaded successfully! From message: {context.MessageId}");
             }
