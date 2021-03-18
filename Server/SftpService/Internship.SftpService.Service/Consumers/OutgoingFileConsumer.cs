@@ -31,6 +31,7 @@ namespace Internship.SftpService.Service.Consumers
             {
                 var configuration = _hostBuilderContext.Configuration;
 
+
                 _logger.LogInformation($"Uploading file with filename: {context.Message.FileName}, msgId: {context.MessageId}");
                 _uploadable.Upload(
                     configuration.GetValue<string>("PathConfig:UploadFiles:To"), 
