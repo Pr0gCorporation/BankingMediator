@@ -1,4 +1,4 @@
-<form (ngSubmit)="onSubmit()" #transactionForm="ngForm" class="transaction-form needs-validation">
+<form (ngSubmit)="onSubmit(transactionForm)" #transactionForm="ngForm" class="transaction-form needs-validation">
     <div class="row center d-flex content-center"  *ngIf="showMsg">
         <div class="col-xs-12">
             <p class="alert alert-success">

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TransactionCreateModel } from '../Models/Transactions';
 import { TransactionsService } from '../shared/transactions.service';
 import { TranslateService } from '@ngx-translate/core';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-add-transaction',
@@ -18,13 +19,14 @@ export class AddTransactionComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onSubmit() {
+  onSubmit(transactionForm: NgForm) {
     let transactionPostedSuccessfully = this.transactionService.postTransaction(
       this.transaction
     );
 
     if (transactionPostedSuccessfully) {
       this.transaction = new TransactionCreateModel();
+      transactionForm.reset();
       this.showMsg = true;
       setTimeout(() => {
         this.showMsg = false;
