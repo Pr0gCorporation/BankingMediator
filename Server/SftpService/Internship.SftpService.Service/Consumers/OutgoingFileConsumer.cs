@@ -37,7 +37,9 @@ namespace Internship.SftpService.Service.Consumers
                 string fileName = context.Message.FileName;
                 byte[] fileBytes = context.Message.File;
                 byte[] compressedBytes;
-                string fileNameZip = fileName + ".zip";
+                string fileNameExtention = Path.GetExtension(fileName);
+                string fileNameZip = fileName.Replace(
+                    fileNameExtention, ".zip");
                 using (var outStream = new MemoryStream())
                 {
                     using (var archive = new ZipArchive(outStream, ZipArchiveMode.Create, true))
