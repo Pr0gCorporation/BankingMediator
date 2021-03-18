@@ -4,6 +4,8 @@ obj/
 riderModule.iml
 /_ReSharper.Caches/
 
+**/banking_LOGS/*
+
 # Common IntelliJ Platform excludes
 
 # User specific

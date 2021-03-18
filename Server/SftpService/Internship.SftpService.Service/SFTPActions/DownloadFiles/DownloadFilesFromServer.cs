@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using Internship.SftpService.Service.SFTPClient;
 using Microsoft.Extensions.Logging;
 using Renci.SshNet;
@@ -15,27 +16,25 @@ namespace Internship.SftpService.Service.SFTPActions.DownloadFiles
             _sftpClient = sftpClient;
             _logger = logger;
         }
-        
-        public int Download(string pathTo, string pathFrom, bool removeFileAfterDownloading = false)
+
+        public List<byte[]> Download(string pathFrom, bool removeFileAfterDownloading = false)
         {
             _sftpClient.Connect();
             var files = _sftpClient.ListDirectory(pathFrom);
-            var downloaded = 0;
+            List<byte[]> byteArrayFiles = new List<byte[]>();
             foreach (var file in files)
             {
                 if (file.IsDirectory) continue;
                 var fullPath = pathFrom + file.Name;
-                using (Stream fileStream = File.Create(pathTo + file.Name))
-                {
-                    _sftpClient.DownloadFile(fullPath, fileStream);
-                    downloaded++;
-                }
+                using var fileStream = new MemoryStream();
+                _sftpClient.DownloadFile(fullPath, fileStream);
+                byteArrayFiles.Add(fileStream.ToArray());
 
-                if(!removeFileAfterDownloading) continue;
+                if (!removeFileAfterDownloading) continue;
                 _sftpClient.DeleteFile(fullPath);
             }
             _sftpClient.Disconnect();
-            return downloaded;
+            return byteArrayFiles;
         }
     }
 }
