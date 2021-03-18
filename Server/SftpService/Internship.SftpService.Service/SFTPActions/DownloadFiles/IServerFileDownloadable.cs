@@ -1,7 +1,9 @@
-﻿namespace Internship.SftpService.Service.SFTPActions.DownloadFiles
+﻿using System.Collections.Generic;
+
+namespace Internship.SftpService.Service.SFTPActions.DownloadFiles
 {
     public interface IServerFileDownloadable
     {
-        int Download(string pathTo, string pathFrom, bool removeFileAfterDownloading);
+        List<byte[]> Download(string pathFrom, bool removeFileAfterDownloading);
     }
 }
