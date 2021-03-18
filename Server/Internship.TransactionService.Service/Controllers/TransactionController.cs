@@ -6,8 +6,6 @@ using Internship.Shared.DTOs.Transaction;
 using Internship.TransactionService.Domain.Interfaces;
 using Internship.TransactionService.Domain.Models;
 using Internship.TransactionService.Domain.Enums;
-using Internship.TransactionService.Domain.Interfaces;
-using Internship.TransactionService.Domain.Models;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -79,7 +77,7 @@ namespace Internship.TransactionService.Service.Controllers
                 _logger.LogInformation($"Verb: POST, Desc: Post transaction, param: transaction = {transactionModel.TransactionId}");
 
                 // Insert to DB
-                await _transactionRepository.Add(transactionModel);
+                int transactionPrimaryKey = await _transactionRepository.Add(transactionModel);
                 _logger.LogInformation($"Insert to the database the transaction: {transactionModel.TransactionId}");
 
                 // Insert to DB (status of the transaction is created)
@@ -87,8 +85,8 @@ namespace Internship.TransactionService.Service.Controllers
                 {
                     Status = transactionStatus.ToString("g"),
                     Reason = "",
-                    Date = DateTime.Now,
-                    TransactionId = transactionModel.TransactionId
+                    DateStatusChanged = DateTime.Now,
+                    TransactionId = transactionPrimaryKey
                 });
                 _logger.LogInformation($"Insert to the database the transaction status: {transactionModel.TransactionId}, {transactionStatus}");
 
@@ -118,8 +116,12 @@ namespace Internship.TransactionService.Service.Controllers
                 // Instance to insert
                 _logger.LogInformation($"Verb: POST, Desc: Cancel transaction, param: transaction = {transaction.TransactionId}");
 
+                // get primary by transaction (guid) id
+                int transactionPrimaryKey = 
+                    await _transactionRepository.GetTransactionPrimaryKeyByTransactionId(transaction.TransactionId);
+
                 // Check transaction by cancelness
-                var transactionStatusModel = await _transactionRepository.GetStatusByTransactionId(transaction.TransactionId);
+                var transactionStatusModel = await _transactionRepository.GetStatusByTransactionId(transactionPrimaryKey);
                 if (CanBeCanceled(transactionStatusModel.Status))
                 {
                     // Insert to DB (status of the transaction is canceled)
@@ -127,8 +129,8 @@ namespace Internship.TransactionService.Service.Controllers
                     {
                         Status = transactionStatus.ToString("g"),
                         Reason = "",
-                        Date = DateTime.Now,
-                        TransactionId = transaction.TransactionId
+                        DateStatusChanged = DateTime.Now,
+                        TransactionId = transactionPrimaryKey
                     });
                     _logger.LogInformation($"Insert to the database the transaction status: {transaction.TransactionId}, {transactionStatus}");
                 }

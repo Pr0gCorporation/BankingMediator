@@ -11,6 +11,7 @@ namespace Internship.TransactionService.Domain.Interfaces
         Task<TransactionModel> GetById(int id);
         Task<int> Add(TransactionModel transactionModel);
         Task<int> UpdateStatus(TransactionStatusModel transactionStatusModel);
-        Task<TransactionStatusModel> GetStatusByTransactionId(Guid transaction_id);
+        Task<TransactionStatusModel> GetStatusByTransactionId(int transaction_id);
+        Task<int> GetTransactionPrimaryKeyByTransactionId(Guid transaction_id);
     }
 }
