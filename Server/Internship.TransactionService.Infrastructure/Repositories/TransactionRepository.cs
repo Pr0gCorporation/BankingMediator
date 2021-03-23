@@ -125,7 +125,7 @@ namespace Internship.TransactionService.Infrastructure.Repositories
                 incoming = transactionModel.Incoming,
                 transaction_id = transactionModel.TransactionId,
                 amount = transactionModel.Amount
-            }); ;
+            });
 
             return await GetTransactionPrimaryKeyByTransactionId(transactionModel.TransactionId);
         }
