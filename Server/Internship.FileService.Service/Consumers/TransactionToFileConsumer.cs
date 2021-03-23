@@ -47,8 +47,8 @@ namespace Internship.FileService.Service.Consumers
             const bool isIncomingTransaction = false;
             
             var fileName = GenerateFileName(
-                transactionFileModel.Creditor.AccountNumber,
-                transactionFileModel.Debtor.AccountNumber,
+                transactionFileModel.Creditor.BankId,
+                transactionFileModel.Debtor.BankId,
                 transactionFileModel.Date);
             
             try
