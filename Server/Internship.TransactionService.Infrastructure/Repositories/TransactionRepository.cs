@@ -31,6 +31,7 @@ namespace Internship.TransactionService.Infrastructure.Repositories
                      , t.creditor_account_number as CreditorAccountNumber
                      , t.creditor_bank_id        as CreditorBankId
                      , t.transaction_id          as TransactionId
+                     , t.incoming                as Incoming
                      , t.amount                  as Amount
                      , tStatus.status            as Status
                      , tStatus.dateStatusChanged as DateStatusChanged
@@ -66,6 +67,7 @@ namespace Internship.TransactionService.Infrastructure.Repositories
                  , t.creditor_account_number as CreditorAccountNumber
                  , t.creditor_bank_id        as CreditorBankId
                  , t.transaction_id          as TransactionId
+                 , t.incoming                as Incoming
                  , t.amount                  as Amount
                  , tStatus.status            as Status
                  , tStatus.dateStatusChanged as DateStatusChanged
@@ -99,11 +101,11 @@ namespace Internship.TransactionService.Infrastructure.Repositories
             var sqlExpressionToInsert = @"INSERT INTO `transactionservice_db`.`transactions`
                                             (`debtor_first_name`, `debtor_last_name`, `debtor_account_number`, `debtor_bank_id`,
                                             `creditor_first_name`, `creditor_last_name`, `creditor_account_number`, `creditor_bank_id`,
-                                            `transaction_id`, `amount`)
+                                            `incoming`, `transaction_id`, `amount`)
                                             VALUES
                                             (@debtor_first_name, @debtor_last_name, @debtor_account_number, @debtor_bank_id,
                                             @creditor_first_name, @creditor_last_name, @creditor_account_number, @creditor_bank_id,
-                                            @transaction_id, @amount);";
+                                            @incoming, @transaction_id, @amount);";
 
             await using var connection = new MySqlConnection(_configuration.GetConnectionString(ConnectionStringName));
             connection.Open();
@@ -120,9 +122,10 @@ namespace Internship.TransactionService.Infrastructure.Repositories
                 creditor_account_number = transactionModel.CreditorAccountNumber,
                 creditor_bank_id = transactionModel.CreditorBankId,
 
+                incoming = transactionModel.Incoming,
                 transaction_id = transactionModel.TransactionId,
                 amount = transactionModel.Amount
-            });
+            }); ;
 
             return await GetTransactionPrimaryKeyByTransactionId(transactionModel.TransactionId);
         }

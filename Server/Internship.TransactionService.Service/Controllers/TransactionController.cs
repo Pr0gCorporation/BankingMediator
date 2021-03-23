@@ -74,6 +74,7 @@ namespace Internship.TransactionService.Service.Controllers
             {
                 // Instance to insert
                 var transactionModel = _mapper.Map<TransactionModel>(transaction);
+                transactionModel.Incoming = false; // outgoing transaction
                 _logger.LogInformation($"Verb: POST, Desc: Post transaction, param: transaction = {transactionModel.TransactionId}");
 
                 // Insert to DB
