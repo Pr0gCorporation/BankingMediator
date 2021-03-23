@@ -1,153 +1,242 @@
-<form (ngSubmit)="onSubmit(transactionForm)" #transactionForm="ngForm" class="transaction-form needs-validation">
-    <div class="row center d-flex content-center"  *ngIf="showMsg">
-        <div class="col-xs-12">
-            <p class="alert alert-success">
-                <strong>{{ 'ACTION.TRANSACTIONPOSTED' | translate }}</strong> {{ 'COMMONWORDS.THANKS' | translate }}!.
-            </p>
-        </div> 
+<form
+  (ngSubmit)="onSubmit(transactionForm)"
+  #transactionForm="ngForm"
+  class="transaction-form needs-validation"
+>
+  <div class="row center d-flex content-center" *ngIf="showMsg">
+    <div class="col-xs-12">
+      <p class="alert alert-success">
+        <strong>{{ "ACTION.TRANSACTIONPOSTED" | translate }}</strong>
+        {{ "COMMONWORDS.THANKS" | translate }}!.
+      </p>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card_item">
+        <label for="debtorFirstName"
+          ><span class="error">*</span
+          >{{ "TRANSACTION.DEBTORFIRSTNAME" | translate }}:</label
+        >
+        <input
+          type="text"
+          id="debtorFirstName"
+          name="debtorFirstName"
+          #debtorFirstName="ngModel"
+          minlength="4"
+          maxlength="30"
+          required
+          [(ngModel)]="transaction.debtorFirstName"
+        />
+      </div>
+      <div
+        [hidden]="debtorFirstName.valid || debtorFirstName.pristine"
+        class="alert alert-danger"
+      >
+        {{ "VALIDATION.DEBTORFIRSTNAMESHORT" | translate }}
+      </div>
+
+      <div class="card_item">
+        <label for="debtorLastName"
+          ><span class="error">*</span
+          >{{ "TRANSACTION.DEBTORLASTNAME" | translate }}:</label
+        >
+        <input
+          type="text"
+          id="debtorLastName"
+          name="debtorLastName"
+          #debtorLastName="ngModel"
+          minlength="4"
+          maxlength="30"
+          required
+          [(ngModel)]="transaction.debtorLastName"
+        />
+      </div>
+      <div
+        [hidden]="debtorLastName.valid || debtorLastName.pristine"
+        class="alert alert-danger"
+      >
+        {{ "VALIDATION.DEBTORLASTNAMESHORT" | translate }}
+      </div>
+
+      <div class="card_item">
+        <label for="debtorAccountNumber"
+          ><span class="error">*</span
+          >{{ "TRANSACTION.DEBTORACCOUNTNUMBER" | translate }}:</label
+        >
+        <input
+          type="text"
+          id="debtorAccountNumber"
+          name="debtorAccountNumber"
+          #debtorAccountNumber="ngModel"
+          minlength="10"
+          maxlength="34"
+          required
+          [(ngModel)]="transaction.debtorAccountNumber"
+        />
+      </div>
+      <div
+        [hidden]="debtorAccountNumber.valid || debtorAccountNumber.pristine"
+        class="alert alert-danger"
+      >
+        {{ "VALIDATION.DEBTORACCOUNTNUMBERBETWEEN" | translate }}
+      </div>
+
+      <div class="card_item">
+        <label for="debtorBankId"
+          ><span class="error">*</span
+          >{{ "TRANSACTION.DEBTORBANKID" | translate }}:</label
+        >
+        <input
+          type="text"
+          id="debtorBankId"
+          name="debtorBankId"
+          #debtorBankId="ngModel"
+          minlength="4"
+          maxlength="4"
+          required
+          [(ngModel)]="transaction.debtorBankId"
+        />
+      </div>
+      <div
+        [hidden]="debtorBankId.valid || debtorBankId.pristine"
+        class="alert alert-danger"
+      >
+        {{ "VALIDATION.DEBTORBANKIDWRONG" | translate }}
+      </div>
     </div>
 
-    <div class="cards">
-        <div class="card">
-            <div class="card_item">
-                <label for="debtorFirstName"><span class="error">*</span>{{ 'TRANSACTION.DEBTORFIRSTNAME' | translate }}:</label>
-                <input type="text" id="debtorFirstName" 
-                name="debtorFirstName" 
-                #debtorFirstName="ngModel" 
-                minlength="4"
-                maxlength="30"
-                required [(ngModel)]="transaction.debtorFirstName">
-            </div>
-            <div [hidden]="debtorFirstName.valid || debtorFirstName.pristine"
-                class="alert alert-danger">
-                {{ 'VALIDATION.DEBTORFIRSTNAMESHORT' | translate }}
-            </div>
+    <div class="card">
+      <div class="card_item">
+        <label for="creditorFirstName"
+          ><span class="error">*</span
+          >{{ "TRANSACTION.CREDITORFIRSTNAME" | translate }}:</label
+        >
+        <input
+          type="text"
+          id="creditorFirstName"
+          name="creditorFirstName"
+          #creditorFirstName="ngModel"
+          minlength="4"
+          maxlength="30"
+          required
+          [(ngModel)]="transaction.creditorFirstName"
+        />
+      </div>
+      <div
+        [hidden]="creditorFirstName.valid || creditorFirstName.pristine"
+        class="alert alert-danger"
+      >
+        {{ "VALIDATION.CREDITORFIRSTNAMESHORT" | translate }}
+      </div>
 
-            <div class="card_item">
-                <label for="debtorLastName"><span class="error">*</span>{{ 'TRANSACTION.DEBTORLASTNAME' | translate }}:</label>
-                <input type="text" id="debtorLastName" 
-                name="debtorLastName" 
-                #debtorLastName="ngModel" 
-                minlength="4"
-                maxlength="30"
-                required [(ngModel)]="transaction.debtorLastName">
-            </div>
-            <div [hidden]="debtorLastName.valid || debtorLastName.pristine"
-            class="alert alert-danger">
-            {{ 'VALIDATION.DEBTORLASTNAMESHORT' | translate }}
-            </div>
+      <div class="card_item">
+        <label for="creditorLastName"
+          ><span class="error">*</span
+          >{{ "TRANSACTION.CREDITORLASTNAME" | translate }}:</label
+        >
+        <input
+          type="text"
+          id="creditorLastName"
+          name="creditorLastName"
+          #creditorLastName="ngModel"
+          minlength="4"
+          maxlength="30"
+          required
+          [(ngModel)]="transaction.creditorLastName"
+        />
+      </div>
+      <div
+        [hidden]="creditorLastName.valid || creditorLastName.pristine"
+        class="alert alert-danger"
+      >
+        {{ "VALIDATION.CREDITORLASTNAMESHORT" | translate }}
+      </div>
 
-            <div class="card_item">
-                <label for="debtorAccountNumber"><span class="error">*</span>{{ 'TRANSACTION.DEBTORACCOUNTNUMBER' | translate }}:</label>
-                <input type="text" id="debtorAccountNumber" 
-                name="debtorAccountNumber" 
-                #debtorAccountNumber="ngModel" 
-                minlength="4"
-                maxlength="6"
-                required [(ngModel)]="transaction.debtorAccountNumber">
-            </div>
-            <div [hidden]="debtorAccountNumber.valid || debtorAccountNumber.pristine"
-            class="alert alert-danger">
-            {{ 'VALIDATION.DEBTORACCOUNTNUMBERBETWEEN' | translate }}
-            </div>
+      <div class="card_item">
+        <label for="creditorAccountNumber"
+          ><span class="error">*</span
+          >{{ "TRANSACTION.CREDITORACCOUNTNUMBER" | translate }}:</label
+        >
+        <input
+          type="text"
+          id="creditorAccountNumber"
+          name="creditorAccountNumber"
+          #creditorAccountNumber="ngModel"
+          minlength="10"
+          maxlength="34"
+          required
+          [(ngModel)]="transaction.creditorAccountNumber"
+        />
+      </div>
+      <div
+        [hidden]="creditorAccountNumber.valid || creditorAccountNumber.pristine"
+        class="alert alert-danger"
+      >
+        {{ "VALIDATION.CREDITORACCOUNTNUMBERBETWEEN" | translate }}
+      </div>
 
-            <div class="card_item">
-                <label for="debtorBankId"><span class="error">*</span>{{ 'TRANSACTION.DEBTORBANKID' | translate }}:</label>
-                <input type="text" id="debtorBankId" 
-                name="debtorBankId"
-                #debtorBankId="ngModel" 
-                minlength="4"
-                maxlength="4"
-                required [(ngModel)]="transaction.debtorBankId">
-            </div>
-            <div [hidden]="debtorBankId.valid || debtorBankId.pristine"
-            class="alert alert-danger">
-            {{ 'VALIDATION.DEBTORBANKIDWRONG' | translate }}
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card_item">
-                <label for="creditorFirstName"><span class="error">*</span>{{ 'TRANSACTION.CREDITORFIRSTNAME' | translate }}:</label>
-                <input type="text" id="creditorFirstName"
-                name="creditorFirstName" 
-                #creditorFirstName="ngModel" 
-                minlength="4"
-                maxlength="30"
-                required [(ngModel)]="transaction.creditorFirstName">
-            </div>
-            <div [hidden]="creditorFirstName.valid || creditorFirstName.pristine"
-            class="alert alert-danger">
-            {{ 'VALIDATION.CREDITORFIRSTNAMESHORT' | translate }}
-            </div>
-
-            <div class="card_item">
-                <label for="creditorLastName"><span class="error">*</span>{{ 'TRANSACTION.CREDITORLASTNAME' | translate }}:</label>
-                <input type="text" id="creditorLastName" 
-                name="creditorLastName" 
-                #creditorLastName="ngModel" 
-                minlength="4"
-                maxlength="30"
-                required [(ngModel)]="transaction.creditorLastName">
-            </div>
-            <div [hidden]="creditorLastName.valid || creditorLastName.pristine"
-            class="alert alert-danger">
-            {{ 'VALIDATION.CREDITORLASTNAMESHORT' | translate }}
-            </div>
-
-            <div class="card_item">
-                <label for="creditorAccountNumber"><span class="error">*</span>{{ 'TRANSACTION.CREDITORACCOUNTNUMBER' | translate }}:</label>
-                <input type="text" id="creditorAccountNumber" 
-                name="creditorAccountNumber" 
-                #creditorAccountNumber="ngModel" 
-                minlength="4"
-                maxlength="6"
-                required [(ngModel)]="transaction.creditorAccountNumber">
-            </div>
-            <div [hidden]="creditorAccountNumber.valid || creditorAccountNumber.pristine"
-            class="alert alert-danger">
-            {{ 'VALIDATION.CREDITORACCOUNTNUMBERBETWEEN' | translate }}
-            </div>
-
-            <div class="card_item">
-                <label for="creditorBankId"><span class="error">*</span>{{ 'TRANSACTION.CREDITORBANKID' | translate }}:</label>
-                <input type="text" id="creditorBankId" 
-                name="creditorBankId" 
-                #creditorBankId="ngModel" 
-                minlength="4"
-                maxlength="4"
-                required [(ngModel)]="transaction.creditorBankId">
-            </div>
-            <div [hidden]="creditorBankId.valid || creditorBankId.pristine"
-            class="alert alert-danger">
-            {{ 'VALIDATION.CREDITORBANKIDWRONG' | translate }}
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card_item">
-                <label for="amount"><span class="error">*</span>{{ 'TRANSACTION.AMOUNT' | translate }}:</label>
-                <input type="text" id="amount" 
-                name="amount" 
-                #amount="ngModel" 
-                type="number"
-                maxlength="20"
-                max="15000"
-                min="0"
-                step="5"
-                required [(ngModel)]="transaction.amount">
-            </div>
-            <div [hidden]="amount.valid || amount.pristine"
-            class="alert alert-danger">
-            {{ 'VALIDATION.AMOUNTREQUIRED' | translate }}
-            </div>
-        </div>
-
-        <div class="center text-center">
-            <button type="submit" class="btn btn-primary center button-wide" 
-                [disabled]="!transactionForm.form.valid">
-                {{ 'ACTION.SUBMIT' | translate }}
-            </button>
-        </div>
+      <div class="card_item">
+        <label for="creditorBankId"
+          ><span class="error">*</span
+          >{{ "TRANSACTION.CREDITORBANKID" | translate }}:</label
+        >
+        <input
+          type="text"
+          id="creditorBankId"
+          name="creditorBankId"
+          #creditorBankId="ngModel"
+          minlength="4"
+          maxlength="4"
+          required
+          [(ngModel)]="transaction.creditorBankId"
+        />
+      </div>
+      <div
+        [hidden]="creditorBankId.valid || creditorBankId.pristine"
+        class="alert alert-danger"
+      >
+        {{ "VALIDATION.CREDITORBANKIDWRONG" | translate }}
+      </div>
     </div>
-</form> 
+
+    <div class="card">
+      <div class="card_item">
+        <label for="amount"
+          ><span class="error">*</span
+          >{{ "TRANSACTION.AMOUNT" | translate }}:</label
+        >
+        <input
+          type="text"
+          id="amount"
+          name="amount"
+          #amount="ngModel"
+          type="number"
+          maxlength="20"
+          max="15000"
+          min="0"
+          step="5"
+          required
+          [(ngModel)]="transaction.amount"
+        />
+      </div>
+      <div
+        [hidden]="amount.valid || amount.pristine"
+        class="alert alert-danger"
+      >
+        {{ "VALIDATION.AMOUNTREQUIRED" | translate }}
+      </div>
+    </div>
+
+    <div class="center text-center">
+      <button
+        type="submit"
+        class="btn btn-primary center button-wide"
+        [disabled]="!transactionForm.form.valid"
+      >
+        {{ "ACTION.SUBMIT" | translate }}
+      </button>
+    </div>
+  </div>
+</form>
