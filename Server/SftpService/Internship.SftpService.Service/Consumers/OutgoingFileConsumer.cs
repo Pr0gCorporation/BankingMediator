@@ -2,8 +2,8 @@
 using System.IO;
 using System.IO.Compression;
 using System.Threading.Tasks;
-using Internship.FileService.Domain.Models;
 using Internship.SftpService.Service.SFTPActions.UploadFiles;
+using Internship.Shared.DTOs.File;
 using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Internship.SftpService.Service.Consumers
 {
-    public class OutgoingFileConsumer : IConsumer<OutgoingFile>
+    public class OutgoingFileConsumer : IConsumer<OutgoingFileDto>
     {
         private readonly ILogger<OutgoingFileConsumer> _logger;
         private readonly HostBuilderContext _hostBuilderContext;
@@ -25,7 +25,7 @@ namespace Internship.SftpService.Service.Consumers
             _uploadable = uploadable;
         }
 
-        public async Task Consume(ConsumeContext<OutgoingFile> context)
+        public async Task Consume(ConsumeContext<OutgoingFileDto> context)
         {
             _logger.LogInformation($"Received new message: {context.MessageId}, of type {context.GetType()}");
 

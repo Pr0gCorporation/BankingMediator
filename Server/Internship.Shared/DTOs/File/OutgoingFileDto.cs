@@ -1,6 +1,6 @@
-﻿namespace Internship.FileService.Domain.Models
+﻿namespace Internship.Shared.DTOs.File
 {
-    public class OutgoingFile
+    public class OutgoingFileDto
     {
         public string FileName { get; set; }
         public byte[] File { get; set; }

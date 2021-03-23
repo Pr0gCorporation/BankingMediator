@@ -1,6 +1,7 @@
 using Internship.FileService.Domain.Interfaces;
 using Internship.FileService.Infrastructure.DAL;
 using Internship.FileService.Service.Consumers;
+using Internship.FileService.Service.Publishers;
 using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -48,6 +49,7 @@ namespace Internship.FileService.Service
                     var configuration = hostContext.Configuration;
 
                     services.AddTransient<IFileRepository, FileRepository>();
+                    services.AddTransient<IncomingTransactionPublisher>();
 
                     services.AddMassTransit(config =>
                     {

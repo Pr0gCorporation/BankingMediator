@@ -1,6 +1,7 @@
 using System;
 using Internship.TransactionService.Domain.Interfaces;
 using Internship.TransactionService.Infrastructure.Repositories;
+using Internship.TransactionService.Service.Consumers;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -34,12 +35,19 @@ namespace Internship.TransactionService.Service
             
             services.AddMassTransit(config =>
             {
+                config.AddConsumer<IncomingTransactionConsumer>();
+
                 config.UsingRabbitMq((ctx, cfg) =>
                 {
                     cfg.Host(Configuration.GetValue<string>("BusConfig:Host"));
+
+                    cfg.ReceiveEndpoint("incoming_transaction", c =>
+                    {
+                        c.ConfigureConsumer<IncomingTransactionConsumer>(ctx);
+                    });
                 });
             });
-                    
+
             services.AddMassTransitHostedService();
             
             services.AddCors(option => option.AddPolicy("APIPolicy", builder => {

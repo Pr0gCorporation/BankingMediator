@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
-using Internship.FileService.Domain.Models;
 using Internship.SftpService.Service.SFTPActions.DownloadFiles;
+using Internship.Shared.DTOs.File;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 
@@ -20,9 +20,9 @@ namespace Internship.SftpService.Service.FileActions.FileReader
             _hostBuilderContext = hostBuilderContext;
         }
 
-        public List<IncomingFile> DownloadAllFiles()
+        public List<IncomingFileDto> DownloadAllFiles()
         {
-            var incomingFiles = new List<IncomingFile>();
+            var incomingFiles = new List<IncomingFileDto>();
             var configuration = _hostBuilderContext.Configuration;
 
             var byteArrayFiles = _downloadable.Download(
@@ -46,7 +46,7 @@ namespace Internship.SftpService.Service.FileActions.FileReader
                 xmlByteArrayFile = extractedXmlFileStream.ToArray();
 
                 incomingFiles.Add(
-                    new IncomingFile
+                    new IncomingFileDto
                     {
                         File = xmlByteArrayFile,
                         FileName = xmlFileName,

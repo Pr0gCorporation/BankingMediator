@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Internship.FileService.Domain.Models;
+using Internship.Shared.DTOs.File;
 using MassTransit;
 
 namespace Internship.SftpService.Service.Publishers.FilePublisher
@@ -13,7 +13,7 @@ namespace Internship.SftpService.Service.Publishers.FilePublisher
             _publishEndpoint = publishEndpoint;
         }
 
-        public async void PublishFiles(IEnumerable<IncomingFile> files)
+        public async void PublishFiles(IEnumerable<IncomingFileDto> files)
         {
             if (files is null) return;
             
