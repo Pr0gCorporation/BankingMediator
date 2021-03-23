@@ -1,25 +1,28 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Internship.FileService.Domain.Interfaces;
-using Internship.FileService.Domain.Models;
+using Internship.FileService.Service.Publishers;
+using Internship.Shared.DTOs.File;
 using MassTransit;
 using Microsoft.Extensions.Logging;
 
 namespace Internship.FileService.Service.Consumers
 {
-    public class IncomingFileConsumer : IConsumer<IncomingFile>
+    public class IncomingFileConsumer : IConsumer<IncomingFileDto>
     {
         private readonly ILogger<IncomingFileConsumer> _logger;
         private readonly IFileRepository _repository;
+        private readonly IncomingTransactionPublisher _publisher;
 
         public IncomingFileConsumer(ILogger<IncomingFileConsumer> logger,
-            IFileRepository repository)
+            IFileRepository repository, IncomingTransactionPublisher publisher)
         {
             _logger = logger;
             _repository = repository;
+            _publisher = publisher;
         }
 
-        public async Task Consume(ConsumeContext<IncomingFile> context)
+        public async Task Consume(ConsumeContext<IncomingFileDto> context)
         {
             _logger.LogInformation($"Received new message: {context.MessageId}, of type {context.GetType()}");
 
@@ -32,6 +35,10 @@ namespace Internship.FileService.Service.Consumers
                     context.Message.File);
 
                 _logger.LogInformation($"File {context.Message.FileName} inserted successfully!");
+
+                _publisher.PublishIncomingTransaction(context.Message.File);
+
+                _logger.LogInformation($"File {context.Message.FileName} published successfully!");
             }
             catch (Exception e)
             {
