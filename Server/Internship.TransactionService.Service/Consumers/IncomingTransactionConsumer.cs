@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Internship.Shared.DTOs.Account;
 using Internship.Shared.DTOs.Transaction;
 using Internship.TransactionService.Domain.Enums;
 using Internship.TransactionService.Domain.Interfaces;
@@ -17,15 +18,17 @@ namespace Internship.TransactionService.Service.Consumers
         private readonly HostBuilderContext _hostBuilderContext;
         private readonly ITransactionRepository _transactionRepository;
         private readonly IMapper _mapper;
+        private readonly IBus _publisher;
 
         public IncomingTransactionConsumer(ILogger<IncomingTransactionConsumer> logger,
             HostBuilderContext hostBuilderContext, ITransactionRepository transactionRepository,
-            IMapper mapper)
+            IMapper mapper, IBus publisher)
         {
             _logger = logger;
             _hostBuilderContext = hostBuilderContext;
             _transactionRepository = transactionRepository;
             _mapper = mapper;
+            _publisher = publisher;
         }
 
         public async Task Consume(ConsumeContext<IncomingTransactionDto> context)
@@ -55,7 +58,20 @@ namespace Internship.TransactionService.Service.Consumers
                     DateStatusChanged = DateTime.Now,
                     TransactionId = transactionPrimaryKey
                 });
+
                 _logger.LogInformation($"Insert to the database the transaction status: {transactionModel.TransactionId}, {transactionStatus}");
+
+                // Publish to account service in order to update balance
+                await _publisher.Publish(new UpdateAccountBalanceDto()
+                {
+                    DebtorIBAN = transactionModel.DebtorAccountNumber,
+                    CreditorIBAN = transactionModel.CreditorAccountNumber,
+                    Amount = transactionModel.Amount,
+                    Reference = transactionModel.TransactionId.ToString()
+                });
+
+                _logger.LogInformation($"Publish the transaction, in order to update balance of the accounts: {transactionModel.TransactionId}," +
+                    $" Debtor: {transactionModel.DebtorAccountNumber}, Creditor: {transactionModel.CreditorAccountNumber}");
             }
             catch (Exception e)
             {
