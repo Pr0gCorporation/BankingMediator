@@ -57,28 +57,19 @@ namespace Internship.AccountService.Infrastructure.DAL
         public async Task<decimal> GetSumOfCashbookRecordsByCashbookId(int cashbookId)
         {
             var sqlExpressionToGetSumOfCashbookRecordsByCashbookId = @"
-                SELECT SUM(amount) AS currentBalance FROM accountservice_db.cashbookRecords
-                WHERE cashbookid = @cashbookId;";
-
-            decimal? sum = null;
+                SELECT COALESCE(SUM(amount), 0) AS currentBalance FROM accountservice_db.cashbookRecords
+                WHERE cashbookid = 1;";
 
             using (var connection = new MySqlConnection(
                 _configuration.GetConnectionString(ConnectionStringName)))
             {
                 connection.Open();
-                sum = await connection.QueryFirstOrDefaultAsync<decimal>(
+                return await connection.QueryFirstOrDefaultAsync<decimal>(
                     sqlExpressionToGetSumOfCashbookRecordsByCashbookId, new
                     {
                         cashbookId
                     });
             }
-
-            if (sum is null)
-            {
-                throw new Exception("No sum for this cashbook.");
-            }
-
-            return (decimal)sum;
         }
 
         public async Task<int> InsertCashbookRecord(CashbookRecordModel cashbookRecordModel)
