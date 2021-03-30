@@ -9,10 +9,10 @@ namespace Internship.SftpService.Service.Jobs
     public class DownloadPublishFilesJob : IJob
     {
         private readonly TransactionFilePublisher _publisher;
-        private readonly ReadXmlFilesFromSftpServer _reader;
+        private readonly ReadFilesFromSftpServer _reader;
 
         public DownloadPublishFilesJob(TransactionFilePublisher publisher, 
-            ReadXmlFilesFromSftpServer reader)
+            ReadFilesFromSftpServer reader)
         {
             _publisher = publisher;
             _reader = reader;
