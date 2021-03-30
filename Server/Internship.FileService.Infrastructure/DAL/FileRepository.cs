@@ -10,6 +10,7 @@ namespace Internship.FileService.Infrastructure.DAL
     public class FileRepository : IFileRepository
     {
         private readonly IConfiguration _configuration;
+        private const string _connectionString = "MYSQLConnection";
 
         public FileRepository(IConfiguration configuration)
         {
@@ -21,7 +22,7 @@ namespace Internship.FileService.Infrastructure.DAL
             const string sqlExpressionToInsert = "INSERT INTO `fileservice_db`.`files`"+
                                                  "(`date`, `incoming`, `filename`, `file`) VALUES (@Date, @Type, @FileName, @File);";
 
-            await using var connection = new MySqlConnection(_configuration.GetConnectionString("MYSQLConnection"));
+            await using var connection = new MySqlConnection(_configuration.GetConnectionString(_connectionString));
             connection.Open();
             
             var inserted = await connection.ExecuteAsync(sqlExpressionToInsert, new
@@ -33,6 +34,18 @@ namespace Internship.FileService.Infrastructure.DAL
             });
 
             return inserted;
+        }
+
+        public async Task<int> GetNextPrimaryKey()
+        {
+            const string sqlExpressionToInsert = @"SELECT MAX(fileid) + 1 as NextId FROM fileservice_db.files;";
+
+            await using var connection = new MySqlConnection(_configuration.GetConnectionString(_connectionString));
+            connection.Open();
+
+            int nextId = await connection.QueryFirstOrDefaultAsync<int>(sqlExpressionToInsert);
+
+            return nextId;
         }
     }
 }

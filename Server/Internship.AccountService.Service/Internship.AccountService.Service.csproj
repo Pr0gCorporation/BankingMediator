@@ -1,11 +1,28 @@
 <Project Sdk="Microsoft.NET.Sdk.Worker">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <UserSecretsId>dotnet-Internship.AccountService.Service-8CD49F34-41A7-443F-BA0A-86E6F1981AE0</UserSecretsId>
+    <TargetFramework>net5.0</TargetFramework>
+    <UserSecretsId>dotnet-Internship.AccountService.Service-D96A03AE-0A3D-450E-B20B-8AAB7F0514FA</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.12" />
+    <PackageReference Include="MassTransit" Version="7.1.6" />
+    <PackageReference Include="MassTransit.AspNetCore" Version="7.1.6" />
+    <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="7.1.6" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="7.1.6" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
+    <PackageReference Include="Serilog.Enrichers.Environment" Version="2.1.3" />
+    <PackageReference Include="Serilog.Enrichers.Process" Version="2.0.1" />
+    <PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
+    <PackageReference Include="Serilog.Extensions.Hosting" Version="4.1.2" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
+    <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Internship.AccountService.Domain\Internship.AccountService.Domain.csproj" />
+    <ProjectReference Include="..\Internship.AccountService.Infrastructure\Internship.AccountService.Infrastructure.csproj" />
+    <ProjectReference Include="..\Internship.Shared\Internship.Shared.csproj" />
   </ItemGroup>
 </Project>

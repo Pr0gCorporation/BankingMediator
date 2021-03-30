@@ -20,7 +20,7 @@ namespace Internship.SftpService.Service.SFTPActions.UploadFiles
         public int Upload(string pathTo, string pathFrom, bool removeFileAfterDownloading = false)
         {
             _sftpClient.Connect();
-            _logger.LogInformation($"Connect to sftp: {_sftpClient.IsConnected()}.-------------------\n");
+            _logger.LogInformation($"Connect to sftp: {_sftpClient.IsConnected()}.\n");
 
             var files = Directory.EnumerateFiles(pathFrom);
 
@@ -33,6 +33,7 @@ namespace Internship.SftpService.Service.SFTPActions.UploadFiles
                 {
                     _sftpClient.UploadFile(fileStream, pathTo + Path.GetFileName(file));
                     uploaded++;
+                    _logger.LogInformation($"File uploaded: {file}\n\n");
                 }
 
                 if (!removeFileAfterDownloading) continue;
@@ -49,13 +50,16 @@ namespace Internship.SftpService.Service.SFTPActions.UploadFiles
         public void Upload(string pathTo, byte[] file, string filename)
         {
             _sftpClient.Connect();
-            
+            _logger.LogInformation($"Connect to sftp: {_sftpClient.IsConnected()}.\n");
+
             using (var stream = new MemoryStream())
             {
                 stream.Write(file, 0, file.Length);
                 stream.Position = 0;
                 _sftpClient.UploadFile(stream, pathTo + filename);
             }
+
+            _logger.LogInformation($"File uploaded: {file}\n\n");
 
             _sftpClient.Disconnect();
         }

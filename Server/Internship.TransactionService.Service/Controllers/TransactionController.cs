@@ -9,6 +9,7 @@ using Internship.TransactionService.Domain.Enums;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Internship.Shared.Events;
 
 namespace Internship.TransactionService.Service.Controllers
 {
@@ -94,9 +95,22 @@ namespace Internship.TransactionService.Service.Controllers
                 // Instance to publish
                 var transactionFile = _mapper.Map<TransactionToFileDto>(transactionModel);
 
-                // Publish to file endpoint
+                // Publish to file endpoint and account one
                 await _publisher.Publish(transactionFile);
-                _logger.LogInformation($"Publish the transaction: {transactionModel.TransactionId}");
+
+                _logger.LogInformation($"Publish the outgoing transaction: {transactionModel.TransactionId}");
+
+                await _publisher.Publish(new TransactionRegistredEvent()
+                {
+                    DebtorIBAN = transactionModel.DebtorAccountNumber,
+                    CreditorIBAN = transactionModel.CreditorAccountNumber,
+                    Amount = transactionModel.Amount,
+                    Reference = transactionModel.TransactionId.ToString()
+                });
+
+                _logger.LogInformation($"Publish the transaction, in order to update balance of the accounts: {transactionModel.TransactionId}," +
+                    $" Debtor: {transactionModel.DebtorAccountNumber}, Creditor: {transactionModel.CreditorAccountNumber}");
+
                 return NoContent();
             }
             catch (Exception e)
@@ -118,7 +132,7 @@ namespace Internship.TransactionService.Service.Controllers
                 _logger.LogInformation($"Verb: POST, Desc: Cancel transaction, param: transaction = {transaction.TransactionId}");
 
                 // get primary by transaction (guid) id
-                int transactionPrimaryKey = 
+                int transactionPrimaryKey =
                     await _transactionRepository.GetTransactionPrimaryKeyByTransactionId(transaction.TransactionId);
 
                 // Check transaction by cancelness

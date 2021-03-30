@@ -2,6 +2,7 @@
 using Internship.Shared.DTOs.Transaction;
 using MassTransit;
 using System.IO;
+using System.Linq;
 
 namespace Internship.FileService.Service.Publishers
 {
@@ -17,13 +18,13 @@ namespace Internship.FileService.Service.Publishers
         public async void PublishIncomingTransaction(byte[] incomingTransactionXmlFile)
         {
             string StringXmlTransaction = System.Text.Encoding.Default.GetString(incomingTransactionXmlFile);
-            TransactionToFile transactionToFile;
+            XMLTransactionFile transactionToFile;
 
             using (StringReader stringReader = new StringReader(StringXmlTransaction))
             {
                 System.Xml.Serialization.XmlSerializer xmlSerializer =
-                new System.Xml.Serialization.XmlSerializer(typeof(TransactionToFile));
-                transactionToFile = (TransactionToFile)xmlSerializer.Deserialize(stringReader);
+                new System.Xml.Serialization.XmlSerializer(typeof(XMLTransactionFile));
+                transactionToFile = (XMLTransactionFile)xmlSerializer.Deserialize(stringReader);
             }
 
             IncomingTransactionDto incomingTransaction = TransactionFileToIncomingModel(transactionToFile);
@@ -31,20 +32,20 @@ namespace Internship.FileService.Service.Publishers
             await _publishEndpoint.Publish(incomingTransaction);
         }
 
-        private IncomingTransactionDto TransactionFileToIncomingModel(TransactionToFile fileDto)
+        private IncomingTransactionDto TransactionFileToIncomingModel(XMLTransactionFile XMLFile)
         {
             return new IncomingTransactionDto()
             {
-                DebtorFirstName = fileDto.Debtor.FirstName,
-                DebtorLastName = fileDto.Debtor.LastName,
-                DebtorAccountNumber = fileDto.Debtor.AccountNumber,
-                DebtorBankId = fileDto.Debtor.BankId,
-                CreditorFirstName = fileDto.Creditor.FirstName,
-                CreditorLastName = fileDto.Creditor.LastName,
-                CreditorAccountNumber = fileDto.Creditor.AccountNumber,
-                CreditorBankId = fileDto.Creditor.BankId,
-                Amount = fileDto.Amount,
-                TransactionId = fileDto.TransactionId
+                DebtorFirstName = XMLFile.Transactions.First().Debtor.FirstName,
+                DebtorLastName = XMLFile.Transactions.First().Debtor.LastName,
+                DebtorAccountNumber = XMLFile.Transactions.First().Debtor.AccountNumber,
+                DebtorBankId = XMLFile.Transactions.First().Debtor.BankId,
+                CreditorFirstName = XMLFile.Transactions.First().Creditor.FirstName,
+                CreditorLastName = XMLFile.Transactions.First().Creditor.LastName,
+                CreditorAccountNumber = XMLFile.Transactions.First().Creditor.AccountNumber,
+                CreditorBankId = XMLFile.Transactions.First().Creditor.BankId,
+                Amount = XMLFile.Transactions.First().Amount,
+                TransactionId = XMLFile.Transactions.First().EndToEndId
             };
         }
     }
