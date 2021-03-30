@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Internship.FileService.Domain.Interfaces;
 using Internship.FileService.Domain.Models.Transaction;
-using Internship.Shared.DTOs.File;
+using Internship.Shared.Events;
 using Internship.Shared.DTOs.Transaction;
 using MassTransit;
 using Microsoft.Extensions.Logging;
@@ -49,7 +49,7 @@ namespace Internship.FileService.Service.Consumers
 
                 _logger.LogInformation($"File {context.MessageId} inserted successfully!");
 
-                await _publishEndpoint.Publish(new OutgoingFileDto()
+                await _publishEndpoint.Publish(new OutgoingFileEvent()
                 {
                     FileName = fileName,
                     File = xmlTransactionBytes

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Internship.Shared.DTOs.Account;
+using Internship.Shared.Events;
 using Internship.Shared.DTOs.Transaction;
 using Internship.TransactionService.Domain.Enums;
 using Internship.TransactionService.Domain.Interfaces;
@@ -62,7 +62,7 @@ namespace Internship.TransactionService.Service.Consumers
                 _logger.LogInformation($"Insert to the database the transaction status: {transactionModel.TransactionId}, {transactionStatus}");
 
                 // Publish to account service in order to update balance
-                await _publisher.Publish(new UpdateAccountBalanceDto()
+                await _publisher.Publish(new TransactionRegistredEvent()
                 {
                     DebtorIBAN = transactionModel.DebtorAccountNumber,
                     CreditorIBAN = transactionModel.CreditorAccountNumber,

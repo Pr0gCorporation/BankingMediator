@@ -9,7 +9,7 @@ using Internship.TransactionService.Domain.Enums;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Internship.Shared.DTOs.Account;
+using Internship.Shared.Events;
 
 namespace Internship.TransactionService.Service.Controllers
 {
@@ -100,7 +100,7 @@ namespace Internship.TransactionService.Service.Controllers
 
                 _logger.LogInformation($"Publish the outgoing transaction: {transactionModel.TransactionId}");
 
-                await _publisher.Publish(new UpdateAccountBalanceDto()
+                await _publisher.Publish(new TransactionRegistredEvent()
                 {
                     DebtorIBAN = transactionModel.DebtorAccountNumber,
                     CreditorIBAN = transactionModel.CreditorAccountNumber,

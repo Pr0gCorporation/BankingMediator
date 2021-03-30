@@ -4,13 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Internship.AccountService.Domain.Interfaces;
 using Internship.AccountService.Domain.Models;
-using Internship.Shared.DTOs.Account;
+using Internship.Shared.Events;
 using MassTransit;
 using Microsoft.Extensions.Logging;
 
 namespace Internship.AccountService.Service.Consumers
 {
-    public class UpdateAccountBalanceConsumer : IConsumer<UpdateAccountBalanceDto>
+    public class UpdateAccountBalanceConsumer : IConsumer<TransactionRegistredEvent>
     {
         private readonly ILogger<UpdateAccountBalanceConsumer> _logger;
         private readonly IAccountRepository _repository;
@@ -22,7 +22,7 @@ namespace Internship.AccountService.Service.Consumers
             _repository = repository;
         }
 
-        public async Task Consume(ConsumeContext<UpdateAccountBalanceDto> context)
+        public async Task Consume(ConsumeContext<TransactionRegistredEvent> context)
         {
             _logger.LogInformation($"Received new message: {context.MessageId}, of type {context.GetType()}");
 
