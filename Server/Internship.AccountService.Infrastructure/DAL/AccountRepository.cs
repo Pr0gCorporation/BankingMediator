@@ -64,7 +64,7 @@ namespace Internship.AccountService.Infrastructure.DAL
                 _configuration.GetConnectionString(ConnectionStringName)))
             {
                 connection.Open();
-                return await connection.QueryFirstOrDefaultAsync<decimal>(
+                return await connection.QuerySingleAsync<decimal>(
                     sqlExpressionToGetSumOfCashbookRecordsByCashbookId, new
                     {
                         cashbookId

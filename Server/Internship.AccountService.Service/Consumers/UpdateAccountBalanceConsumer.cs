@@ -26,11 +26,23 @@ namespace Internship.AccountService.Service.Consumers
 
             var accountBalanceDto = context.Message;
 
+            const int imposibleId = 0;
+
             try
             {
                 // Get all the necessary data
                 var debtorAccountId = await _repository.GetAccountPrimaryKeyByIBAN(accountBalanceDto.DebtorIBAN);
                 var creditorAccountId = await _repository.GetAccountPrimaryKeyByIBAN(accountBalanceDto.CreditorIBAN);
+
+                if (debtorAccountId == imposibleId ||
+                    creditorAccountId == imposibleId)
+                {
+                    _logger.LogError(
+                        $"There is no such IBAN(s): {accountBalanceDto.DebtorIBAN}, {accountBalanceDto.CreditorIBAN}");
+
+                    return;
+                }
+
                 var debtorCashbookId = await _repository.GetCashbookPrimaryKeyByAccountId(debtorAccountId);
                 var creditorCashbookId = await _repository.GetCashbookPrimaryKeyByAccountId(creditorAccountId);
 
