@@ -24,20 +24,16 @@ namespace Internship.AccountService.Infrastructure.DAL
                 SELECT id FROM accountservice_db.account
                 WHERE IBAN = @IBAN;";
 
-            var id = -1;
-
             using (var connection = new MySqlConnection(
                 _configuration.GetConnectionString(ConnectionStringName)))
             {
                 connection.Open();
-                id = await connection.QueryFirstOrDefaultAsync<int>(
+                return await connection.QueryFirstOrDefaultAsync<int>(
                     sqlExpressionToGetAccountPrimaryKeyByIBAN, new
                     {
                         IBAN
                     });
             }
-
-            return id;
         }
 
         public async Task<int> GetCashbookPrimaryKeyByAccountId(int accountId)
@@ -46,20 +42,16 @@ namespace Internship.AccountService.Infrastructure.DAL
                 SELECT id FROM accountservice_db.cashbook
                 WHERE accountid = @accountId;";
 
-            var id = -1;
-
             using (var connection = new MySqlConnection(
                 _configuration.GetConnectionString(ConnectionStringName)))
             {
                 connection.Open();
-                id = await connection.QueryFirstOrDefaultAsync<int>(
+                return await connection.QueryFirstOrDefaultAsync<int>(
                     sqlExpressionToGetCashbookPrimaryKeyByAccountId, new
                     {
                         accountId
                     });
             }
-
-            return id;
         }
 
         public async Task<decimal> GetSumOfCashbookRecordsByCashbookId(int cashbookId)
@@ -97,14 +89,12 @@ namespace Internship.AccountService.Infrastructure.DAL
                     VALUES
                     (@cashbookId, @date, @amount, @reference);";
 
-            int inserted;
-
             using (var connection = new MySqlConnection(
                 _configuration.GetConnectionString(ConnectionStringName)))
             {
                 connection.Open();
 
-                inserted = await connection.ExecuteAsync(sqlExpressionToInsert, new
+                return await connection.ExecuteAsync(sqlExpressionToInsert, new
                 {
                     cashbookId = cashbookRecordModel.CashbookId,
                     date = cashbookRecordModel.Date,
@@ -112,8 +102,6 @@ namespace Internship.AccountService.Infrastructure.DAL
                     reference = cashbookRecordModel.OriginReference
                 });
             }
-
-            return inserted;
         }
 
         public async Task<int> UpdateCashbookBalance(int cashbookId, decimal balance)
@@ -123,21 +111,17 @@ namespace Internship.AccountService.Infrastructure.DAL
                     SET `balance` = @balance
                     WHERE `id` = @cashbookId;";
 
-            int updated;
-
             using (var connection = new MySqlConnection(
                 _configuration.GetConnectionString(ConnectionStringName)))
             {
                 connection.Open();
 
-                updated = await connection.ExecuteAsync(sqlExpressionToUpdate, new
+                return await connection.ExecuteAsync(sqlExpressionToUpdate, new
                 {
                     cashbookId,
                     balance
                 });
             }
-
-            return updated;
         }
     }
 }
