@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Internship.AccountService.Domain.Interfaces;
 using Internship.AccountService.Domain.Models;
@@ -30,30 +28,33 @@ namespace Internship.AccountService.Service.Consumers
 
             try
             {
+                // Get all the necessary data
                 var debtorAccountId = await _repository.GetAccountPrimaryKeyByIBAN(accountBalanceDto.DebtorIBAN);
                 var creditorAccountId = await _repository.GetAccountPrimaryKeyByIBAN(accountBalanceDto.CreditorIBAN);
                 var debtorCashbookId = await _repository.GetCashbookPrimaryKeyByAccountId(debtorAccountId);
                 var creditorCashbookId = await _repository.GetCashbookPrimaryKeyByAccountId(creditorAccountId);
 
                 var time = DateTime.Now;
-                int negative = -1;
 
+                // Insert the cashbook record about decreased amount of the debtor
                 _ = await _repository.InsertCashbookRecord(new CashbookRecordModel()
                 {
                     CashbookId = debtorCashbookId,
+                    Date = time,
+                    Amount = -1 * accountBalanceDto.Amount,
+                    OriginReference = accountBalanceDto.Reference
+                });
+
+                // Insert the cashbook record about increased amount of the creditor
+                _ = await _repository.InsertCashbookRecord(new CashbookRecordModel()
+                {
+                    CashbookId = creditorCashbookId,
                     Date = time,
                     Amount = accountBalanceDto.Amount,
                     OriginReference = accountBalanceDto.Reference
                 });
 
-                _ = await _repository.InsertCashbookRecord(new CashbookRecordModel()
-                {
-                    CashbookId = creditorCashbookId,
-                    Date = time,
-                    Amount = negative * accountBalanceDto.Amount,
-                    OriginReference = accountBalanceDto.Reference
-                });
-
+                // Update the total balance in the cashbook table each of the accounts
                 var debtorResultantBalance = await _repository.GetSumOfCashbookRecordsByCashbookId(debtorCashbookId);
                 var creditorResultantBalance = await _repository.GetSumOfCashbookRecordsByCashbookId(creditorCashbookId);
 
