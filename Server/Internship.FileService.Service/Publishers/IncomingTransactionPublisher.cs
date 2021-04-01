@@ -2,6 +2,8 @@
 using Internship.Shared.DTOs.Transaction;
 using MassTransit;
 using Newtonsoft.Json;
+using ServiceStack.Text;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -20,7 +22,7 @@ namespace Internship.FileService.Service.Publishers
         {
             string StringTransactionFromByteArray =
                 System.Text.Encoding.Default.GetString(incomingTransactionByteArrayFile);
-            TransactionFileModel transactionToFile;
+            IncomingTransactionDto incomingTransaction;
             using (StringReader stringReader = new StringReader(StringTransactionFromByteArray))
 
             switch (fileExtention)
@@ -28,39 +30,61 @@ namespace Internship.FileService.Service.Publishers
                 case ".xml":
                         System.Xml.Serialization.XmlSerializer xmlSerializer =
                         new System.Xml.Serialization.XmlSerializer(typeof(TransactionFileModel));
-                        transactionToFile = (TransactionFileModel)xmlSerializer.Deserialize(stringReader);
+                        incomingTransaction = 
+                            TransactionFileToIncomingModel((TransactionFileModel)xmlSerializer.Deserialize(stringReader));
                     break;
                 case ".json":
-                        transactionToFile =
-                            JsonConvert.DeserializeObject<TransactionFileModel>(stringReader.ReadToEnd());
+                        incomingTransaction =
+                            TransactionFileToIncomingModel(
+                                JsonConvert.DeserializeObject<TransactionFileModel>(stringReader.ReadToEnd()));
                     break;
                 case ".csv":
-                        // todo: add logic to deserialize from csv
-                        transactionToFile = null;
+                        IEnumerable<TransactionCSVFile> deserializedTransactions =
+                            CsvSerializer.DeserializeFromString
+                                <IEnumerable<TransactionCSVFile>>(stringReader.ReadToEnd());
+
+                        incomingTransaction = TransactionCSVFileToIncomingModel(deserializedTransactions.First());
                     break;
                 default:
-                    transactionToFile = null;
+                        incomingTransaction = null;
                     break;
             }
 
-            if (transactionToFile is not null)
-                await _publishEndpoint.Publish(TransactionFileToIncomingModel(transactionToFile));
+            if (incomingTransaction is not null)
+                await _publishEndpoint.Publish(incomingTransaction);
         }
 
-        private IncomingTransactionDto TransactionFileToIncomingModel(TransactionFileModel TransactionFile)
+        private IncomingTransactionDto TransactionFileToIncomingModel(TransactionFileModel transactionFile)
         {
             return new IncomingTransactionDto()
             {
-                DebtorFirstName = TransactionFile.Transactions.First().Debtor.FirstName,
-                DebtorLastName = TransactionFile.Transactions.First().Debtor.LastName,
-                DebtorAccountNumber = TransactionFile.Transactions.First().Debtor.AccountNumber,
-                DebtorBankId = TransactionFile.Transactions.First().Debtor.BankId,
-                CreditorFirstName = TransactionFile.Transactions.First().Creditor.FirstName,
-                CreditorLastName = TransactionFile.Transactions.First().Creditor.LastName,
-                CreditorAccountNumber = TransactionFile.Transactions.First().Creditor.AccountNumber,
-                CreditorBankId = TransactionFile.Transactions.First().Creditor.BankId,
-                Amount = TransactionFile.Transactions.First().Amount,
-                TransactionId = TransactionFile.Transactions.First().EndToEndId
+                DebtorFirstName = transactionFile.Transactions.First().Debtor.FirstName,
+                DebtorLastName = transactionFile.Transactions.First().Debtor.LastName,
+                DebtorAccountNumber = transactionFile.Transactions.First().Debtor.AccountNumber,
+                DebtorBankId = transactionFile.Transactions.First().Debtor.BankId,
+                CreditorFirstName = transactionFile.Transactions.First().Creditor.FirstName,
+                CreditorLastName = transactionFile.Transactions.First().Creditor.LastName,
+                CreditorAccountNumber = transactionFile.Transactions.First().Creditor.AccountNumber,
+                CreditorBankId = transactionFile.Transactions.First().Creditor.BankId,
+                Amount = transactionFile.Transactions.First().Amount,
+                TransactionId = transactionFile.Transactions.First().EndToEndId
+            };
+        }
+
+        private IncomingTransactionDto TransactionCSVFileToIncomingModel(TransactionCSVFile transactionCSVFile)
+        {
+            return new IncomingTransactionDto()
+            {
+                DebtorFirstName = transactionCSVFile.DebtorFirstName,
+                DebtorLastName = transactionCSVFile.DebtorLastName,
+                DebtorAccountNumber = transactionCSVFile.DebtorAccountNumber,
+                DebtorBankId = transactionCSVFile.DebtorBankId,
+                CreditorFirstName = transactionCSVFile.CreditorFirstName,
+                CreditorLastName = transactionCSVFile.CreditorLastName,
+                CreditorAccountNumber = transactionCSVFile.CreditorAccountNumber,
+                CreditorBankId = transactionCSVFile.CreditorBankId,
+                Amount = transactionCSVFile.Amount,
+                TransactionId = transactionCSVFile.EndToEndId
             };
         }
     }
