@@ -32,7 +32,7 @@ namespace Internship.FileService.Service.Consumers
         {
             int fileId = await _repository.GetNextPrimaryKey();
             var transactionFileModel = TransactionDtoToFileModel(context.Message, fileId);
-            var xmlTransactionBytes = await SerializeFileModelToBytes(transactionFileModel);
+            var xmlTransactionBytes = await SerializeFileModelToXmlBytes(transactionFileModel);
 
             const bool isIncomingTransaction = false;
 
@@ -64,9 +64,9 @@ namespace Internship.FileService.Service.Consumers
             }
         }
 
-        private XMLTransactionFile TransactionDtoToFileModel(TransactionToFileDto fileDto, int fileId)
+        private TransactionFileModel TransactionDtoToFileModel(TransactionToFileDto fileDto, int fileId)
         {
-            return new XMLTransactionFile()
+            return new TransactionFileModel()
             {
                 FileId = fileId,
                 Date = fileDto.Date,
@@ -91,7 +91,7 @@ namespace Internship.FileService.Service.Consumers
             };
         }
 
-        private async Task<byte[]> SerializeFileModelToBytes(XMLTransactionFile transactionFileModel)
+        private async Task<byte[]> SerializeFileModelToXmlBytes(TransactionFileModel transactionFileModel)
         {
             var serializer = new XmlSerializer(transactionFileModel.GetType());
 
@@ -100,7 +100,7 @@ namespace Internship.FileService.Service.Consumers
             return Encoding.ASCII.GetBytes(xmlTransactionString);
         }
 
-        private async Task<string> GetXML(XmlSerializer serializer, XMLTransactionFile transactionFileModel)
+        private async Task<string> GetXML(XmlSerializer serializer, TransactionFileModel transactionFileModel)
         {
             using
             var memoryStream = new MemoryStream();

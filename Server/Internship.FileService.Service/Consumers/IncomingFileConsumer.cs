@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using Internship.FileService.Domain.Interfaces;
 using Internship.FileService.Service.Publishers;
@@ -36,7 +37,8 @@ namespace Internship.FileService.Service.Consumers
 
                 _logger.LogInformation($"File {context.Message.FileName} inserted successfully!");
 
-                _publisher.PublishIncomingTransaction(context.Message.File);
+                _publisher.PublishIncomingTransaction(context.Message.File,
+                    Path.GetExtension(context.Message.FileName));
 
                 _logger.LogInformation($"File {context.Message.FileName} published successfully!");
             }

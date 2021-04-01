@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 namespace Internship.FileService.Domain.Models.Transaction
 {
     [XmlRoot(ElementName = "TransactionFile")]
-    public class XMLTransactionFile
+    public class TransactionFileModel
     {
         public int FileId { get; set; }
         public DateTime Date { get; set; }

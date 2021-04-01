@@ -1,6 +1,7 @@
 ﻿using Internship.FileService.Domain.Models.Transaction;
 using Internship.Shared.DTOs.Transaction;
 using MassTransit;
+using Newtonsoft.Json;
 using System.IO;
 using System.Linq;
 
@@ -15,37 +16,51 @@ namespace Internship.FileService.Service.Publishers
             _publishEndpoint = publishEndpoint;
         }
 
-        public async void PublishIncomingTransaction(byte[] incomingTransactionXmlFile)
+        public async void PublishIncomingTransaction(byte[] incomingTransactionByteArrayFile, string fileExtention)
         {
-            string StringXmlTransaction = System.Text.Encoding.Default.GetString(incomingTransactionXmlFile);
-            XMLTransactionFile transactionToFile;
+            string StringTransactionFromByteArray =
+                System.Text.Encoding.Default.GetString(incomingTransactionByteArrayFile);
+            TransactionFileModel transactionToFile;
+            using (StringReader stringReader = new StringReader(StringTransactionFromByteArray))
 
-            using (StringReader stringReader = new StringReader(StringXmlTransaction))
+            switch (fileExtention)
             {
-                System.Xml.Serialization.XmlSerializer xmlSerializer =
-                new System.Xml.Serialization.XmlSerializer(typeof(XMLTransactionFile));
-                transactionToFile = (XMLTransactionFile)xmlSerializer.Deserialize(stringReader);
+                case ".xml":
+                        System.Xml.Serialization.XmlSerializer xmlSerializer =
+                        new System.Xml.Serialization.XmlSerializer(typeof(TransactionFileModel));
+                        transactionToFile = (TransactionFileModel)xmlSerializer.Deserialize(stringReader);
+                    break;
+                case ".json":
+                        transactionToFile =
+                            JsonConvert.DeserializeObject<TransactionFileModel>(stringReader.ReadToEnd());
+                    break;
+                case ".csv":
+                        // todo: add logic to deserialize from csv
+                        transactionToFile = null;
+                    break;
+                default:
+                    transactionToFile = null;
+                    break;
             }
 
-            IncomingTransactionDto incomingTransaction = TransactionFileToIncomingModel(transactionToFile);
-
-            await _publishEndpoint.Publish(incomingTransaction);
+            if (transactionToFile is not null)
+                await _publishEndpoint.Publish(TransactionFileToIncomingModel(transactionToFile));
         }
 
-        private IncomingTransactionDto TransactionFileToIncomingModel(XMLTransactionFile XMLFile)
+        private IncomingTransactionDto TransactionFileToIncomingModel(TransactionFileModel TransactionFile)
         {
             return new IncomingTransactionDto()
             {
-                DebtorFirstName = XMLFile.Transactions.First().Debtor.FirstName,
-                DebtorLastName = XMLFile.Transactions.First().Debtor.LastName,
-                DebtorAccountNumber = XMLFile.Transactions.First().Debtor.AccountNumber,
-                DebtorBankId = XMLFile.Transactions.First().Debtor.BankId,
-                CreditorFirstName = XMLFile.Transactions.First().Creditor.FirstName,
-                CreditorLastName = XMLFile.Transactions.First().Creditor.LastName,
-                CreditorAccountNumber = XMLFile.Transactions.First().Creditor.AccountNumber,
-                CreditorBankId = XMLFile.Transactions.First().Creditor.BankId,
-                Amount = XMLFile.Transactions.First().Amount,
-                TransactionId = XMLFile.Transactions.First().EndToEndId
+                DebtorFirstName = TransactionFile.Transactions.First().Debtor.FirstName,
+                DebtorLastName = TransactionFile.Transactions.First().Debtor.LastName,
+                DebtorAccountNumber = TransactionFile.Transactions.First().Debtor.AccountNumber,
+                DebtorBankId = TransactionFile.Transactions.First().Debtor.BankId,
+                CreditorFirstName = TransactionFile.Transactions.First().Creditor.FirstName,
+                CreditorLastName = TransactionFile.Transactions.First().Creditor.LastName,
+                CreditorAccountNumber = TransactionFile.Transactions.First().Creditor.AccountNumber,
+                CreditorBankId = TransactionFile.Transactions.First().Creditor.BankId,
+                Amount = TransactionFile.Transactions.First().Amount,
+                TransactionId = TransactionFile.Transactions.First().EndToEndId
             };
         }
     }
