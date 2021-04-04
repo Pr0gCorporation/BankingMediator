@@ -39,9 +39,9 @@ namespace Internship.FileService.Service.Publishers
                                 JsonConvert.DeserializeObject<TransactionFileModel>(stringReader.ReadToEnd()));
                     break;
                 case ".csv":
-                        IEnumerable<TransactionCSVFile> deserializedTransactions =
+                        IEnumerable<TransactionCSVFileModel> deserializedTransactions =
                             CsvSerializer.DeserializeFromString
-                                <IEnumerable<TransactionCSVFile>>(stringReader.ReadToEnd());
+                                <IEnumerable<TransactionCSVFileModel>>(stringReader.ReadToEnd());
 
                         incomingTransaction = TransactionCSVFileToIncomingModel(deserializedTransactions.First());
                     break;
@@ -71,7 +71,7 @@ namespace Internship.FileService.Service.Publishers
             };
         }
 
-        private IncomingTransactionDto TransactionCSVFileToIncomingModel(TransactionCSVFile transactionCSVFile)
+        private IncomingTransactionDto TransactionCSVFileToIncomingModel(TransactionCSVFileModel transactionCSVFile)
         {
             return new IncomingTransactionDto()
             {

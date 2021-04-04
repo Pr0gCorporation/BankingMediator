@@ -2,7 +2,7 @@
 
 namespace Internship.FileService.Domain.Models.Transaction
 {
-    public class TransactionCSVFile
+    public class TransactionCSVFileModel
     {
         public int FileId { get; set; }
         public DateTime Date { get; set; }
