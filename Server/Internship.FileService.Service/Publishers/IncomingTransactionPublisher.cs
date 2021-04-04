@@ -1,10 +1,7 @@
 ﻿using Internship.FileService.Domain.Models.Transaction;
+using Internship.FileService.Infrastructure.SerializerFactoryMethod;
 using Internship.Shared.DTOs.Transaction;
 using MassTransit;
-using Newtonsoft.Json;
-using ServiceStack.Text;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 namespace Internship.FileService.Service.Publishers
@@ -23,30 +20,31 @@ namespace Internship.FileService.Service.Publishers
             string StringTransactionFromByteArray =
                 System.Text.Encoding.Default.GetString(incomingTransactionByteArrayFile);
             IncomingTransactionDto incomingTransaction;
-            using (StringReader stringReader = new StringReader(StringTransactionFromByteArray))
+            FileSerializer fileSerializer;
 
             switch (fileExtention)
             {
                 case ".xml":
-                        System.Xml.Serialization.XmlSerializer xmlSerializer =
-                        new System.Xml.Serialization.XmlSerializer(typeof(TransactionFileModel));
-                        incomingTransaction = 
-                            TransactionFileToIncomingModel((TransactionFileModel)xmlSerializer.Deserialize(stringReader));
+                    fileSerializer = new XmlFileSerializerMethod();
+
+                    incomingTransaction = TransactionFileToIncomingModel(
+                        fileSerializer.Deserialize<TransactionFileModel>(StringTransactionFromByteArray));
                     break;
                 case ".json":
-                        incomingTransaction =
-                            TransactionFileToIncomingModel(
-                                JsonConvert.DeserializeObject<TransactionFileModel>(stringReader.ReadToEnd()));
+                    fileSerializer = new JsonFileSerializerMethod();
+
+                    incomingTransaction =
+                        TransactionFileToIncomingModel(
+                            fileSerializer.Deserialize<TransactionFileModel>(StringTransactionFromByteArray));
                     break;
                 case ".csv":
-                        IEnumerable<TransactionCSVFileModel> deserializedTransactions =
-                            CsvSerializer.DeserializeFromString
-                                <IEnumerable<TransactionCSVFileModel>>(stringReader.ReadToEnd());
+                    fileSerializer = new CsvFileSerializerMethod();
 
-                        incomingTransaction = TransactionCSVFileToIncomingModel(deserializedTransactions.First());
+                    incomingTransaction = TransactionCSVFileToIncomingModel(
+                        fileSerializer.Deserialize<TransactionCSVFileModel>(StringTransactionFromByteArray));
                     break;
                 default:
-                        incomingTransaction = null;
+                    incomingTransaction = null;
                     break;
             }
 
