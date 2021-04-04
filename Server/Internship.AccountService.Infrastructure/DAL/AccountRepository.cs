@@ -56,18 +56,43 @@ namespace Internship.AccountService.Infrastructure.DAL
 
         public async Task<decimal> GetSumOfCashbookRecordsByCashbookId(int cashbookId)
         {
-            var sqlExpressionToGetSumOfCashbookRecordsByCashbookId = @"
-                SELECT COALESCE(SUM(amount), 0) AS currentBalance FROM accountservice_db.cashbookRecords
-                WHERE cashbookid = 1;";
+            return ((await this.GetSentMoney(cashbookId)) * -1) + await this.GetReceivedMoney(cashbookId);
+        }
+        
+        private async Task<decimal> GetSentMoney(int cashbookIdFrom)
+        {
+            var sqlExpressionToGetSentMoney = @"
+                SELECT SUM(amount)
+                FROM accountservice_db.cashbookRecords
+                WHERE cashbookidFrom = @cashbookIdFrom;";
 
             using (var connection = new MySqlConnection(
                 _configuration.GetConnectionString(ConnectionStringName)))
             {
                 connection.Open();
                 return await connection.QuerySingleAsync<decimal>(
-                    sqlExpressionToGetSumOfCashbookRecordsByCashbookId, new
+                    sqlExpressionToGetSentMoney, new
                     {
-                        cashbookId
+                        cashbookIdFrom
+                    });
+            }
+        }
+
+        private async Task<decimal> GetReceivedMoney(int cashbookIdTo)
+        {
+            var sqlExpressionToGetSentMoney = @"
+                SELECT SUM(amount)
+                FROM accountservice_db.cashbookRecords
+                WHERE cashbookidTo = @cashbookIdTo;";
+
+            using (var connection = new MySqlConnection(
+                _configuration.GetConnectionString(ConnectionStringName)))
+            {
+                connection.Open();
+                return await connection.QuerySingleAsync<decimal>(
+                    sqlExpressionToGetSentMoney, new
+                    {
+                        cashbookIdTo
                     });
             }
         }
@@ -75,10 +100,9 @@ namespace Internship.AccountService.Infrastructure.DAL
         public async Task<int> InsertCashbookRecord(CashbookRecordModel cashbookRecordModel)
         {
             var sqlExpressionToInsert = @"
-                INSERT INTO `accountservice_db`.`cashbookRecords`
-                    (`cashbookid`, `date`, `amount`, `original_reference`)
-                    VALUES
-                    (@cashbookId, @date, @amount, @reference);";
+                INSERT INTO `accountservice_db`.`cashbookRecords` 
+                    (`cashbookidFrom`, `cashbookidTo`, `date`, `amount`, `original_reference`) VALUES 
+                (@cashbookidFrom, @cashbookidTo, @date, @amount, @reference);";
 
             using (var connection = new MySqlConnection(
                 _configuration.GetConnectionString(ConnectionStringName)))
@@ -87,7 +111,8 @@ namespace Internship.AccountService.Infrastructure.DAL
 
                 return await connection.ExecuteAsync(sqlExpressionToInsert, new
                 {
-                    cashbookId = cashbookRecordModel.CashbookId,
+                    cashbookidFrom = cashbookRecordModel.CashbookIdFrom,
+                    cashbookidTo = cashbookRecordModel.CashbookIdTo,
                     date = cashbookRecordModel.Date,
                     amount = cashbookRecordModel.Amount,
                     reference = cashbookRecordModel.OriginReference
