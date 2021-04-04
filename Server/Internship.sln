@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Internship.FileService.Doma
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Internship.FileService.Infrastructure", "Internship.FileService.Infrastructure\Internship.FileService.Infrastructure.csproj", "{E8CAFDDB-17AF-44BF-8CF6-8BFD7CE418F9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Internship.FileService.Service.Tests", "Internship.FileService.Service.Tests\Internship.FileService.Service.Tests.csproj", "{72EE16D4-2D25-4E12-9B17-F11691415D0E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Internship.FileService.Infrastructure.Tests", "Internship.FileService.Service.Tests\Internship.FileService.Infrastructure.Tests.csproj", "{72EE16D4-2D25-4E12-9B17-F11691415D0E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TransactionService", "TransactionService", "{BCACDA8D-9565-4E6A-8ABD-EE23FCF03405}"
 EndProject
@@ -43,7 +43,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Internship.AccountService.D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Internship.AccountService.Infrastructure", "Internship.AccountService.Infrastructure\Internship.AccountService.Infrastructure.csproj", "{4ACCF3C0-C804-4375-92F4-3DF55EA9B4F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Internship.AccountService.Service", "Internship.AccountService.Service\Internship.AccountService.Service.csproj", "{461D48A6-1EE8-4528-9E9E-A72F4AC92AAB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Internship.AccountService.Service", "Internship.AccountService.Service\Internship.AccountService.Service.csproj", "{461D48A6-1EE8-4528-9E9E-A72F4AC92AAB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
