@@ -111,8 +111,8 @@ namespace Internship.AccountService.Infrastructure.DAL
 
                 return await connection.ExecuteAsync(sqlExpressionToInsert, new
                 {
-                    cashbookidFrom = cashbookRecordModel.CashbookIdFrom,
-                    cashbookidTo = cashbookRecordModel.CashbookIdTo,
+                    cashbookidFrom = cashbookRecordModel.CashbookIdDebtor,
+                    cashbookidTo = cashbookRecordModel.CashbookIdCreditor,
                     date = cashbookRecordModel.Date,
                     amount = cashbookRecordModel.Amount,
                     reference = cashbookRecordModel.OriginReference

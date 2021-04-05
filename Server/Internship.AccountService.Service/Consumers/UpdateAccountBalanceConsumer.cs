@@ -51,8 +51,8 @@ namespace Internship.AccountService.Service.Consumers
                 // Insert the cashbook record about transaction
                 _ = await _repository.InsertCashbookRecord(new CashbookRecordModel()
                 {
-                    CashbookIdFrom = debtorCashbookId,
-                    CashbookIdTo = creditorCashbookId,
+                    CashbookIdDebtor = debtorCashbookId,
+                    CashbookIdCreditor = creditorCashbookId,
                     Date = time,
                     Amount = accountBalanceDto.Amount,
                     OriginReference = accountBalanceDto.Reference
