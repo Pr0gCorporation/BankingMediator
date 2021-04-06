@@ -13,14 +13,15 @@ namespace Internship.FileService.Service.Consumers
     {
         private readonly ILogger<IncomingFileConsumer> _logger;
         private readonly IFileRepository _repository;
-        private readonly IncomingTransactionPublisher _publisher;
+        private IncomingTransactionFilePublisher _publisher;
+        private readonly IBus _bus;
 
         public IncomingFileConsumer(ILogger<IncomingFileConsumer> logger,
-            IFileRepository repository, IncomingTransactionPublisher publisher)
+            IFileRepository repository, IBus bus)
         {
             _logger = logger;
             _repository = repository;
-            _publisher = publisher;
+            _bus = bus;
         }
 
         public async Task Consume(ConsumeContext<IncomingFileDto> context)
@@ -37,10 +38,23 @@ namespace Internship.FileService.Service.Consumers
 
                 _logger.LogInformation($"File {context.Message.FileName} inserted successfully!");
 
-                _publisher.PublishIncomingTransaction(context.Message.File,
-                    Path.GetExtension(context.Message.FileName));
+                _publisher = (Path.GetExtension(context.Message.FileName)) switch
+                {
+                    ".xml" => new IncomingTransactionXmlFilePublisher(_bus),
+                    ".json" => new IncomingTransactionJsonFilePublisher(_bus),
+                    ".csv" => new IncomingTransactionCsvFilePublisher(_bus),
+                    _ => null,
+                };
 
-                _logger.LogInformation($"File {context.Message.FileName} published successfully!");
+                if (_publisher is not null)
+                {
+                    _publisher.PublishIncomingTransaction(context.Message.File);
+                    _logger.LogInformation($"File {context.Message.FileName} published successfully!");
+                }
+                else
+                {
+                    _logger.LogInformation($"File {context.Message.FileName} publish failed! Probably wrong file extention.");
+                }
             }
             catch (Exception e)
             {

@@ -49,7 +49,6 @@ namespace Internship.FileService.Service
                     var configuration = hostContext.Configuration;
 
                     services.AddTransient<IFileRepository, FileRepository>();
-                    services.AddTransient<IncomingTransactionPublisher>();
 
                     services.AddMassTransit(config =>
                     {

@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Serialization;
 using Internship.FileService.Domain.Interfaces;
 using Internship.FileService.Infrastructure.FileModels;
 using Internship.Shared.Events;
