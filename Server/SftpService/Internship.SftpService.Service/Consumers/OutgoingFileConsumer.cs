@@ -33,6 +33,8 @@ namespace Internship.SftpService.Service.Consumers
             {
                 var configuration = _hostBuilderContext.Configuration;
 
+                // decouple archivation
+
                 _logger.LogInformation($"Archiving the file with filename: {context.Message.FileName}, msgId: {context.MessageId}");
                 string fileName = context.Message.FileName;
                 byte[] fileBytes = context.Message.File;
