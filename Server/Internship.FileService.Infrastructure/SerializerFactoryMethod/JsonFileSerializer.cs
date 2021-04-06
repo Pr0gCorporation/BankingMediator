@@ -2,11 +2,11 @@
 
 namespace Internship.FileService.Infrastructure.SerializerFactoryMethod
 {
-    public class CsvFileSerializerMethod : FileSerializer
+    public class JsonFileSerializer : FileSerializer
     {
         public override IFileSerializable<T> CreateSerializer<T>()
         {
-            return new CsvFileSerializer<T>();
+            return new JsonFileSerializer<T>();
         }
     }
 }

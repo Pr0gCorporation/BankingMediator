@@ -6,11 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Internship.FileService.Domain.Interfaces;
-using Internship.FileService.Domain.Models.Transaction;
+using Internship.FileService.Infrastructure.FileModels;
 using Internship.Shared.Events;
 using Internship.Shared.DTOs.Transaction;
 using MassTransit;
 using Microsoft.Extensions.Logging;
+using Internship.FileService.Infrastructure.SerializerFactoryMethod;
 
 namespace Internship.FileService.Service.Consumers
 {
@@ -19,6 +20,7 @@ namespace Internship.FileService.Service.Consumers
         private readonly ILogger<TransactionToFileConsumer> _logger;
         private readonly IFileRepository _repository;
         private readonly IBus _publishEndpoint;
+        FileSerializer fileSerializer;
 
         public TransactionToFileConsumer(ILogger<TransactionToFileConsumer> logger,
           IFileRepository inserter, IBus publishEndpoint)
@@ -26,13 +28,15 @@ namespace Internship.FileService.Service.Consumers
             _logger = logger;
             _repository = inserter;
             _publishEndpoint = publishEndpoint;
+            fileSerializer = new XmlFileSerializer();
         }
 
         public async Task Consume(ConsumeContext<TransactionToFileDto> context)
         {
             int fileId = await _repository.GetNextPrimaryKey();
             var transactionFileModel = TransactionDtoToFileModel(context.Message, fileId);
-            var xmlTransactionBytes = await SerializeFileModelToXmlBytes(transactionFileModel);
+
+            var xmlTransactionBytes = await fileSerializer.Serialize(transactionFileModel);
 
             const bool isIncomingTransaction = false;
 
@@ -89,25 +93,6 @@ namespace Internship.FileService.Service.Consumers
                     }
                 }
             };
-        }
-
-        private async Task<byte[]> SerializeFileModelToXmlBytes(TransactionFileModel transactionFileModel)
-        {
-            var serializer = new XmlSerializer(transactionFileModel.GetType());
-
-            string xmlTransactionString = await GetXML(serializer, transactionFileModel);
-
-            return Encoding.ASCII.GetBytes(xmlTransactionString);
-        }
-
-        private async Task<string> GetXML(XmlSerializer serializer, TransactionFileModel transactionFileModel)
-        {
-            using
-            var memoryStream = new MemoryStream();
-            serializer.Serialize(memoryStream, transactionFileModel);
-
-            memoryStream.Position = 0;
-            return await new StreamReader(memoryStream).ReadToEndAsync();
         }
 
         private string GenerateFileName(string a, string b)

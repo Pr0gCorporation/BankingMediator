@@ -1,4 +1,4 @@
-﻿using Internship.FileService.Domain.Models.Transaction;
+﻿using Internship.FileService.Infrastructure.FileModels;
 using Internship.FileService.Infrastructure.SerializerFactoryMethod;
 using Internship.Shared.DTOs.Transaction;
 using MassTransit;
@@ -25,20 +25,20 @@ namespace Internship.FileService.Service.Publishers
             switch (fileExtention)
             {
                 case ".xml":
-                    fileSerializer = new XmlFileSerializerMethod();
+                    fileSerializer = new XmlFileSerializer();
 
                     incomingTransaction = TransactionFileToIncomingModel(
                         fileSerializer.Deserialize<TransactionFileModel>(StringTransactionFromByteArray));
                     break;
                 case ".json":
-                    fileSerializer = new JsonFileSerializerMethod();
+                    fileSerializer = new JsonFileSerializer();
 
                     incomingTransaction =
                         TransactionFileToIncomingModel(
                             fileSerializer.Deserialize<TransactionFileModel>(StringTransactionFromByteArray));
                     break;
                 case ".csv":
-                    fileSerializer = new CsvFileSerializerMethod();
+                    fileSerializer = new CsvFileSerializer();
 
                     incomingTransaction = TransactionCSVFileToIncomingModel(
                         fileSerializer.Deserialize<TransactionCSVFileModel>(StringTransactionFromByteArray));

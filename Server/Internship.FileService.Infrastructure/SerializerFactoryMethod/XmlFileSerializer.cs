@@ -2,7 +2,7 @@
 
 namespace Internship.FileService.Infrastructure.SerializerFactoryMethod
 {
-    public class XmlFileSerializerMethod : FileSerializer
+    public class XmlFileSerializer : FileSerializer
     {
         public override IFileSerializable<T> CreateSerializer<T>()
         {

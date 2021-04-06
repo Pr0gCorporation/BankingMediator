@@ -1,4 +1,4 @@
-﻿namespace Internship.FileService.Domain.Models.Transaction
+﻿namespace Internship.FileService.Infrastructure.FileModels
 {
     public class AccountToFile
     {
