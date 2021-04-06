@@ -36,11 +36,11 @@
     "VALIDATION": {
         "DEBTORFIRSTNAMESHORT": "Voornaam schuldenaar is te kort",
         "DEBTORLASTNAMESHORT": "Achternaam schuldenaar is te kort",
-        "DEBTORACCOUNTNUMBERBETWEEN": "Debiteuren Rekeningnummer moet uit [4-6] symbolen bestaan",
+        "DEBTORACCOUNTNUMBERBETWEEN": "Debiteuren Rekeningnummer moet uit IBAN",
         "DEBTORBANKIDWRONG": "Bank-ID van de debiteur moet uit 4 symbolen bestaan",
         "CREDITORFIRSTNAMESHORT": "Voornaam schuldeiser is te kort",
         "CREDITORLASTNAMESHORT": "Achternaam crediteur is te kort",
-        "CREDITORACCOUNTNUMBERBETWEEN": "Het rekeningnummer van de crediteur moet uit [4-6] symbolen bestaan",
+        "CREDITORACCOUNTNUMBERBETWEEN": "Het rekeningnummer van de crediteur moet uit IBAN",
         "CREDITORBANKIDWRONG": "De bank-ID van de crediteur moet uit 4 symbolen bestaan",
         "AMOUNTREQUIRED": "Bedrag is vereist"
     },

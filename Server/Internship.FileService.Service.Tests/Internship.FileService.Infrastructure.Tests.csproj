@@ -19,4 +19,9 @@
         </PackageReference>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Internship.FileService.Domain\Internship.FileService.Domain.csproj" />
+      <ProjectReference Include="..\Internship.FileService.Infrastructure\Internship.FileService.Infrastructure.csproj" />
+    </ItemGroup>
+
 </Project>

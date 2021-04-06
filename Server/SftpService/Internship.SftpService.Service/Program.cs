@@ -56,7 +56,7 @@ namespace Internship.SftpService.Service
                     services.AddSftpDownloader();
                     services.AddSftpUploader();
                     services.AddScoped<TransactionFilePublisher>();
-                    services.AddScoped<ReadXmlFilesFromSftpServer>();
+                    services.AddScoped<ReadFilesFromSftpServer>();
 
                     services.AddMassTransit(config =>
                     {

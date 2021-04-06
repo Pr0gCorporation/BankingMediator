@@ -36,11 +36,11 @@
     "VALIDATION": {
         "DEBTORFIRSTNAMESHORT": "Debtor First Name is too short",
         "DEBTORLASTNAMESHORT": "Debtor Last Name is too short",
-        "DEBTORACCOUNTNUMBERBETWEEN": "Debtor Account number must be [4-6] symbols",
+        "DEBTORACCOUNTNUMBERBETWEEN": "Debtor Account number must be IBAN",
         "DEBTORBANKIDWRONG": "Debtor bank ID has to be 4 symbols",
         "CREDITORFIRSTNAMESHORT": "Creditor First Name is too short",
         "CREDITORLASTNAMESHORT": "Creditor Last Name is too short",
-        "CREDITORACCOUNTNUMBERBETWEEN": "Creditor Account number must be [4-6] symbols",
+        "CREDITORACCOUNTNUMBERBETWEEN": "Creditor Account number must be IBAN",
         "CREDITORBANKIDWRONG": "Creditor bank ID has to be 4 symbols",
         "AMOUNTREQUIRED": "Amount is required"
     },

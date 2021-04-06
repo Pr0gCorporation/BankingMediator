@@ -8,12 +8,12 @@ using Microsoft.Extensions.Hosting;
 
 namespace Internship.SftpService.Service.FileActions.FileReader
 {
-    public class ReadXmlFilesFromSftpServer
+    public class ReadFilesFromSftpServer
     {
         private readonly IServerFileDownloadable _downloadable;
         private readonly HostBuilderContext _hostBuilderContext;
 
-        public ReadXmlFilesFromSftpServer(IServerFileDownloadable downloadable,
+        public ReadFilesFromSftpServer(IServerFileDownloadable downloadable,
             HostBuilderContext hostBuilderContext)
         {
             _downloadable = downloadable;
@@ -25,31 +25,31 @@ namespace Internship.SftpService.Service.FileActions.FileReader
             var incomingFiles = new List<IncomingFileDto>();
             var configuration = _hostBuilderContext.Configuration;
 
-            var byteArrayFiles = _downloadable.Download(
+            var zipByteArrayFiles = _downloadable.Download(
                 configuration.GetValue<string>("PathConfig:DownloadFiles:From"),
                 configuration.GetValue<bool>("PathConfig:DownloadFiles:RemoveAfter"));
 
-            foreach (var file in byteArrayFiles)
+            foreach (var file in zipByteArrayFiles)
             {
                 var zipByteArray = file;
                 var zipStream = new MemoryStream(zipByteArray);
-                byte[] xmlByteArrayFile;
+                byte[] byteArrayFile;
 
                 ZipArchive archive = new ZipArchive(zipStream);
                 ZipArchiveEntry entry = archive.Entries[0];
 
-                string xmlFileName = entry.FullName;
+                string fileName = entry.FullName;
 
-                var xmlFileStreamFromEntry = entry.Open();
-                using var extractedXmlFileStream = new MemoryStream();
-                xmlFileStreamFromEntry.CopyTo(extractedXmlFileStream);
-                xmlByteArrayFile = extractedXmlFileStream.ToArray();
+                var fileStreamFromEntry = entry.Open();
+                using var extractedFileStream = new MemoryStream();
+                fileStreamFromEntry.CopyTo(extractedFileStream);
+                byteArrayFile = extractedFileStream.ToArray();
 
                 incomingFiles.Add(
                     new IncomingFileDto
                     {
-                        File = xmlByteArrayFile,
-                        FileName = xmlFileName,
+                        File = byteArrayFile,
+                        FileName = fileName,
                     });
             }
 
