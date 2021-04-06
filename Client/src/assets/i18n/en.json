@@ -1,0 +1,53 @@
+{
+    "HOME": {
+        "ASIDES": {
+            "VIEWTRANSACTIONS": "View transactions",
+            "ADDTRANSACTION": "Add transaction"
+        },
+        "SELECT": "Select language"
+    },
+    "TRANSACTION": {
+        "DEBTORFIRSTNAME": "Debtor First Name",
+        "DEBTORLASTNAME": "Debtor Last Name",
+        "DEBTORACCOUNTNUMBER": "Debtor Account Number",
+        "DEBTORBANKID": "Debtor BankId",
+        "CREDITORFIRSTNAME": "Creditor First Name",
+        "CREDITORLASTNAME": "Creditor Last Name",
+        "CREDITORACCOUNTNUMBER": "Creditor Account Number",
+        "CREDITORBANKID": "Creditor BankId",
+        "AMOUNT": "Amount",
+        "TRANSACTIONID": "Transaction Id",
+        "STATUS": "Status",
+        "DATE": "Modified",
+        "CANCEL": "Cancel"
+    },
+    "TIME": {
+        "LOADING": "Loading"
+    },
+    "ACTION": {
+        "SUBMIT": "Submit",
+        "TRANSACTIONPOSTED": "Transaction posted"
+    },
+    "COMMONWORDS": {
+        "THANKS": "Thanks",
+        "NO": "No",
+        "YESSURE": "Yes, I'm sure"
+    },
+    "VALIDATION": {
+        "DEBTORFIRSTNAMESHORT": "Debtor First Name is too short",
+        "DEBTORLASTNAMESHORT": "Debtor Last Name is too short",
+        "DEBTORACCOUNTNUMBERBETWEEN": "Debtor Account number must be IBAN",
+        "DEBTORBANKIDWRONG": "Debtor bank ID has to be 4 symbols",
+        "CREDITORFIRSTNAMESHORT": "Creditor First Name is too short",
+        "CREDITORLASTNAMESHORT": "Creditor Last Name is too short",
+        "CREDITORACCOUNTNUMBERBETWEEN": "Creditor Account number must be IBAN",
+        "CREDITORBANKIDWRONG": "Creditor bank ID has to be 4 symbols",
+        "AMOUNTREQUIRED": "Amount is required"
+    },
+    "CANCELDIALOG": {
+        "CANCELTRANSACTION": "Cancel transaction",
+        "TRANSACTION": "Transaction",
+        "MESSAGE": "will be canceled forever, if you are sure, then write the reason for canceling:",
+        "PLACEHOLDER": "Write a reason"
+    }
+}

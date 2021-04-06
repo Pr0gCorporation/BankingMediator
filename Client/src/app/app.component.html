@@ -1,0 +1,23 @@
+<div class="container">
+  <h1>{{ appTitle }}</h1>
+  <label for="">
+    {{ 'HOME.SELECT' | translate }}
+    <select #langselect (change)="translate.use(langselect.value)">
+      <option *ngFor="let lang of translate.getLangs()" [value]="lang">
+        {{ lang }}
+      </option>
+    </select>
+  </label>
+  <section class="asides">
+    <section class="text-center mt-5 aside aside-wider">
+      <h2 class="display-5">{{ 'HOME.ASIDES.VIEWTRANSACTIONS' | translate }}</h2>
+      <div class="scrollable">
+        <app-transactions-list></app-transactions-list>
+      </div>
+    </section>
+    <section class="text-center mt-5 aside">
+      <h2 class="display-5">{{ 'HOME.ASIDES.ADDTRANSACTION' | translate }}</h2>
+      <app-add-transaction></app-add-transaction>
+    </section>
+  </section>
+</div>

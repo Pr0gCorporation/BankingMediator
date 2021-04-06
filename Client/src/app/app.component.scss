@@ -1,0 +1,50 @@
+.container {
+  padding: 2%;
+  margin: 0 auto;
+  width: 90%;
+
+  h1 {
+    margin: 0 auto;
+    text-align: center;
+  }
+}
+
+.asides {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.aside {
+  width: 50%;
+
+  &-wider {
+    width: 65%;
+  }
+}
+
+.scrollable {
+  height: 70vh;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  -webkit-box-shadow: inset 1px 1px 5px 1px #000000; 
+  box-shadow: inset 1px 1px 5px 1px #333;
+  padding: 1.5%;
+}
+
+@media screen and (max-width: 992px) {
+  .container {
+    width: 100% !important;
+    padding: 0 !important;
+  }
+
+  .asides {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  .aside {
+    margin: 0 auto;
+    width: 90% !important;
+  }
+}

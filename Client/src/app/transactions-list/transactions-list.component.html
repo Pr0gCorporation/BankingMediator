@@ -1,0 +1,33 @@
+<aside class="list" *ngIf="!loading">
+    <ul class="transactions">
+        <li class="transactions_item" *ngFor="let transaction of transactionService.transactions; let i = index;">
+            <div class="center">
+                <div class="mt-2 mb-2">{{ 'TRANSACTION.DEBTORFIRSTNAME' | translate }}: {{ transaction.debtorFirstName }}</div>
+                <div class="mt-2 mb-2">{{ 'TRANSACTION.DEBTORLASTNAME' | translate }}: {{ transaction.debtorLastName }}</div> 
+                <div class="mt-2 mb-2">{{ 'TRANSACTION.DEBTORACCOUNTNUMBER' | translate }}: {{ transaction.debtorAccountNumber }}</div>
+                <div class="mt-2 mb-2">{{ 'TRANSACTION.DEBTORBANKID' | translate }}: {{ transaction.debtorBankId }}</div> 
+            </div>
+            <div class="center">
+                <div class="mt-2 mb-2">{{ 'TRANSACTION.CREDITORFIRSTNAME' | translate }}: {{ transaction.creditorFirstName }}</div>
+                <div class="mt-2 mb-2">{{ 'TRANSACTION.CREDITORLASTNAME' | translate }}: {{transaction.creditorLastName }}</div> 
+                <div class="mt-2 mb-2">{{ 'TRANSACTION.CREDITORACCOUNTNUMBER' | translate }}: {{ transaction.creditorAccountNumber }}</div>
+                <div class="mt-2 mb-2">{{ 'TRANSACTION.CREDITORBANKID' | translate }}: {{transaction.creditorBankId }}</div> 
+            </div>
+            <div class="center">
+                <div class="mt-2 mb-2">{{ 'TRANSACTION.AMOUNT' | translate }}: {{ transaction.amount }}</div>
+                <div class="mt-2 mb-2">{{ 'TRANSACTION.TRANSACTIONID' | translate }}: {{ transaction.transactionId }}</div>
+            </div>
+            <div class="center">
+                <div class="mt-2 mb-2">{{ 'TRANSACTION.STATUS' | translate }}: {{ transaction.status }}</div>
+                <div class="mt-2 mb-2">{{ 'TRANSACTION.DATE' | translate }}: {{ transaction.dateStatusChanged }}</div>
+            </div>
+            <div *ngIf="transaction.status !== 'Completed' && transaction.status !== 'Canceled'" class="cancel">
+                <button class="btn btn-danger button-wide"
+                 (click)="cancelTransactionDialog(transaction.transactionId, '')">{{ 'TRANSACTION.CANCEL' | translate }}</button>
+            </div>
+        </li>
+    </ul>
+</aside>
+<aside *ngIf="loading">
+    <p>{{ 'TIME.LOADING' | translate }}....</p>
+</aside>
