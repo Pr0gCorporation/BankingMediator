@@ -48,19 +48,11 @@ namespace Internship.AccountService.Service.Consumers
 
                 var time = DateTime.Now;
 
-                // Insert the cashbook record about decreased amount of the debtor
+                // Insert the cashbook record about transaction
                 _ = await _repository.InsertCashbookRecord(new CashbookRecordModel()
                 {
-                    CashbookId = debtorCashbookId,
-                    Date = time,
-                    Amount = -1 * accountBalanceDto.Amount,
-                    OriginReference = accountBalanceDto.Reference
-                });
-
-                // Insert the cashbook record about increased amount of the creditor
-                _ = await _repository.InsertCashbookRecord(new CashbookRecordModel()
-                {
-                    CashbookId = creditorCashbookId,
+                    CashbookIdDebtor = debtorCashbookId,
+                    CashbookIdCreditor = creditorCashbookId,
                     Date = time,
                     Amount = accountBalanceDto.Amount,
                     OriginReference = accountBalanceDto.Reference
