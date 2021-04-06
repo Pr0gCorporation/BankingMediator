@@ -1,4 +1,5 @@
 using System;
+using Internship.SftpService.Infrastructure.Archivator;
 using Internship.SftpService.Service.Consumers;
 using Internship.SftpService.Service.Extentions;
 using Internship.SftpService.Service.FileActions.FileReader;
@@ -53,6 +54,7 @@ namespace Internship.SftpService.Service
 
                     services.AddHostedService<Worker>();
                     services.AddTransient<SftpClientIntern>();
+                    services.AddTransient<IArchivator, ZipArchivator>();
                     services.AddSftpDownloader();
                     services.AddSftpUploader();
                     services.AddScoped<TransactionFilePublisher>();
