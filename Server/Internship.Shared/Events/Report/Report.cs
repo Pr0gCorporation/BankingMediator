@@ -11,6 +11,6 @@ namespace Internship.Shared.Events.Report
         public string IBAN { get; set; }
         public decimal OpeningBalance { get; set; }
         public decimal ClosingBalance { get; set; }
-        public List<BalanceMutation> BalanceMutations { get; set; }
+        public IEnumerable<BalanceMutation> BalanceMutations { get; set; }
     }
 }
