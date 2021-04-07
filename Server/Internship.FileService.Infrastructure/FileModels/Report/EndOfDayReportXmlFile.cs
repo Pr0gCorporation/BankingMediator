@@ -9,6 +9,6 @@ namespace Internship.FileService.Infrastructure.FileModels.Report
     {
         public DateTime Date { get; set; }
         [XmlArrayItem("Report")]
-        public IEnumerable<ReportXmlFile> Reports { get; set; }
+        public List<AccountReportXmlFile> Reports { get; set; }
     }
 }

@@ -3,12 +3,12 @@ using System.Xml.Serialization;
 
 namespace Internship.FileService.Infrastructure.FileModels.Report
 {
-    public class ReportXmlFile
+    public class AccountReportXmlFile
     {
         public string IBAN { get; set; }
         public decimal OpeningBalance { get; set; }
         public decimal ClosingBalance { get; set; }
         [XmlArrayItem("BalanceMutation")]
-        public IEnumerable<BalanceMutationXmlFile> BalanceMutations { get; set; }
+        public List<BalanceMutationXmlFile> BalanceMutations { get; set; }
     }
 }

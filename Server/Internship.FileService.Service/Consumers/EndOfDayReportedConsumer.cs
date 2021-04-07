@@ -25,15 +25,15 @@ namespace Internship.FileService.Service.Consumers
 
         public async Task Consume(ConsumeContext<EndOfDayReportedEvent> context)
         {
-            var endOfDayReportXmlFileType = MapReportEventToXmlFileType(context.Message);
-
-            var endOfDayReportXmlFileBytes = await _fileSerializer.Serialize(endOfDayReportXmlFileType);
+            EndOfDayReportXmlFile endOfDayReportXmlFile = MapReportEventToXmlFileType(context.Message);
+            var endOfDayReportXmlFileBytes = await _fileSerializer.Serialize(endOfDayReportXmlFile);
 
             // RandomNumbers is for testing, it will be removed after testing is done 
             // (file will be created not at the end but every ** seconds)
             var outgoingXmlReportFile = new OutgoingFileEvent()
             {
-                FileName = context.Message.Date.ToString() + RandomNumbers(),
+                FileName = "EndOfDayReport_" + context.Message.Date.Month + 
+                    "." + context.Message.Date.Day + "_" + RandomNumbers() + ".xml",
                 File = endOfDayReportXmlFileBytes
             };
 
@@ -45,9 +45,9 @@ namespace Internship.FileService.Service.Consumers
             return new EndOfDayReportXmlFile()
             {
                 Date = endOfDayReportedEvent.Date,
-                Reports = endOfDayReportedEvent.Reports.Select(report =>
+                Reports = endOfDayReportedEvent.AccountReports.Select(report =>
                 {
-                    return new ReportXmlFile()
+                    return new AccountReportXmlFile()
                     {
                         IBAN = report.IBAN,
                         OpeningBalance = report.OpeningBalance,
@@ -61,15 +61,15 @@ namespace Internship.FileService.Service.Consumers
                                 Amount = mutation.Amount,
                                 OriginalReference = mutation.OriginalReference
                             };
-                        })
+                        }).ToList()
                     };
-                })
+                }).ToList()
             };
         }
 
         private static string RandomNumbers()
         {
-            return new Random().Next(7000).ToString();
+            return new Random().Next(700).ToString();
         }
     }
 }

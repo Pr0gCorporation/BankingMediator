@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Internship.Shared.Events.Report
 {
-    public class Report
+    public class AccountReport
     {
         public string IBAN { get; set; }
         public decimal OpeningBalance { get; set; }
