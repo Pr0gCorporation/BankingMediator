@@ -28,8 +28,6 @@ namespace Internship.FileService.Service.Consumers
             EndOfDayReportXmlFile endOfDayReportXmlFile = MapReportEventToXmlFileType(context.Message);
             var endOfDayReportXmlFileBytes = await _fileSerializer.Serialize(endOfDayReportXmlFile);
 
-            // RandomNumbers is for testing, it will be removed after testing is done 
-            // (file will be created not at the end but every ** seconds)
             var outgoingXmlReportFile = new OutgoingFileEvent()
             {
                 FileName = "EndOfDayReport_" + context.Message.Date.Month + 
