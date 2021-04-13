@@ -4,6 +4,7 @@ using Internship.AccountService.Domain.Models;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Internship.AccountService.Infrastructure.DAL
@@ -56,15 +57,23 @@ namespace Internship.AccountService.Infrastructure.DAL
 
         public async Task<decimal> GetSumOfCashbookRecordsByCashbookId(int cashbookId)
         {
-            return ((await this.GetSentMoney(cashbookId)) * -1) + await this.GetReceivedMoney(cashbookId);
+            return ((await this.GetSentMoneyBeforeDate(cashbookId, DateTime.Now.Date.AddDays(1))) * -1)
+                + await this.GetReceivedMoneyBeforeDate(cashbookId, DateTime.Now.Date.AddDays(1));
         }
-        
-        private async Task<decimal> GetSentMoney(int cashbookIdFrom)
+
+        public async Task<decimal> GetSumOfCashbookRecordsByCashbookIdBeforeDate(int cashbookId, DateTime beforeDate)
+        {
+            return ((await this.GetSentMoneyBeforeDate(cashbookId, beforeDate)) * -1)
+                + await this.GetReceivedMoneyBeforeDate(cashbookId, beforeDate);
+        }
+
+        private async Task<decimal> GetSentMoneyBeforeDate(int cashbookIdFrom, DateTime beforeDate)
         {
             var sqlExpressionToGetSentMoney = @"
                 SELECT SUM(amount)
                 FROM accountservice_db.cashbookRecords
-                WHERE cashbookidFrom = @cashbookIdFrom;";
+                WHERE cashbookidFrom = @cashbookIdFrom
+                AND date < @beforeDate;";
 
             using (var connection = new MySqlConnection(
                 _configuration.GetConnectionString(ConnectionStringName)))
@@ -73,17 +82,19 @@ namespace Internship.AccountService.Infrastructure.DAL
                 return await connection.QuerySingleAsync<decimal>(
                     sqlExpressionToGetSentMoney, new
                     {
-                        cashbookIdFrom
+                        cashbookIdFrom,
+                        beforeDate
                     });
             }
         }
 
-        private async Task<decimal> GetReceivedMoney(int cashbookIdTo)
+        private async Task<decimal> GetReceivedMoneyBeforeDate(int cashbookIdTo, DateTime beforeDate)
         {
             var sqlExpressionToGetSentMoney = @"
                 SELECT SUM(amount)
                 FROM accountservice_db.cashbookRecords
-                WHERE cashbookidTo = @cashbookIdTo;";
+                WHERE cashbookidTo = @cashbookIdTo
+                AND date < @beforeDate;";
 
             using (var connection = new MySqlConnection(
                 _configuration.GetConnectionString(ConnectionStringName)))
@@ -92,7 +103,8 @@ namespace Internship.AccountService.Infrastructure.DAL
                 return await connection.QuerySingleAsync<decimal>(
                     sqlExpressionToGetSentMoney, new
                     {
-                        cashbookIdTo
+                        cashbookIdTo,
+                        beforeDate
                     });
             }
         }
@@ -136,6 +148,70 @@ namespace Internship.AccountService.Infrastructure.DAL
                 {
                     cashbookId,
                     balance
+                });
+            }
+        }
+
+        public async Task<IEnumerable<AccountModel>> GetAccounts()
+        {
+            var sqlExpressionToGetAccounts = @"
+                SELECT `account`.`id` as Id,
+                    `account`.`name` as Name,
+                    `account`.`IBAN` as IBAN,
+                    `account`.`email` as Email
+                FROM `accountservice_db`.`account`;";
+
+            using (var connection = new MySqlConnection(
+                _configuration.GetConnectionString(ConnectionStringName)))
+            {
+                connection.Open();
+                return await connection.QueryAsync<AccountModel>(sqlExpressionToGetAccounts);
+            }
+        }
+
+        public async Task<IEnumerable<CashbookRecordModel>> GetMutationsByCashbookId(int cashbookId,
+            DateTime beforeDate, DateTime afterDate)
+        {
+            var sqlExpressionToGetAccounts = @"
+                SELECT `cashbookRecords`.`id` as Id,
+                    `cashbookRecords`.`cashbookidFrom` as CashbookIdDebtor,
+                    `cashbookRecords`.`cashbookidTo` as CashbookIdCreditor,
+                    `cashbookRecords`.`date` as Date,
+                    `cashbookRecords`.`amount` as Amount,
+                    `cashbookRecords`.`original_reference` as OriginReference
+                FROM `accountservice_db`.`cashbookRecords`
+                WHERE (cashbookidFrom = @cashbookId OR cashbookidTo = @cashbookId)
+                AND (date > @afterDate AND date < @beforeDate);";
+
+            using (var connection = new MySqlConnection(
+                _configuration.GetConnectionString(ConnectionStringName)))
+            {
+                connection.Open();
+                return await connection.QueryAsync<CashbookRecordModel>(sqlExpressionToGetAccounts, new
+                {
+                    cashbookId,
+                    beforeDate,
+                    afterDate
+                });
+            }
+        }
+
+        public async Task<string> GetAccountIBANByCashbookId(int cashbookId)
+        {
+            var sqlExpressionToUpdate = @"
+                 SELECT IBAN FROM accountservice_db.account acc
+                 INNER JOIN accountservice_db.cashbook ch
+                 ON acc.id = ch.accountid
+                 WHERE ch.id = @cashbookId;";
+
+            using (var connection = new MySqlConnection(
+                _configuration.GetConnectionString(ConnectionStringName)))
+            {
+                connection.Open();
+
+                return await connection.QuerySingleAsync<string>(sqlExpressionToUpdate, new
+                {
+                    cashbookId
                 });
             }
         }

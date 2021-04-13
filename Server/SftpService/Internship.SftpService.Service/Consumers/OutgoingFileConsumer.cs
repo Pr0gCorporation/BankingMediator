@@ -53,8 +53,7 @@ namespace Internship.SftpService.Service.Consumers
             catch (Exception e)
             {
                 _logger.LogError(e, $"Upload failed for message {context.MessageId}");
-                _logger.LogDebug($"File size (bytes): {context.Message.File.Length}");
-                throw;
+                _logger.LogDebug($"File size (in bytes): {context.Message.File.Length}");
             }
         }
     }

@@ -7,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
+using Quartz;
+using Internship.AccountService.Service.Jobs;
 
 namespace Internship.AccountService.Service
 {
@@ -65,6 +67,35 @@ namespace Internship.AccountService.Service
                     });
 
                     services.AddMassTransitHostedService();
+
+                    services.AddQuartz(q =>
+                    {
+                        var endOfDayReportJobConfiguration = new JobConfiguration(
+                            configuration.GetValue<string>("JobConfig:GenerateReportJob:JobKey"),
+                            configuration.GetValue<string>("JobConfig:GenerateReportJob:WithIdentity"),
+                            DateTimeOffset.Now,
+                            configuration.GetValue<string>("JobConfig:GenerateReportJob:CronSchedule")
+                        );
+
+                        // Use a Scoped container to create jobs.
+                        q.UseMicrosoftDependencyInjectionScopedJobFactory();
+
+                        // Create a "key"s for the jobs
+                        var endOfDayReportJobKey = new JobKey(endOfDayReportJobConfiguration.JobKey);
+
+                        // Register the jobs with the DI container
+                        q.AddJob<EndOfDayReportingJob>(opts => opts.WithIdentity(endOfDayReportJobKey));
+
+                        q.AddTrigger(opts => opts
+                             .ForJob(endOfDayReportJobKey)
+                             .WithIdentity(endOfDayReportJobConfiguration.WithIdentity)
+                             .StartAt(endOfDayReportJobConfiguration.StartAt)
+                             .WithCronSchedule(endOfDayReportJobConfiguration.CronSchedule));
+                    });
+
+                    // Add the Quartz.NET hosted service
+                    services.AddQuartzHostedService(
+                        q => q.WaitForJobsToComplete = true);
                 });
     }
 }

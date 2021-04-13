@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using Internship.FileService.Infrastructure.FileModels.Report;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;

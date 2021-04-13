@@ -1,7 +1,6 @@
 using Internship.FileService.Domain.Interfaces;
 using Internship.FileService.Infrastructure.DAL;
 using Internship.FileService.Service.Consumers;
-using Internship.FileService.Service.Publishers;
 using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -54,6 +53,7 @@ namespace Internship.FileService.Service
                     {
                         config.AddConsumer<IncomingFileConsumer>();
                         config.AddConsumer<TransactionToFileConsumer>();
+                        config.AddConsumer<EndOfDayReportedConsumer>();
 
                         config.UsingRabbitMq((ctx, cfg) =>
                         {
@@ -67,6 +67,11 @@ namespace Internship.FileService.Service
                             cfg.ReceiveEndpoint("file_send", c =>
                             {
                                 c.ConfigureConsumer<TransactionToFileConsumer>(ctx);
+                            });
+
+                            cfg.ReceiveEndpoint("report_generated", c =>
+                            {
+                                c.ConfigureConsumer<EndOfDayReportedConsumer>(ctx);
                             });
                         });
                     });
