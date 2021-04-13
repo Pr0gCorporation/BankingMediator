@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
-using System.IO.Compression;
 using System.Threading.Tasks;
+using Internship.SftpService.Infrastructure.Archivator;
 using Internship.SftpService.Service.SFTPActions.UploadFiles;
 using Internship.Shared.Events;
 using MassTransit;
@@ -16,11 +16,13 @@ namespace Internship.SftpService.Service.Consumers
         private readonly ILogger<OutgoingFileConsumer> _logger;
         private readonly HostBuilderContext _hostBuilderContext;
         private readonly IServerFileUploadable _uploadable;
+        private readonly IArchivator _archivator;
 
-        public OutgoingFileConsumer(ILogger<OutgoingFileConsumer> logger,
+        public OutgoingFileConsumer(ILogger<OutgoingFileConsumer> logger, IArchivator archivator,
             HostBuilderContext hostBuilderContext, IServerFileUploadable uploadable)
         {
             _logger = logger;
+            _archivator = archivator;
             _hostBuilderContext = hostBuilderContext;
             _uploadable = uploadable;
         }
@@ -36,21 +38,10 @@ namespace Internship.SftpService.Service.Consumers
                 _logger.LogInformation($"Archiving the file with filename: {context.Message.FileName}, msgId: {context.MessageId}");
                 string fileName = context.Message.FileName;
                 byte[] fileBytes = context.Message.File;
-                byte[] compressedBytes;
                 string fileNameExtention = Path.GetExtension(fileName);
-                string fileNameZip = fileName.Replace(
-                    fileNameExtention, ".zip");
-                using (var outStream = new MemoryStream())
-                {
-                    using (var archive = new ZipArchive(outStream, ZipArchiveMode.Create, true))
-                    {
-                        var fileInArchive = archive.CreateEntry(fileName, CompressionLevel.Optimal);
-                        using var entryStream = fileInArchive.Open();
-                        using var fileToCompressStream = new MemoryStream(fileBytes);
-                        fileToCompressStream.CopyTo(entryStream);
-                    }
-                    compressedBytes = outStream.ToArray();
-                }
+
+                byte[] compressedBytes = _archivator.ZipArchivation(fileName, fileBytes);
+                string fileNameZip = fileName.Replace(fileNameExtention, ".zip");
 
                 _logger.LogInformation($"Uploading the archived file with filename: {context.Message.FileName}, msgId: {context.MessageId}");
                 _uploadable.Upload(
@@ -62,8 +53,7 @@ namespace Internship.SftpService.Service.Consumers
             catch (Exception e)
             {
                 _logger.LogError(e, $"Upload failed for message {context.MessageId}");
-                _logger.LogDebug($"File size (bytes): {context.Message.File.Length}");
-                throw;
+                _logger.LogDebug($"File size (in bytes): {context.Message.File.Length}");
             }
         }
     }
