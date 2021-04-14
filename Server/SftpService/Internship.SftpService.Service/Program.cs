@@ -53,7 +53,7 @@ namespace Internship.SftpService.Service
                     var configuration = hostContext.Configuration;
 
                     services.AddHostedService<Worker>();
-                    services.AddTransient<SftpClientIntern>();
+                    services.AddTransient<SftpBankClient>();
                     services.AddTransient<IArchivator, ZipArchivator>();
                     services.AddSftpDownloader();
                     services.AddSftpUploader();

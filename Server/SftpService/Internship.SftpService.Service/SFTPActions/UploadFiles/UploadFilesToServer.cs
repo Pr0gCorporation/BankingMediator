@@ -8,10 +8,10 @@ namespace Internship.SftpService.Service.SFTPActions.UploadFiles
 {
     public class UploadFilesToServer : IServerFileUploadable
     {
-        private readonly SftpClientIntern _sftpClient;
+        private readonly SftpBankClient _sftpClient;
         private readonly ILogger<UploadFilesToServer> _logger;
 
-        public UploadFilesToServer(SftpClientIntern sftpClient, ILogger<UploadFilesToServer> logger)
+        public UploadFilesToServer(SftpBankClient sftpClient, ILogger<UploadFilesToServer> logger)
         {
             _sftpClient = sftpClient;
             _logger = logger;
@@ -59,7 +59,7 @@ namespace Internship.SftpService.Service.SFTPActions.UploadFiles
                 _sftpClient.UploadFile(stream, pathTo + filename);
             }
 
-            _logger.LogInformation($"File uploaded: {file}\n\n");
+            _logger.LogInformation($"File uploaded: {filename}\n\n");
 
             _sftpClient.Disconnect();
         }
