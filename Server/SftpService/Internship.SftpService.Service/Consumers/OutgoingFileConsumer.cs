@@ -32,9 +32,9 @@ namespace Internship.SftpService.Service.Consumers
         {
             _logger.LogInformation($"Received new message: {context.MessageId}, of type {context.GetType()}");
 
-            //try
-            //{
-            var configuration = _hostBuilderContext.Configuration;
+            try
+            {
+                var configuration = _hostBuilderContext.Configuration;
 
             _logger.LogInformation($"Archiving the file with filename: {context.Message.FileName}, msgId: {context.MessageId}");
             string fileName = context.Message.FileName;
@@ -52,12 +52,12 @@ namespace Internship.SftpService.Service.Consumers
                     compressedBytes, fileNameZip);
                 _logger.LogInformation($"The archived file uploaded successfully! From message: {context.MessageId}, where FileName: {fileNameZip}");
             }
-            //}
-            //catch (Exception e)
-            //{
-            //    _logger.LogError(e, $"Upload failed for message {context.MessageId}");
-            //    _logger.LogDebug($"File name: {context.Message.FileName}");
-            //}
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Upload failed for message {context.MessageId}");
+                _logger.LogDebug($"File name: {context.Message.FileName}");
+            }
         }
     }
 }
