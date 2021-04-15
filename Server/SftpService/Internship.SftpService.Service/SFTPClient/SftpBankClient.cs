@@ -8,24 +8,20 @@ using Renci.SshNet.Sftp;
 
 namespace Internship.SftpService.Service.SFTPClient
 {
-    public class SftpClientIntern
+    public class SftpBankClient
     {
-        public string Host { get; set; }
-        public int Port { get; set; }
-        public string Username { get; set; }
-        public string Password { get; set; }
         private SftpClient SftpClient { get; set; }
 
-        public SftpClientIntern(HostBuilderContext hostBuilderContext)
+        public SftpBankClient(HostBuilderContext hostBuilderContext)
         {
             var configuration = hostBuilderContext.Configuration;
-            Host = configuration.GetValue<string>("SftpConfig:Host");
-            Port = configuration.GetValue<int>("SftpConfig:Port");
-            Username = configuration.GetValue<string>("SftpConfig:Username");
-            Password = configuration.GetValue<string>("SftpConfig:Password");
-            var connectionInfo = new ConnectionInfo(Host, 
-                Port, 
-                Username, 
+            var Host = configuration.GetValue<string>("SftpConfig:Host");
+            var Port = configuration.GetValue<int>("SftpConfig:Port");
+            var Username = configuration.GetValue<string>("SftpConfig:Username");
+            var Password = configuration.GetValue<string>("SftpConfig:Password");
+            var connectionInfo = new ConnectionInfo(Host,
+                Port,
+                Username,
                 new PasswordAuthenticationMethod(Username, Password));
             SftpClient = new SftpClient(connectionInfo);
         }

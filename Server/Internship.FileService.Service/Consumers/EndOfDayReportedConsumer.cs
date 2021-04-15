@@ -27,6 +27,7 @@ namespace Internship.FileService.Service.Consumers
         {
             EndOfDayReportXmlFile endOfDayReportXmlFile = MapReportEventToXmlFileType(context.Message);
             var endOfDayReportXmlFileBytes = await _fileSerializer.Serialize(endOfDayReportXmlFile);
+            _logger.LogInformation("New end of day report consumed: " + context.MessageId);
 
             var outgoingXmlReportFile = new OutgoingFileEvent()
             {
@@ -35,6 +36,7 @@ namespace Internship.FileService.Service.Consumers
                 File = endOfDayReportXmlFileBytes
             };
 
+            _logger.LogInformation("File end of day report published: " + outgoingXmlReportFile.FileName);
             await _bus.Publish(outgoingXmlReportFile);
         }
 

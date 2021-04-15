@@ -3,6 +3,7 @@ using Internship.Shared.Events.Report;
 using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Quartz;
 using System;
 using System.Collections.Generic;
@@ -13,16 +14,18 @@ namespace Internship.AccountService.Service.Jobs
     [DisallowConcurrentExecution]
     public class EndOfDayReportingJob : IJob
     {
+        private readonly ILogger<EndOfDayReportingJob> _logger;
         private readonly IBus _bus;
         private readonly IAccountRepository _accountRepository;
         private readonly HostBuilderContext _hostBuilderContext;
 
         public EndOfDayReportingJob(IBus bus, IAccountRepository accountRepository,
-            HostBuilderContext hostBuilderContext)
+            HostBuilderContext hostBuilderContext, ILogger<EndOfDayReportingJob> logger)
         {
             _bus = bus;
             _accountRepository = accountRepository;
             _hostBuilderContext = hostBuilderContext;
+            _logger = logger;
         }
 
         public async Task Execute(IJobExecutionContext context)
@@ -80,6 +83,8 @@ namespace Internship.AccountService.Service.Jobs
                     AccountReports = accountReportsListUnit
                 });
             }
+
+            _logger.LogInformation("End of day reports successfully sent!");
         }
     }
 }

@@ -74,7 +74,7 @@ namespace Internship.AccountService.Service
                             configuration.GetValue<string>("JobConfig:GenerateReportJob:JobKey"),
                             configuration.GetValue<string>("JobConfig:GenerateReportJob:WithIdentity"),
                             DateTimeOffset.Now,
-                            configuration.GetValue<string>("JobConfig:GenerateReportJob:CronSchedule")
+                            configuration.GetValue<string>("JobConfig:GenerateReportJob:TestCron")
                         );
 
                         // Use a Scoped container to create jobs.

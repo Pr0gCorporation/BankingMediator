@@ -95,7 +95,7 @@ namespace Internship.TransactionService.Service.Controllers
                 // Instance to publish
                 var transactionFile = _mapper.Map<TransactionToFileDto>(transactionModel);
 
-                // Publish to file endpoint and account one
+                // Publish to file endpoint
                 await _publisher.Publish(transactionFile);
 
                 _logger.LogInformation($"Publish the outgoing transaction: {transactionModel.TransactionId}");
